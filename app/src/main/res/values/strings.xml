@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name" translatable="false">sub</string>
+    <string name="welcome" translatable="false">Вітальний екран</string>
+    <string name="Add_bike" translatable="false">Додати байк</string>
+    <string name="Save" translatable="false">Зберегти</string>
+    <string name="Choose_ur_bike" translatable="false">Виберіть ваш байк</string>
+    <string name="CompCheker">Чекер</string>
+    <string name="Discover">Вивчай</string>
+    <string name="GARAGE">ГАРАЖ</string>
+    <string name="Garage">Гараж</string>
+    <string name="Stack">Стек</string>
+    <string name="_1">-</string>
+    <string name="add_new_setup">+</string>
+    <string name="etc">…</string>
+    <string name="bikes_geometry_stock">Стокова геометрія байка</string>
+    <string name="custom_settings">Кастомні налаштування</string>
+    <string name="add">+</string>
+    <string name="components_adjust">Компоненти байка</string>
+    <string name="frame_geometry">Геометрія рами</string>
+    <string name="bike_name">%1$s %2$s</string>
+    <string name="go_back">Назад</string>
+
+    <string name="top_tube_lenght">Довжина верхньої труби</string>
+    <string name="top_tube_length_label">%1$d mm</string>
+    <string name="wheel_base">Колесна база</string>
+    <string name="wheel_base_label">%1$d mm</string>
+    <string name="wheel_size">Розмір колес</string>
+    <string name="wheel_size_label">%1$d in</string>
+    <string name="word_ok">OK</string>
+    <string name="stack_label">%1$d mm</string>
+    <string name="stand_over_height">Висота для стояння</string>
+    <string name="stand_over_height_label">%1$d mm</string>
+    <string name="selected_size_label">Розмір: %1$s</string>
+    <string name="seat_height">Висота місця сидіння</string>
+    <string name="seat_height_label">%1$d mm</string>
+    <string name="seat_tube_angle">Кут підсидільної труби</string>
+    <string name="seat_tube_angle_label">%1$d°</string>
+    <string name="seat_tube_lenght">Довжина підсидільної труби</string>
+    <string name="seat_tube_length_label">%1$d mm</string>
+    <string name="reach">Річ</string>
+    <string name="reach_label">%1$d mm</string>
+    <string name="head_tube_angle">Кут нахилу рульової</string>
+    <string name="head_tube_angle_label">%1$d°</string>
+    <string name="head_tube_lenght">Висота рульової трубки</string>
+    <string name="head_tube_length_label">%1$d mm</string>
+    <string name="body_height">Для зросту</string>
+    <string name="body_height_label">%1$d sm</string>
+    <string name="bottom_bracket_offset">Зміщення нижнього кронштейну</string>
+    <string name="bottom_bracket_offset_label">%1$d mm</string>
+    <string name="chainstay_lenght">Довжина чеінстею</string>
+    <string name="chainstay_length_label">%1$d mm</string>
+    <string name="choosebike">Виберіть байк зі списку</string>
+    <string name="btn_confirm">Вибрати</string>
+    <string name="firsttext">Вітаю в додатку SuB! Цей додаток спеціально створенний для райдерської спільноти. Паркуй свій байк у гараж і налаштовуй його</string>
+    <string name="Menu">Меню</string>
+    <string name="delete">-</string>
+
+</resources>

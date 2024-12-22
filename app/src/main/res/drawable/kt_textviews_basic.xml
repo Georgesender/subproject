@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Білі краї -->
+    <item>
+        <shape>
+            <solid android:color="@color/white" /> <!-- Білий колір -->
+            <corners android:radius="20dp" /> <!-- Заокруглені краї -->
+        </shape>
+    </item>
+
+    <!-- Чорний фон всередині -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp" android:bottom="2dp">
+        <shape>
+            <solid android:color="@color/black" /> <!-- Чорний колір -->
+            <corners android:radius="18dp" /> <!-- Трохи менший радіус -->
+        </shape>
+    </item>
+
+</layer-list>
+
