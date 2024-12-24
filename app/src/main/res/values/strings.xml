@@ -54,5 +54,9 @@
     <string name="firsttext">Вітаю в додатку SuB! Цей додаток спеціально створенний для райдерської спільноти. Паркуй свій байк у гараж і налаштовуй його</string>
     <string name="Menu">Меню</string>
     <string name="delete">-</string>
+    <string name="Bike_components">Компоненти байка</string>
+    <string name="Component">Компонент</string>
+    <string name="Series">Серія</string>
+    <string name="Sizes">Розміри</string>
 
 </resources>
