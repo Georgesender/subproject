@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.preBikeGarage" android:exported="true">
+        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.MainBikeGarage" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -21,6 +21,7 @@
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.PreAddBikeActivity" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.BikeGarageAct" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.BikeGeometryAct" android:exported="true"/>
+        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ComponentsGeometryAct" android:exported="true"/>
     </application>
 
 </manifest>

@@ -46,3 +46,18 @@ data class BikeGeometry(
     val bodyHeight: Int,
     val wheelSize: Int
 )
+
+
+@Entity(tableName = "components_table")
+data class Component(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var bikeId: Int, // Ідентифікатор байка
+    var component1: String = "",
+    var component2: String = "",
+    var series1: String = "",
+    var series2: String = "",
+    var sSizeWidth: String = "",
+    var sSizeGoes: String = ""
+
+)
+

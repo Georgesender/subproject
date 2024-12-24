@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Поле для введення ширини -->
+    <EditText
+        android:id="@+id/widthEditText"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:hint="000"
+        android:inputType="number"
+        android:maxLength="3"
+        android:textColor="#000000"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <!-- "x" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="x"
+        android:textSize="18sp"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Поле для введення величини -->
+    <EditText
+        android:id="@+id/goesEditText"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:hint="00"
+        android:inputType="number"
+        android:maxLength="2"
+        android:textColor="#000000"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <!-- "mm" -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mm"
+        android:textSize="18sp"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Кнопка ОК -->
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"/>
+
+</LinearLayout>

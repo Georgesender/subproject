@@ -78,7 +78,7 @@
                     android:layout_marginTop="22dp"
                     android:src="@drawable/img_frameset"
                     android:scaleType="fitCenter"
-                    android:contentDescription="TODO"
+                    android:contentDescription="@string/_1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -323,7 +323,8 @@
                     android:padding="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Розмірність"/>
+                    android:text="Розмірність"
+                    tools:ignore="HardcodedText" />
                 <androidx.gridlayout.widget.GridLayout
                     android:id="@+id/geometry_basic"
                     android:padding="8dp"

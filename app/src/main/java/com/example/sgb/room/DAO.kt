@@ -2,7 +2,9 @@ package com.example.sgb.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface BikeDao {
@@ -32,6 +34,18 @@ interface GeometryDao {
 
     @Query("DELETE FROM bike_geometry WHERE bikeId = :bikeId")
     suspend fun deleteGeometryByBikeId(bikeId: Int)
+}
+
+@Dao
+interface ComponentsDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertComponent(component: Component)
+
+    @Query("SELECT * FROM components_table WHERE bikeId = :bikeId LIMIT 1")
+    suspend fun getComponentsByBikeId(bikeId: Int): Component?
+
+    @Update
+    suspend fun updateComponent(component: Component)
 }
 
 

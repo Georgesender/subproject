@@ -45,8 +45,6 @@ class BikeGarageAct : AppCompatActivity() {
 
 
         val bikeId = intent.getIntExtra("bike_id", -1) // Отримуємо bikeId
-
-
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
             lifecycleScope.launch {
@@ -82,7 +80,7 @@ class BikeGarageAct : AppCompatActivity() {
 
         val compGeometry = findViewById<View>(R.id.componentsGeometry)
         compGeometry.setOnClickListener {
-            val intent = Intent(this, ComponentsCheker::class.java)
+            val intent = Intent(this, ComponentsGeometryAct::class.java)
             intent.putExtra("bike_id", bikeId)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this, R.anim.fade_in_faster, R.anim.fade_out_faster

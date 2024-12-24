@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sub.R
 
-class preBikeGarage : AppCompatActivity() {
+class MainBikeGarage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,14 +21,14 @@ class preBikeGarage : AppCompatActivity() {
 
         if (selectedBikeId != -1) {
             // Якщо байк вибрано, відкриваємо BikeGarageAct з ID байка
-            val intent = Intent(this@preBikeGarage, BikeGarageAct::class.java)
+            val intent = Intent(this@MainBikeGarage, BikeGarageAct::class.java)
             intent.putExtra("bike_id", selectedBikeId)
             startActivity(intent)
             finish()
         } else {
             // Якщо байк не вибрано, показуємо кнопку додавання
             addBikeButton.setOnClickListener {
-                val intent = Intent(this@preBikeGarage, PreAddBikeActivity::class.java)
+                val intent = Intent(this@MainBikeGarage, PreAddBikeActivity::class.java)
                 startActivity(intent)
             }
         }

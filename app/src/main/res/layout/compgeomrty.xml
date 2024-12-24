@@ -1,504 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
     <FrameLayout
         android:id="@+id/frame_top"
-        android:background="@color/bike_grey_blue"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:background="@color/bike_grey_blue"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
-            android:textSize="20sp"
+            android:id="@+id/brand_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:text="Bike Name"
+            android:textColor="@color/white"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_gravity="top|center_horizontal"
-            android:id="@+id/bike_name"
-            android:padding="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bike Name"/>
-        <TextView
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:layout_gravity="bottom|center_horizontal"
-            android:id="@+id/bike_model"
-            android:padding="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bike Model"/>
+            tools:ignore="HardcodedText" />
+
         <ImageView
-            android:layout_gravity="end|center_vertical"
             android:id="@+id/bike_photo"
             android:layout_width="98dp"
             android:layout_height="68dp"
-            android:src="@drawable/img_sendercf9"
-            android:contentDescription="@string/_1"
-            android:layout_marginEnd="8dp"/>
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/_1" />
+
         <Button
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/go_back"/>
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/kt_textviews_basic"
+            android:text="@string/go_back"
+            android:textColor="@color/white" />
     </FrameLayout>
-    <ScrollView
+
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frame_top">
+
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/geometry_image"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/img_fork_ruler"
-                android:scaleType="fitCenter"
-                android:contentDescription="TODO"/>
-            <androidx.gridlayout.widget.GridLayout
-                android:id="@+id/geometry_table"
-                android:padding="8dp"
+                android:layout_height="280dp"
+                android:background="@drawable/grey_square"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/components_sizes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:padding="8dp"
+                    android:text="@string/Bike_components"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/geometry_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/geometry_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="@string/_1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/img_fork_ruler"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/components_sizes"
+                    tools:ignore="HardcodedText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:columnCount="2"
-                app:rowCount="17">
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/main_components"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="80dp"
                     android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="start"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Component geometry"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:gravity="end"
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="600 mm"
-                    app:layout_columnWeight="1"/>
-            </androidx.gridlayout.widget.GridLayout>
+                    app:columnCount="3"
+                    app:rowCount="3">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:background="@color/bike_grey_blue"
+                        android:text="@string/Component"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:background="@color/bike_grey_blue"
+                        android:text="@string/Series"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="55dp"
+                        android:gravity="center"
+                        android:text="@string/Sizes"
+                        android:background="@color/bike_grey_blue"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/component1"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="start"
+                        android:paddingStart="12dp"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,RtlSymmetry,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+                    <EditText
+                        android:id="@+id/series1"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+                    <TextView
+                        android:id="@+id/size1"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="start"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+                    <EditText
+                        android:id="@+id/component2"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="start"
+                        android:paddingStart="12dp"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,RtlSymmetry,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+                    <EditText
+                        android:id="@+id/series2"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
+
+                    <EditText
+                        android:id="@+id/size2"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="start"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+
+
+                </androidx.gridlayout.widget.GridLayout>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
