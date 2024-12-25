@@ -159,7 +159,7 @@ class PreAddBikeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.add_bike)
+        setContentView(R.layout.kt_add_bike)
 
         brandSpinner = findViewById(R.id.brand_spinner)
         modelSpinner = findViewById(R.id.model_spinner)
@@ -262,7 +262,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                 saveBikeGeometry(bikeId)
 
                 // Передаємо bikeId у BikeGarageAct
-                val intent = Intent(this@PreAddBikeActivity, BikeGarageAct::class.java).apply {
+                val intent = Intent(this@PreAddBikeActivity, ActBikeGarage::class.java).apply {
                     putExtra("bike_id", bikeId)
                 }
                 startActivity(intent)

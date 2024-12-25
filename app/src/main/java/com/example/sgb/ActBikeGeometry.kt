@@ -17,7 +17,7 @@ import com.example.sgb.room.BikeGeometry
 import com.example.sub.R
 import kotlinx.coroutines.launch
 
-class BikeGeometryAct : AppCompatActivity() {
+class ActBikeGeometry : AppCompatActivity() {
     private lateinit var selectedSize: TextView
     private lateinit var bikeName: TextView
     private lateinit var bikePhoto: ImageView
@@ -39,7 +39,7 @@ class BikeGeometryAct : AppCompatActivity() {
     @SuppressLint("DiscouragedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bikegeometry)
+        setContentView(R.layout.kt_bikegeometry)
 
 
         val backButton: Button = findViewById(R.id.back)
@@ -48,7 +48,7 @@ class BikeGeometryAct : AppCompatActivity() {
 
         backButton.setOnClickListener {
             if (selectedBikeId != -1) {
-                val intent = Intent(this@BikeGeometryAct, BikeGarageAct::class.java)
+                val intent = Intent(this@ActBikeGeometry, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
                 val options = ActivityOptionsCompat.makeCustomAnimation(
                     this, R.anim.fade_in, R.anim.fade_out
@@ -83,7 +83,7 @@ class BikeGeometryAct : AppCompatActivity() {
         // Отримуємо bikeId із Intent
         val bikeId = intent.getIntExtra("bike_id", -1)
         lifecycleScope.launch {
-            val database = BikeDatabase.getDatabase(this@BikeGeometryAct)
+            val database = BikeDatabase.getDatabase(this@ActBikeGeometry)
             val geometryDao = database.geometryDao()
             val bikeDao = database.bikeDao()
             val bike = bikeDao.getBikeById(bikeId)

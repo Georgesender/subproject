@@ -14,7 +14,7 @@ class ComponentsCheker : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.components_checker)
+        setContentView(R.layout.kt_components_checker)
         setupBottomNavigation()
 
 
@@ -31,7 +31,7 @@ class ComponentsCheker : AppCompatActivity() {
 
         navHome.setOnClickListener {
             if (selectedBikeId != -1) {
-                val intent = Intent(this@ComponentsCheker, BikeGarageAct::class.java)
+                val intent = Intent(this@ComponentsCheker, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
                 val options = ActivityOptionsCompat.makeCustomAnimation(
                     this, R.anim.fade_in, R.anim.fade_out

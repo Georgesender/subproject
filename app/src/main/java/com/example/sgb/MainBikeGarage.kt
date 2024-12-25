@@ -11,7 +11,7 @@ class MainBikeGarage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bikegarage)
+        setContentView(R.layout.kt_bikegarage)
 
         val addBikeButton = findViewById<Button>(R.id.add_bike_button)
 
@@ -21,7 +21,7 @@ class MainBikeGarage : AppCompatActivity() {
 
         if (selectedBikeId != -1) {
             // Якщо байк вибрано, відкриваємо BikeGarageAct з ID байка
-            val intent = Intent(this@MainBikeGarage, BikeGarageAct::class.java)
+            val intent = Intent(this@MainBikeGarage, ActBikeGarage::class.java)
             intent.putExtra("bike_id", selectedBikeId)
             startActivity(intent)
             finish()

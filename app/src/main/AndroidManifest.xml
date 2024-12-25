@@ -19,9 +19,9 @@
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ComponentsCheker"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.Discover" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.PreAddBikeActivity" android:exported="true"/>
-    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.BikeGarageAct" android:exported="true"/>
-    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.BikeGeometryAct" android:exported="true"/>
-        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ComponentsGeometryAct" android:exported="true"/>
+    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGarage" android:exported="true"/>
+    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGeometry" android:exported="true"/>
+        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActComponentsGeometry" android:exported="true"/>
     </application>
 
 </manifest>

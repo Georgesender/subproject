@@ -7,7 +7,7 @@
     android:layout_width="185dp"
     android:layout_height="205dp">
     <TextView
-        android:background="@drawable/shapes"
+        android:background="@drawable/extra_shapes"
         android:layout_width="match_parent"
         android:layout_height="165dp"
         android:layout_marginBottom="40dp"
@@ -26,7 +26,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/shapesblk"
+        android:background="@drawable/extra_shapesblk"
         android:paddingStart="8dp"
         android:paddingTop="5dp"
         android:text="@string/components_adjust"

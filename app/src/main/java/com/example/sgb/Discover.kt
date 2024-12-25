@@ -12,7 +12,7 @@ import com.example.sub.R
 class Discover : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.discover)
+        setContentView(R.layout.kt_discover)
         setupBottomNavigation()
     }
 
@@ -38,7 +38,7 @@ class Discover : AppCompatActivity() {
 
         navHome.setOnClickListener {
             if (selectedBikeId != -1) {
-                val intent = Intent(this@Discover, BikeGarageAct::class.java)
+                val intent = Intent(this@Discover, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
                 val options = ActivityOptionsCompat.makeCustomAnimation(
                     this, R.anim.fade_in, R.anim.fade_out

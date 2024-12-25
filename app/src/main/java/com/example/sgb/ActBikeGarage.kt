@@ -17,7 +17,7 @@ import com.example.sgb.room.BikeDatabase
 import com.example.sub.R
 import kotlinx.coroutines.launch
 
-class BikeGarageAct : AppCompatActivity() {
+class ActBikeGarage : AppCompatActivity() {
 
     private lateinit var bikeNameTextView: TextView
     private lateinit var bikeSubmodelTextView: TextView
@@ -27,7 +27,7 @@ class BikeGarageAct : AppCompatActivity() {
     @SuppressLint("DiscouragedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bikegarage_active)
+        setContentView(R.layout.kt_bikegarage_active)
         setupBottomNavigation()
 
         val clearButton = findViewById<Button>(R.id.right_button_2)
@@ -48,7 +48,7 @@ class BikeGarageAct : AppCompatActivity() {
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
             lifecycleScope.launch {
-                val bikeDao = BikeDatabase.getDatabase(this@BikeGarageAct).bikeDao()
+                val bikeDao = BikeDatabase.getDatabase(this@ActBikeGarage).bikeDao()
                 val bike = bikeDao.getBikeById(bikeId)
 
                 // Якщо байк знайдений
@@ -80,7 +80,7 @@ class BikeGarageAct : AppCompatActivity() {
 
         val compGeometry = findViewById<View>(R.id.componentsGeometry)
         compGeometry.setOnClickListener {
-            val intent = Intent(this, ComponentsGeometryAct::class.java)
+            val intent = Intent(this, ActComponentsGeometry::class.java)
             intent.putExtra("bike_id", bikeId)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this, R.anim.fade_in_faster, R.anim.fade_out_faster
@@ -90,7 +90,7 @@ class BikeGarageAct : AppCompatActivity() {
 
         val frameGeometry = findViewById<View>(R.id.frameGeometry)
         frameGeometry.setOnClickListener {
-            val intent = Intent(this, BikeGeometryAct::class.java)
+            val intent = Intent(this, ActBikeGeometry::class.java)
             intent.putExtra("bike_id", bikeId) // Передаємо bikeId
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this, R.anim.fade_in_faster, R.anim.fade_out_faster
@@ -144,9 +144,13 @@ class BikeGarageAct : AppCompatActivity() {
     private fun deleteBikeAndClearPreferences(bikeId: Int) {
         lifecycleScope.launch {
             // Ініціалізуємо базу даних
-            val database = BikeDatabase.getDatabase(this@BikeGarageAct)
+            val database = BikeDatabase.getDatabase(this@ActBikeGarage)
             val bikeDao = database.bikeDao()
             val geometryDao = database.geometryDao()
+            val componentsDao = database.componentsDao()  // Додаємо DAO для компонентів
+
+            // Видаляємо компоненти байка
+            componentsDao.deleteComponentsByBikeId(bikeId)
 
             // Видаляємо геометрію байка
             geometryDao.deleteGeometryByBikeId(bikeId)
@@ -161,11 +165,9 @@ class BikeGarageAct : AppCompatActivity() {
             editor.apply()
 
             // Переходимо до AddBikeActivity
-            val intent = Intent(this@BikeGarageAct, PreAddBikeActivity::class.java)
+            val intent = Intent(this@ActBikeGarage, PreAddBikeActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
-
-
 }

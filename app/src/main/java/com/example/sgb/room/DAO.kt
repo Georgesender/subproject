@@ -44,6 +44,9 @@ interface ComponentsDao {
 
     @Update
     suspend fun updateComponent(component: Component)
+    // Додати метод для видалення компонентів
+    @Query("DELETE FROM components_table WHERE bikeId = :bikeId")
+    suspend fun deleteComponentsByBikeId(bikeId: Int)
 }
 
 
