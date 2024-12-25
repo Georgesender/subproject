@@ -14,8 +14,6 @@ interface BikeDao {
     @Query("SELECT * FROM bike_table WHERE id = :id")
     suspend fun getBikeById(id: Int): Bike?
 
-    @Query("SELECT * FROM bike_table")
-    suspend fun getAllBikes(): List<Bike>
 
     @Query("UPDATE bike_table SET selectedSize = :size WHERE id = :bikeId")
     suspend fun updateBikeSize(bikeId: Int, size: String)
