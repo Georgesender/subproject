@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/black" /> <!-- Тло -->
+        </shape>
+    </item>
+    <item android:left="0dp" android:right="0dp" android:bottom="0dp">
+        <shape>
+            <stroke android:color="@color/white" android:width="2dp"/>
+            <solid android:color="@color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Нижня межа -->
+    <item android:left="2dp" android:right="2dp" android:top="0dp">
+        <shape>
+            <stroke android:color="@android:color/black" android:width="4dp"/>
+            <solid android:color="@color/transparent"/>
+        </shape>
+    </item>
+</layer-list>

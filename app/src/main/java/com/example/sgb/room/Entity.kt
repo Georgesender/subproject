@@ -57,7 +57,7 @@ data class Component(
     var series1: String = "",
     var series2: String = "",
     var sSizeWidth: String = "",
-    var sSizeGoes: String = ""
-
+    var sSizeGoes: String = "",
+    var fSize2: String = ""
 )
 
