@@ -29,10 +29,16 @@ class ActComponentsGeometry : AppCompatActivity() {
     private lateinit var bikeImageView: ImageView
     private lateinit var component1View: TextView
     private lateinit var component2View: TextView
+    private lateinit var component3View: TextView
+    private lateinit var component4View: TextView
     private lateinit var series1View: TextView
     private lateinit var series2View: TextView
+    private lateinit var series3View: TextView
+    private lateinit var series4View: TextView
     private lateinit var size1View: TextView
     private lateinit var size2View: TextView
+    private lateinit var size3View: TextView
+    private lateinit var size4View: TextView
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,10 +65,16 @@ class ActComponentsGeometry : AppCompatActivity() {
         bikeImageView = findViewById(R.id.bike_photo)
         component1View = findViewById(R.id.component1)
         component2View = findViewById(R.id.component2)
+        component3View = findViewById(R.id.component3)
+        component4View = findViewById(R.id.component4)
         series1View = findViewById(R.id.series1)
         series2View = findViewById(R.id.series2)
+        series3View = findViewById(R.id.series3)
+        series4View = findViewById(R.id.series4)
         size1View = findViewById(R.id.size1)
         size2View = findViewById(R.id.size2)
+        size3View = findViewById(R.id.size3)
+        size4View = findViewById(R.id.size4)
     }
 
     private fun backButtonListener(selectedBikeId: Int) {
@@ -89,19 +101,30 @@ class ActComponentsGeometry : AppCompatActivity() {
                 ?: Component(bikeId = bikeId).also { componentsDao.insertComponent(it) }
 
             // Встановлення початкових значень
-            component1View.text = components.component1
-            component2View.text = components.component2
+            component1View.text = components.componentBrand1
+            component2View.text = components.componentBrand2
+            component3View.text = components.componentBrand3
+            component4View.text = components.componentBrand4
             series1View.text = components.series1
             series2View.text = components.series2
+            series3View.text = components.series3
+            series4View.text = components.series4
             size2View.text = getString(R.string.size_with_mm, components.fSize2)
-
+            size3View.text = getString(R.string.size_with_mm, components.size3)
+            size4View.text = getString(R.string.size_with_mm, components.size4)
 
             // Налаштування слухачів кліків
-            setViewDialogListener(component1View, bikeId, "component1", componentsDao)
-            setViewDialogListener(component2View, bikeId, "component2", componentsDao)
+            setViewDialogListener(component1View, bikeId, "componentBrand1", componentsDao, isComponentBField = true)
+            setViewDialogListener(component2View, bikeId, "componentBrand2", componentsDao, isComponentBField = true)
+            setViewDialogListener(component3View, bikeId, "componentBrand3", componentsDao, isComponentBField = true)
+            setViewDialogListener(component4View, bikeId, "componentBrand4", componentsDao, isComponentBField = true)
             setViewDialogListener(series1View, bikeId, "series1", componentsDao)
             setViewDialogListener(series2View, bikeId, "series2", componentsDao)
-            setViewDialogListener(size2View, bikeId, "size2", componentsDao)
+            setViewDialogListener(series3View, bikeId, "series3", componentsDao)
+            setViewDialogListener(series4View, bikeId, "series4", componentsDao)
+            setViewDialogListener(size2View, bikeId, "size2", componentsDao, true)
+            setViewDialogListener(size3View, bikeId, "size3", componentsDao, true)
+            setViewDialogListener(size4View, bikeId, "size4", componentsDao, true)
 
 
 
@@ -130,44 +153,62 @@ class ActComponentsGeometry : AppCompatActivity() {
             }
         }
     }
-
     private fun setViewDialogListener(
         editText: TextView,
         bikeId: Int,
         field: String,
-        componentsDao: ComponentsDao
+        componentsDao: ComponentsDao,
+        isSizeField: Boolean = false,
+        isComponentBField: Boolean = false
     ) {
         editText.setOnClickListener {
-            viewDialog { newValue ->
+            viewDialog({ newValue ->
                 // Оновлюємо значення одразу в TextView
-                editText.text = newValue
+                editText.text = if (isComponentBField) {
+                    newValue
+                } else {
+                    newValue
+                }
 
                 // Оновлюємо дані в базі після введення
                 lifecycleScope.launch {
                     val components = componentsDao.getComponentsByBikeId(bikeId)
                     components?.let {
                         when (field) {
-                            "component1" -> it.component1 = newValue
-                            "component2" -> it.component2 = newValue
+                            "componentBrand1" -> it.componentBrand1 = newValue
+                            "componentBrand2" -> it.componentBrand2 = newValue
+                            "componentBrand3" -> it.componentBrand3 = newValue
+                            "componentBrand4" -> it.componentBrand4 = newValue
                             "series1" -> it.series1 = newValue
                             "series2" -> it.series2 = newValue
+                            "series3" -> it.series3 = newValue
+                            "series4" -> it.series4 = newValue
                             "size2" -> {
                                 it.fSize2 = newValue
-                                // Оновлюємо текст для size2 з додаванням " mm"
                                 size2View.text = getString(R.string.size_with_mm, newValue)
+                            }
+                            "size3" -> {
+                                it.size3 = newValue
+                                size3View.text = getString(R.string.size_with_mm, newValue)
+                            }
+                            "size4" -> {
+                                it.size4 = newValue
+                                size4View.text = getString(R.string.size_with_mm, newValue)
                             }
                         }
                         componentsDao.updateComponent(it)
                     }
                 }
-            }
+            }, isSizeField, isComponentBField)
         }
     }
 
 
-
+    @SuppressLint("SetTextI18n")
     private fun viewDialog(
-        onValueSubmitted: (String) -> Unit
+        onValueSubmitted: (String) -> Unit,
+        isSizeField: Boolean = false,
+        isComponentBField: Boolean = false
     ) {
         val dialogView = layoutInflater.inflate(R.layout.di_textwriter, null)
         val dialog = AlertDialog.Builder(this)
@@ -178,24 +219,33 @@ class ActComponentsGeometry : AppCompatActivity() {
 
         val inputText = dialogView.findViewById<EditText>(R.id.inputText)
         val okButton = dialogView.findViewById<Button>(R.id.okButton)
+        val textPasted = dialogView.findViewById<TextView>(R.id.text_pasted)
+
+        // Відображаємо відповідний текст залежно від поля
+        textPasted.text = when {
+            isSizeField -> "mm"
+            isComponentBField -> "brand"
+            else -> ""
+        }
 
         inputText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                // Це дозволить одразу оновлювати TextView в реальному часі
                 onValueSubmitted(s.toString())
             }
         })
 
         okButton.setOnClickListener {
             val newValue = inputText.text.toString().take(15) // Максимум 15 символів
-            onValueSubmitted(newValue) // Передаємо значення назад
+            onValueSubmitted(newValue)
             dialog.dismiss()
         }
 
         dialog.show()
     }
+
+
 
     private fun setupSize1ViewDialog(bikeId: Int, componentsDao: ComponentsDao) {
         val dialogView = layoutInflater.inflate(R.layout.di_shock_sizeformat, null)

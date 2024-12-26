@@ -42,7 +42,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.room.runtime) // або актуальна версія
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.cardview) // або актуальна версія
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
     implementation (libs.androidx.constraintlayout.v214)

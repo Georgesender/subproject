@@ -52,12 +52,18 @@ data class BikeGeometry(
 data class Component(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var bikeId: Int, // Ідентифікатор байка
-    var component1: String = "",
-    var component2: String = "",
+    var componentBrand1: String = "",
+    var componentBrand2: String = "",
+    var componentBrand3: String = "",
+    var componentBrand4: String = "",
     var series1: String = "",
     var series2: String = "",
+    var series3: String = "",
+    var series4: String = "",
     var sSizeWidth: String = "",
     var sSizeGoes: String = "",
-    var fSize2: String = ""
+    var fSize2: String = "",
+    var size3: String = "",
+    var size4: String = ""
 )
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">sub</string>
+    <string name="app_name" translatable="false">Setup Bike</string>
     <string name="welcome" translatable="false">Вітальний екран</string>
     <string name="Add_bike" translatable="false">Додати байк</string>
     <string name="Save" translatable="false">Зберегти</string>
@@ -12,7 +12,7 @@
     <string name="_1">-</string>
     <string name="add_new_setup">+</string>
     <string name="etc">…</string>
-    <string name="bikes_geometry_stock">Стокова геометрія байка</string>
+    <string name="bikes_geometry_based">Базова геометрія байка</string>
     <string name="custom_settings">Кастомні налаштування</string>
     <string name="add">+</string>
     <string name="components_adjust">Компоненти байка</string>
@@ -57,12 +57,13 @@
     <string name="Bike_components">Компоненти байка</string>
     <string name="Brand">Бренд</string>
     <string name="Series">Серія</string>
-    <string name="Sizes">Розміри</string>
+    <string name="sizesis">Розмірність</string>
     <string name="size_format">%1$s x %2$s mm</string>
     <string name="Shock">Аморт</string>
     <string name="Fork">Вилка</string>
     <string name="size_with_mm">%1$s mm</string>
-
+    <string name="todo">TODO</string>
+    <string name="Setups">Сетапи</string>
 
 
 </resources>

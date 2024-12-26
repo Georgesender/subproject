@@ -112,17 +112,17 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:ignore="HardcodedText" />
+
                     <ImageView
                         android:id="@+id/bike_image"
                         android:layout_width="370dp"
                         android:layout_height="250dp"
                         android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
                         android:contentDescription="Bike Image"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/bike_submodel"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,ImageContrastCheck" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/bikes_geometry_stock"
+                    android:text="@string/bikes_geometry_based"
                     android:layout_marginStart="10dp"/>
                 <LinearLayout
                     android:layout_gravity="center_horizontal"
@@ -158,7 +158,7 @@
                         layout="@layout/inc_geometry_comp"/>
                 </LinearLayout>
                 <TextView
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     android:textColor="@color/white"
                     android:id="@+id/description_text"
                     android:layout_width="wrap_content"
@@ -170,25 +170,12 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginStart="10dp">
-                    <Button
-                        android:textColor="@color/white"
-                        android:id="@+id/button_one"
-                        android:background="@drawable/kt_textviews_basic1"
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="20dp"
-                        android:text="Button One"
-                        tools:ignore="HardcodedText" />
-                    <Button
-                        android:textColor="@color/white"
-                        android:id="@+id/button_two"
-                        android:background="@drawable/kt_textviews_basic1"
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="Button Two"
-                        tools:ignore="HardcodedText" />
+                    android:layout_marginTop="15dp">
+                    <include
+                        android:id="@+id/setups"
+                        android:layout_width="185dp"
+                        android:layout_height="205dp"
+                        layout="@layout/inc_setups_button"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

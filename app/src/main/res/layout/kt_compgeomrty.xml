@@ -113,49 +113,50 @@
                     app:rowCount="3">
 
                     <TextView
-                        android:layout_width="30dp"
-                        android:layout_height="55dp"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
                         android:gravity="center"
                         android:background="@color/bike_grey_blue"
                         android:text="@string/Brand"
                         android:textColor="@color/white"
-                        android:textSize="22sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_columnWeight="1" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="55dp"
+                        android:layout_height="50dp"
                         android:gravity="center"
                         android:background="@color/bike_grey_blue"
                         android:text="@string/Series"
                         android:textColor="@color/white"
-                        android:textSize="22sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_columnWeight="1" />
 
                     <TextView
-                        android:layout_width="45dp"
-                        android:layout_height="55dp"
-                        android:gravity="center"
-                        android:text="@string/Sizes"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:background="@color/bike_grey_blue"
+                        android:gravity="center"
+                        android:text="@string/sizesis"
                         android:textColor="@color/white"
-                        android:textSize="22sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
-                        app:layout_columnWeight="1" />
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextSizeCheck" />
 
                     <TextView
                         android:id="@+id/component1"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:gravity="center"
-                        android:text="@string/Shock"
+                        android:hint="@string/Shock"
+                        android:textColorHint="@color/white"
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="RtlSymmetry,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        app:layout_columnWeight="1"/>
 
                     <TextView
                         android:id="@+id/series1"
@@ -165,8 +166,7 @@
                         android:textColor="@color/white"
                         android:background="@drawable/tb_start_bott_end"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        app:layout_columnWeight="1"/>
 
                     <TextView
                         android:id="@+id/size1"
@@ -176,20 +176,19 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        app:layout_columnWeight="1"/>
 
                     <TextView
                         android:id="@+id/component2"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:gravity="center"
+                        android:hint="@string/Fork"
+                        android:textColorHint="@color/white"
                         android:background="@drawable/tb_start_bott_end"
-                        android:text="@string/Fork"
                         android:textColor="@color/white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="RtlSymmetry,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        app:layout_columnWeight="1"/>
 
                     <TextView
                         android:id="@+id/series2"
@@ -199,8 +198,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="LabelFor,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
+                        app:layout_columnWeight="1"/>
 
                     <TextView
                         android:id="@+id/size2"
@@ -210,8 +208,71 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"
-                        tools:ignore="LabelFor,SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                        app:layout_columnWeight="1" />
+                    <TextView
+                        android:id="@+id/component3"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:textColor="@color/white"
+                        android:hint="@string/_1"
+                        android:textColorHint="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"/>
+
+                    <TextView
+                        android:id="@+id/series3"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:id="@+id/size3"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"/>
+
+                    <TextView
+                        android:id="@+id/component4"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:hint="@string/_1"
+                        android:textColorHint="@color/white"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"/>
+
+                    <TextView
+                        android:id="@+id/series4"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:background="@drawable/tb_start_bott_end"
+                        app:layout_columnWeight="1"/>
+
+
+                    <TextView
+                        android:id="@+id/size4"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_columnWeight="1"/>
 
 
                 </androidx.gridlayout.widget.GridLayout>
