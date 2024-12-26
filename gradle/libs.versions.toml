@@ -1,6 +1,5 @@
 [versions]
 agp = "8.7.3"
-constraintlayoutVersion = "2.1.4"
 gridlayout = "1.0.0"
 gson = "2.10.1"
 kotlin = "2.0.0"
@@ -10,7 +9,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.04.01"
+composeBom = "2024.12.01"
 roomCommon = "2.6.1"
 firebaseCrashlyticsBuildtools = "3.0.2"
 roomCompiler = "2.6.1"
@@ -21,7 +20,6 @@ roomRuntime = "2.6.1"
 cardview = "1.0.0"
 
 [libraries]
-androidx-constraintlayout-v214 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
