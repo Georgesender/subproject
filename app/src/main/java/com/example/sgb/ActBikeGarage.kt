@@ -98,6 +98,16 @@ class ActBikeGarage : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         }
 
+        val setupBike = findViewById<View>(R.id.setups)
+        setupBike.setOnClickListener {
+            val intent = Intent(this, ActSetups::class.java)
+            intent.putExtra("bike_id", bikeId)
+            val option = ActivityOptionsCompat.makeCustomAnimation(
+                this, R.anim.fade_in_faster, R.anim.fade_out_faster
+            )
+            startActivity(intent, option.toBundle())
+        }
+
         val testing = findViewById<Button>(R.id.left_button)
         testing.setOnClickListener {
             startActivity(Intent(this, PreAddBikeActivity::class.java))

@@ -64,6 +64,10 @@
     <string name="size_with_mm">%1$s mm</string>
     <string name="todo">TODO</string>
     <string name="Setups">Сетапи</string>
+    <array name="spinner_setups">
+        <item>Додати сетап</item>
+        <item>Видалити сетап</item>
+    </array>
 
 
 </resources>

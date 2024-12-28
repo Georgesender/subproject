@@ -173,6 +173,7 @@
                     android:layout_marginTop="15dp">
                     <include
                         android:id="@+id/setups"
+                        android:layout_marginStart="10dp"
                         android:layout_width="185dp"
                         android:layout_height="205dp"
                         layout="@layout/inc_setups_button"/>

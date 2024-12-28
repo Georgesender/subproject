@@ -22,6 +22,7 @@
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGarage" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGeometry" android:exported="true"/>
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActComponentsGeometry" android:exported="true"/>
+        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActSetups" android:exported="true"/>
     </application>
 
 </manifest>

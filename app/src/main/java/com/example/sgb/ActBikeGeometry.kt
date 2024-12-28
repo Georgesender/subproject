@@ -47,7 +47,6 @@ class ActBikeGeometry : AppCompatActivity() {
         val selectedBikeId = sharedPreferences.getInt("selected_bike_id", -1)
 
         backButton.setOnClickListener {
-            if (selectedBikeId != -1) {
                 val intent = Intent(this@ActBikeGeometry, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
                 val options = ActivityOptionsCompat.makeCustomAnimation(
@@ -55,7 +54,6 @@ class ActBikeGeometry : AppCompatActivity() {
                 )
                 startActivity(intent, options.toBundle())
                 finish()
-            }
         }
 
 
