@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 @Suppress("DEPRECATION")
 class ActSetups : AppCompatActivity() {
     private lateinit var bikeNameTextView: TextView
+    private var isDeleteMode = false // Флаг для режиму видалення
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,9 @@ class ActSetups : AppCompatActivity() {
 
         // Кнопка для відображення меню
         val burgerMenuButton: Button = findViewById(R.id.burger_menu)
-        setupAlertDialog(burgerMenuButton)
+        val setupsContainer: androidx.constraintlayout.widget.ConstraintLayout = findViewById(R.id.setups)
+
+        setupAlertDialog(burgerMenuButton, backButton, setupsContainer)
 
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
@@ -56,12 +59,14 @@ class ActSetups : AppCompatActivity() {
         editor.apply()
     }
 
-    // Відображення AlertDialog для меню
-    private fun setupAlertDialog(button: Button) {
+    private fun setupAlertDialog(
+        burgerMenuButton: Button,
+        backButton: Button,
+        setupsContainer: androidx.constraintlayout.widget.ConstraintLayout
+    ) {
         val items = arrayOf("Додати сетап", "Видалити сетап")
-        val setupsContainer: androidx.constraintlayout.widget.ConstraintLayout = findViewById(R.id.setups)
 
-        button.setOnClickListener {
+        burgerMenuButton.setOnClickListener {
             val builder = AlertDialog.Builder(this, R.style.CustomAlertDialogStyle)
             builder.setTitle("Меню")
             builder.setItems(items) { _, which ->
@@ -70,7 +75,10 @@ class ActSetups : AppCompatActivity() {
                         // Відкриваємо діалог для введення назви
                         showNameInputDialog(setupsContainer)
                     }
-                    1 -> Toast.makeText(this, "Вибрано: Видалити сетап", Toast.LENGTH_SHORT).show()
+                    1 -> {
+                        Toast.makeText(this, "Режим видалення активовано", Toast.LENGTH_SHORT).show()
+                        enableDeleteMode(burgerMenuButton, backButton, setupsContainer)
+                    }
                 }
             }
             builder.show()
@@ -78,7 +86,6 @@ class ActSetups : AppCompatActivity() {
     }
 
     private fun showNameInputDialog(container: androidx.constraintlayout.widget.ConstraintLayout) {
-        // Створення діалогового вікна з кастомним лейаутом
         val dialogView = layoutInflater.inflate(R.layout.di_textwriter, null)
         val inputText = dialogView.findViewById<EditText>(R.id.inputText)
         val okButton = dialogView.findViewById<Button>(R.id.okButton)
@@ -90,7 +97,6 @@ class ActSetups : AppCompatActivity() {
         okButton.setOnClickListener {
             val setupName = inputText.text.toString().trim()
             if (setupName.isNotEmpty()) {
-                // Додаємо кнопку до контейнера з введеною назвою
                 addSetupButton(container, setupName)
                 dialog.dismiss()
             } else {
@@ -106,17 +112,43 @@ class ActSetups : AppCompatActivity() {
             text = name
             textSize = 16f
             setTextColor(resources.getColor(android.R.color.white, theme))
-            setBackgroundResource(R.drawable.kt_textviews_basic) // Приклад стилю
+            setBackgroundResource(R.drawable.kt_textviews_basic)
             layoutParams = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
                 androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 topToTop = container.id
                 startToStart = container.id
-                marginStart = 16 // Відступи
+                marginStart = 16
                 topMargin = 16
+            }
+
+            // Обробка кліку кнопки
+            setOnClickListener {
+                if (isDeleteMode) {
+                    container.removeView(this) // Видалення кнопки в режимі видалення
+                }
             }
         }
         container.addView(newButton)
+    }
+
+    private fun enableDeleteMode(
+        burgerMenuButton: Button,
+        backButton: Button,
+        setupsContainer: androidx.constraintlayout.widget.ConstraintLayout
+    ) {
+        isDeleteMode = true
+        // Змінюємо кольори кнопок
+        burgerMenuButton.setBackgroundColor(resources.getColor(android.R.color.holo_red_dark, theme))
+        backButton.setBackgroundColor(resources.getColor(android.R.color.holo_red_dark, theme))
+
+        // Вихід із режиму видалення при повторному натисканні на "burgerMenuButton"
+        burgerMenuButton.setOnClickListener {
+            isDeleteMode = false
+            burgerMenuButton.setBackgroundColor(R.drawable.img_burger) // Повертаємо колір
+            backButton.setBackgroundColor(R.drawable.img_back_button) // Повертаємо колір
+            setupAlertDialog(burgerMenuButton, backButton, setupsContainer) // Повертаємо початкову логіку
+        }
     }
 }
