@@ -34,6 +34,7 @@ class Discover : AppCompatActivity() {
                 R.anim.fade_out
             )
             startActivity(intent, options.toBundle())
+            finish()
         }
 
         navHome.setOnClickListener {

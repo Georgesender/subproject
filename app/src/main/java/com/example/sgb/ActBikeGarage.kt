@@ -137,6 +137,7 @@ class ActBikeGarage : AppCompatActivity() {
                 this, R.anim.fade_in, R.anim.fade_out
             )
             startActivity(intent, options.toBundle())
+            finish()
         }
 
         navDiscover.setOnClickListener {
@@ -145,6 +146,7 @@ class ActBikeGarage : AppCompatActivity() {
                 this, R.anim.fade_in, R.anim.fade_out
             )
             startActivity(intent, options.toBundle())
+            finish()
         }
 
         navHome.setTypeface(null, Typeface.BOLD)

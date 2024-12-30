@@ -10,11 +10,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
-        app:cardUseCompatPadding="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:cardElevation="0dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -32,8 +30,8 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:layout_width="172dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:background="@drawable/extra_shapesblk_setup"
         android:text="@string/Setups"
         android:gravity="center"

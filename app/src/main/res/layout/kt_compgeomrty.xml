@@ -29,19 +29,20 @@
             android:id="@+id/bike_photo"
             android:layout_width="98dp"
             android:layout_height="68dp"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="5dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="5dp"
             android:contentDescription="@string/_1" />
 
         <Button
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/kt_textviews_basic"
-            android:text="@string/go_back"
-            android:textColor="@color/white" />
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/img_back_button"
+            android:contentDescription="@string/go_back"
+            tools:ignore="TouchTargetSizeCheck" />
     </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -150,13 +151,14 @@
                         android:id="@+id/component1"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
+                        android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Shock"
-                        android:textColorHint="@color/white"
-                        android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
+                        android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"/>
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextContrastCheck" />
 
                     <TextView
                         android:id="@+id/series1"
@@ -182,13 +184,14 @@
                         android:id="@+id/component2"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
+                        android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Fork"
-                        android:textColorHint="@color/white"
-                        android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
+                        android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"/>
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextContrastCheck" />
 
                     <TextView
                         android:id="@+id/series2"
@@ -217,7 +220,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:hint="@string/_1"
-                        android:textColorHint="@color/white"
+                        android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
 
@@ -247,7 +250,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:hint="@string/_1"
-                        android:textColorHint="@color/white"
+                        android:textColorHint="@color/transparent_white"
                         android:background="@drawable/tb_start_bott_end"
                         android:textColor="@color/white"
                         android:textSize="22sp"

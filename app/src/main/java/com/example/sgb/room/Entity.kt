@@ -67,3 +67,10 @@ data class Component(
     var size4: String = ""
 )
 
+// таблиця для MaketSetup.kt
+@Entity(tableName = "setup_table")
+data class MarksForSetup(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+
+)
+

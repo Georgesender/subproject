@@ -48,6 +48,7 @@ class ComponentsCheker : AppCompatActivity() {
                 R.anim.fade_out
             )
             startActivity(intent, options.toBundle())
+            finish()
         }
         navCompCheck.setTypeface(null, Typeface.BOLD) // Жирний текст
         navCompCheck.textSize = navCompCheck.textSize / resources.displayMetrics.density + 10
