@@ -17,7 +17,7 @@
     <string name="add">+</string>
     <string name="components_adjust">Компоненти байка</string>
     <string name="frame_geometry">Геометрія рами</string>
-    <string name="bike_name">%1$s %2$s</string>
+    <string name="two_strings">%1$s %2$s</string>
     <string name="go_back">Назад</string>
 
     <string name="top_tube_lenght">Довжина верхньої труби</string>
@@ -64,6 +64,7 @@
     <string name="size_with_mm">%1$s mm</string>
     <string name="todo">TODO</string>
     <string name="Setups">Сетапи</string>
+    <string name="test">test</string>
     <array name="spinner_setups">
         <item>Додати сетап</item>
         <item>Видалити сетап</item>

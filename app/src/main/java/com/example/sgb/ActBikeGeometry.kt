@@ -109,7 +109,7 @@ class ActBikeGeometry : AppCompatActivity() {
 
     private fun updateBikeMainInfTextView(bike: Bike){
         selectedSize.text = getString(R.string.selected_size_label, bike.selectedSize)
-        bikeName.text = getString(R.string.bike_name, bike.brand, bike.modelsJson.keys.first())
+        bikeName.text = getString(R.string.two_strings, bike.brand, bike.modelsJson.keys.first())
     }
 
     private fun updateGeometryTextViews(geometry: BikeGeometry) {

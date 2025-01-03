@@ -46,7 +46,7 @@ class ActSetups : AppCompatActivity() {
 
                 if (bike != null) {
                     saveSelectedBikeId(bikeId)
-                    bikeNameTextView.text = getString(R.string.bike_name, bike.brand, bike.modelsJson.keys.first())
+                    bikeNameTextView.text = getString(R.string.two_strings, bike.brand, bike.modelsJson.keys.first())
                     // Не завантажуємо кнопки одразу
                 }
             }

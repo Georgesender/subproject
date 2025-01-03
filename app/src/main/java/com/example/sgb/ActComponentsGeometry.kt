@@ -101,17 +101,17 @@ class ActComponentsGeometry : AppCompatActivity() {
                 ?: Component(bikeId = bikeId).also { componentsDao.insertComponent(it) }
 
             // Встановлення початкових значень
-            component1View.text = components.componentBrand1
-            component2View.text = components.componentBrand2
-            component3View.text = components.componentBrand3
-            component4View.text = components.componentBrand4
-            series1View.text = components.series1
-            series2View.text = components.series2
-            series3View.text = components.series3
-            series4View.text = components.series4
+            component1View.text = components.shockBrand
+            component2View.text = components.forkBrand
+            component3View.text = components.frontTyreBrand
+            component4View.text = components.rearTyreBrand
+            series1View.text = components.shockSeries
+            series2View.text = components.forkSeries
+            series3View.text = components.frontTyreSeries
+            series4View.text = components.rearTyreSeries
             size2View.text = getString(R.string.size_with_mm, components.fSize2)
-            size3View.text = getString(R.string.size_with_mm, components.size3)
-            size4View.text = getString(R.string.size_with_mm, components.size4)
+            size3View.text = getString(R.string.size_with_mm, components.frontTyreSize)
+            size4View.text = getString(R.string.size_with_mm, components.rearTyreSize)
 
             // Налаштування слухачів кліків
             setViewDialogListener(component1View, bikeId, "componentBrand1", componentsDao, isComponentBField = true)
@@ -136,7 +136,7 @@ class ActComponentsGeometry : AppCompatActivity() {
 
             bike?.let {
                 bikeAndModelView.text =
-                    getString(R.string.bike_name, it.brand, it.modelsJson.keys.first())
+                    getString(R.string.two_strings, it.brand, it.modelsJson.keys.first())
                 loadBikeImage(it)
             }
         }
@@ -175,24 +175,24 @@ class ActComponentsGeometry : AppCompatActivity() {
                     val components = componentsDao.getComponentsByBikeId(bikeId)
                     components?.let {
                         when (field) {
-                            "componentBrand1" -> it.componentBrand1 = newValue
-                            "componentBrand2" -> it.componentBrand2 = newValue
-                            "componentBrand3" -> it.componentBrand3 = newValue
-                            "componentBrand4" -> it.componentBrand4 = newValue
-                            "series1" -> it.series1 = newValue
-                            "series2" -> it.series2 = newValue
-                            "series3" -> it.series3 = newValue
-                            "series4" -> it.series4 = newValue
+                            "componentBrand1" -> it.shockBrand = newValue
+                            "componentBrand2" -> it.forkBrand = newValue
+                            "componentBrand3" -> it.frontTyreBrand = newValue
+                            "componentBrand4" -> it.rearTyreBrand = newValue
+                            "series1" -> it.shockSeries = newValue
+                            "series2" -> it.forkSeries = newValue
+                            "series3" -> it.frontTyreSeries = newValue
+                            "series4" -> it.rearTyreSeries = newValue
                             "size2" -> {
                                 it.fSize2 = newValue
                                 size2View.text = getString(R.string.size_with_mm, newValue)
                             }
                             "size3" -> {
-                                it.size3 = newValue
+                                it.frontTyreSize = newValue
                                 size3View.text = getString(R.string.size_with_mm, newValue)
                             }
                             "size4" -> {
-                                it.size4 = newValue
+                                it.rearTyreSize = newValue
                                 size4View.text = getString(R.string.size_with_mm, newValue)
                             }
                         }

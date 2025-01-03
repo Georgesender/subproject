@@ -54,7 +54,7 @@ class ActBikeGarage : AppCompatActivity() {
                 // Якщо байк знайдений
                 if (bike != null) {
                     saveSelectedBikeId(bikeId)
-                    bikeNameTextView.text = getString(R.string.bike_name, bike.brand, bike.modelsJson.keys.first())
+                    bikeNameTextView.text = getString(R.string.two_strings, bike.brand, bike.modelsJson.keys.first())
                     bikeSubmodelTextView.text = bike.modelsJson.values.first().submodels.keys.first()
                     // Отримуємо рік зі структури BikeSubmodel
                     val years = bike.modelsJson.values.first().submodels.values.first().years
