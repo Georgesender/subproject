@@ -111,13 +111,14 @@
                     android:layout_gravity="center"
                     android:padding="4dp"
                     app:columnCount="3"
-                    app:rowCount="3">
+                    app:rowCount="9">
+
 
                     <TextView
                         android:layout_width="28dp"
-                        android:layout_height="50dp"
-                        android:gravity="center"
+                        android:layout_height="49dp"
                         android:background="@color/bike_grey_blue"
+                        android:gravity="center"
                         android:text="@string/Brand"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -146,6 +147,22 @@
                         android:textStyle="bold"
                         app:layout_columnWeight="1"
                         tools:ignore="TextSizeCheck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="18dp"
+                        android:layout_marginTop="8dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/tb_end_start"
+                        android:text="@string/Shock_"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnSpan="3"
+                        app:layout_gravity="fill"
+                        app:layout_columnWeight="1"
+                        tools:ignore="RtlSymmetry" />
 
                     <TextView
                         android:id="@+id/component1"
@@ -181,6 +198,22 @@
                         app:layout_columnWeight="1"/>
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="18dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/tb_end_start"
+                        android:text="@string/Fork_"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        app:layout_columnSpan="3"
+                        app:layout_gravity="fill"
+                        app:layout_columnWeight="1"
+                        tools:ignore="RtlSymmetry" />
+
+                    <TextView
                         android:id="@+id/component2"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
@@ -212,17 +245,35 @@
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="18dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/tb_end_start"
+                        android:text="@string/Tyres_"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        app:layout_columnSpan="3"
+                        app:layout_gravity="fill"
+                        app:layout_columnWeight="1"
+                        tools:ignore="RtlSymmetry" />
+
                     <TextView
                         android:id="@+id/component3"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
-                        android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:hint="@string/Front"
                         android:textColor="@color/white"
-                        android:hint="@string/_1"
                         android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"/>
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextContrastCheck" />
 
                     <TextView
                         android:id="@+id/series3"
@@ -248,13 +299,14 @@
                         android:id="@+id/component4"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
-                        android:gravity="center"
-                        android:hint="@string/_1"
-                        android:textColorHint="@color/transparent_white"
                         android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:hint="@string/Rear"
                         android:textColor="@color/white"
+                        android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
-                        app:layout_columnWeight="1"/>
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextContrastCheck" />
 
                     <TextView
                         android:id="@+id/series4"
@@ -276,6 +328,22 @@
                         android:textColor="@color/white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingStart="18dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/tb_end_start"
+                        android:text="@string/Other_optional_"
+                        android:layout_marginTop="16dp"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        app:layout_columnSpan="3"
+                        app:layout_gravity="fill"
+                        app:layout_columnWeight="1"
+                        tools:ignore="RtlSymmetry" />
 
 
                 </androidx.gridlayout.widget.GridLayout>

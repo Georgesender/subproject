@@ -47,314 +47,403 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_name_container">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setups"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bike_name_container"
-        app:layout_constraintVertical_bias="0.0">
-
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/fork_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:columnCount="4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:rowCount="4">
-
-            <!-- Перший рядок (2 стовпці) -->
-            <TextView
-                android:id="@+id/fork"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_columnSpan="4"
-                app:layout_gravity="fill"
-                app:layout_columnWeight="1"/>
-
-
-            <!-- Наступні рядки (4 стовпці) -->
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-        </androidx.gridlayout.widget.GridLayout>
-
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/shock_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:columnCount="4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fork_table"
-            app:rowCount="4">
-
-            <!-- Перший рядок (2 стовпці) -->
-            <TextView
-                android:id="@+id/shock"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_columnSpan="4"
-                app:layout_gravity="fill"
-                app:layout_columnWeight="1"/>
-
-
-            <!-- Наступні рядки (4 стовпці) -->
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-
-            <TextView
-                android:layout_width="75dp"
-                android:layout_height="41dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-        </androidx.gridlayout.widget.GridLayout>
-
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/tyres_set"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/setups"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:columnCount="2"
+            android:layout_height="0dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shock_table"
-            app:rowCount="2">
+            app:layout_constraintTop_toBottomOf="@id/bike_name_container"
+            app:layout_constraintVertical_bias="0.0">
 
-            <!-- 2 рядки, 2 стовпці -->
-            <TextView
-                android:id="@+id/front_tyre"
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/fork_table"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"/>
+                android:layout_height="wrap_content"
+                android:background="@drawable/tb_with_strike"
+                android:layout_margin="16dp"
+                app:columnCount="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rowCount="5">
 
-            <TextView
-                android:id="@+id/rear_tyre"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"/>
+                <TextView
+                    android:id="@+id/fork"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:text="@string/test"
+                    android:background="@color/bike_grey_blue"
+                    android:textColor="@color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    app:layout_columnSpan="4"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="1"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
 
-            <TextView
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="21sp"
+                    android:gravity="center"
+                    android:background="@drawable/tb_end_start"
+                    android:text="Rebound"
+                    android:textColor="@color/white"
+                    app:layout_columnSpan="2"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="2"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="21sp"
+                    android:gravity="center"
+                    android:background="@drawable/tb_end_start"
+                    android:text="Compression"
+                    android:textColor="@color/white"
+                    app:layout_columnSpan="2"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="2"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="HSR"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="LSR"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="HSC"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="LSC"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+            </androidx.gridlayout.widget.GridLayout>
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/shock_table"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="@string/test"
-                android:textColor="@color/white"
-                app:layout_columnWeight="1"/>
-        </androidx.gridlayout.widget.GridLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/tb_with_strike"
+                app:columnCount="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fork_table"
+                app:rowCount="5">
+
+                <TextView
+                    android:id="@+id/shock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    android:background="@color/bike_grey_blue"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    app:layout_columnSpan="4"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="1"/>
+
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="21sp"
+                    android:gravity="center"
+                    android:background="@drawable/tb_end_start"
+                    android:text="Rebound"
+                    android:textColor="@color/white"
+                    app:layout_columnSpan="2"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="2"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="21sp"
+                    android:gravity="center"
+                    android:background="@drawable/tb_end_start"
+                    android:text="Compression"
+                    android:textColor="@color/white"
+                    app:layout_columnSpan="2"
+                    app:layout_gravity="fill"
+                    app:layout_columnWeight="2"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="HSR"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="LSR"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="HSC"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:text="LSC"
+                    android:textSize="19sp"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+                <TextView
+                    android:layout_width="88dp"
+                    android:layout_height="39dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+            </androidx.gridlayout.widget.GridLayout>
+
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/tyres_set"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/tb_with_strike"
+                app:columnCount="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shock_table"
+                app:rowCount="2">
+
+                <!-- 2 рядки, 2 стовпці -->
+                <TextView
+                    android:id="@+id/front_tyre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:gravity="center"
+                    android:textSize="26sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    android:background="@color/bike_grey_blue"
+                    android:textStyle="bold"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:id="@+id/rear_tyre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:gravity="center"
+                    android:textSize="26sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    android:background="@color/bike_grey_blue"
+                    android:textStyle="bold"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:textSize="19sp"
+                    android:text="@string/test"
+                    android:textColor="@color/white"
+                    app:layout_columnWeight="1"/>
+            </androidx.gridlayout.widget.GridLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

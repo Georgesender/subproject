@@ -110,8 +110,8 @@ class ActComponentsGeometry : AppCompatActivity() {
             series3View.text = components.frontTyreSeries
             series4View.text = components.rearTyreSeries
             size2View.text = getString(R.string.size_with_mm, components.fSize2)
-            size3View.text = getString(R.string.size_with_mm, components.frontTyreSize)
-            size4View.text = getString(R.string.size_with_mm, components.rearTyreSize)
+            size3View.text = getString(R.string.wheel_size_string, components.frontTyreSize)
+            size4View.text = getString(R.string.wheel_size_string, components.rearTyreSize)
 
             // Налаштування слухачів кліків
             setViewDialogListener(component1View, bikeId, "componentBrand1", componentsDao, isComponentBField = true)
@@ -189,11 +189,11 @@ class ActComponentsGeometry : AppCompatActivity() {
                             }
                             "size3" -> {
                                 it.frontTyreSize = newValue
-                                size3View.text = getString(R.string.size_with_mm, newValue)
+                                size3View.text = getString(R.string.wheel_size_string, newValue)
                             }
                             "size4" -> {
                                 it.rearTyreSize = newValue
-                                size4View.text = getString(R.string.size_with_mm, newValue)
+                                size4View.text = getString(R.string.wheel_size_string, newValue)
                             }
                         }
                         componentsDao.updateComponent(it)
