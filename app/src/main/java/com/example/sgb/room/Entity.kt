@@ -71,6 +71,8 @@ data class Component(
 @Entity(tableName = "setup_table")
 data class MarksForSetup(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-
+    val bikeId: Int, // ID байка, до якого прив'язаний сетап
+    val setupName: String // Назва сетапу
 )
+
 

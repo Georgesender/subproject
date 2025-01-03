@@ -1,6 +1,7 @@
 package com.example.sgb.room
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -48,5 +49,23 @@ interface ComponentsDao {
     @Query("DELETE FROM components_table WHERE bikeId = :bikeId")
     suspend fun deleteComponentsByBikeId(bikeId: Int)
 }
+
+@Dao
+interface SetupDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSetup(setup: MarksForSetup)
+
+    @Query("SELECT * FROM setup_table WHERE bikeId = :bikeId")
+    suspend fun getSetupsByBikeId(bikeId: Int): List<MarksForSetup>
+
+    @Query("SELECT * FROM setup_table WHERE id = :setupId")
+    suspend fun getSetupById(setupId: Int): MarksForSetup?
+
+    @Delete
+    suspend fun deleteSetup(setup: MarksForSetup)
+}
+
+
+
 
 

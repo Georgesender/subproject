@@ -6,12 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(entities = [Bike::class, BikeGeometry::class, Component::class], version = 1)
+@Database(entities = [Bike::class, BikeGeometry::class, Component::class, MarksForSetup::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class BikeDatabase : RoomDatabase() {
     abstract fun bikeDao(): BikeDao
     abstract fun geometryDao(): GeometryDao
     abstract fun componentsDao(): ComponentsDao
+    abstract fun setupDao(): SetupDao
 
     companion object {
         @Volatile
