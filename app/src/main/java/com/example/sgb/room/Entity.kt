@@ -74,5 +74,24 @@ data class MarksForSetup(
     val bikeId: Int, // ID байка, до якого прив'язаний сетап
     val setupName: String // Назва сетапу
 )
+// cетап для байкпарку
+@Entity(tableName = "bikepark_table")
+data class BikeParkSetupData(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var bikeId: Int,
+    var forkHSR: String = "",
+    var forkLSR: String = "",
+    var forkHSC: String = "",
+    var forkLSC: String = "",
+    var shockHSR: String = "",
+    var shockLSR: String = "",
+    var shockHSC: String = "",
+    var shockLSC: String = "",
+    var frontTyrePressure: String = "",
+    var rearTyrePressure: String = "",
+    var forkNotes: String = "",
+    var shockNotes: String = "",
+    var tyreNotes: String = ""
+)
 
 

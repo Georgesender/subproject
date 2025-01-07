@@ -134,7 +134,7 @@ class ActBikeGarage : AppCompatActivity() {
         navCompCheck.setOnClickListener {
             val intent = Intent(this, ComponentsCheker::class.java)
             val options = ActivityOptionsCompat.makeCustomAnimation(
-                this, R.anim.fade_in, R.anim.fade_out
+                this, R.anim.fade_in_faster, R.anim.fade_out_faster
             )
             startActivity(intent, options.toBundle())
             finish()
@@ -143,7 +143,7 @@ class ActBikeGarage : AppCompatActivity() {
         navDiscover.setOnClickListener {
             val intent = Intent(this, Discover::class.java)
             val options = ActivityOptionsCompat.makeCustomAnimation(
-                this, R.anim.fade_in, R.anim.fade_out
+                this, R.anim.fade_in_faster, R.anim.fade_out_faster
             )
             startActivity(intent, options.toBundle())
             finish()

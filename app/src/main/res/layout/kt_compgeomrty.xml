@@ -171,7 +171,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Shock"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"
@@ -182,7 +182,7 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:gravity="center"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:background="@drawable/tb_start_bott_end"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
@@ -193,7 +193,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
 
@@ -220,7 +220,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Fork"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"
@@ -232,7 +232,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
 
@@ -242,7 +242,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1" />
 
@@ -269,7 +269,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Front"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"
@@ -281,7 +281,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1" />
 
@@ -291,7 +291,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
 
@@ -302,7 +302,7 @@
                         android:background="@drawable/tb_start_bott_end"
                         android:gravity="center"
                         android:hint="@string/Rear"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textColorHint="@color/transparent_white"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"
@@ -313,7 +313,7 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:gravity="center"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         android:background="@drawable/tb_start_bott_end"
                         app:layout_columnWeight="1"/>
@@ -325,7 +325,7 @@
                         android:layout_height="48dp"
                         android:gravity="center"
                         android:background="@drawable/tb_start_bott_end"
-                        android:textColor="@color/white"
+                        android:textColor="@color/green_strings"
                         android:textSize="22sp"
                         app:layout_columnWeight="1"/>
 

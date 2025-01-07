@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="1dp"
-            android:text="test"
             android:textColor="@color/white"
             android:textSize="28sp"
             tools:ignore="HardcodedText" />
@@ -75,15 +74,35 @@
                     android:id="@+id/fork"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:gravity="center"
-                    android:text="@string/test"
                     android:background="@color/bike_grey_blue"
+                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
                     app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_columnWeight="1"/>
+                    tools:ignore="TextSizeCheck" />
+
+                <EditText
+                    android:id="@+id/fork_notes"
+                    android:layout_width="88dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/tb_start_bott_end_withmargin"
+                    android:gravity="start|center_vertical"
+                    android:hint="@string/You_can_add_notes_here"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="45"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/green_strings"
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="16sp"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
 
 
                 <TextView
@@ -94,6 +113,7 @@
                     android:background="@drawable/tb_end_start"
                     android:text="Rebound"
                     android:textColor="@color/white"
+                    android:paddingBottom="2dp"
                     app:layout_columnSpan="2"
                     app:layout_gravity="fill"
                     app:layout_columnWeight="2"
@@ -102,21 +122,23 @@
                 <TextView
                     android:layout_width="88dp"
                     android:layout_height="wrap_content"
-                    android:textSize="21sp"
-                    android:gravity="center"
                     android:background="@drawable/tb_end_start"
+                    android:gravity="center"
                     android:text="Compression"
+                    android:paddingBottom="2dp"
                     android:textColor="@color/white"
+                    android:textSize="21sp"
                     app:layout_columnSpan="2"
-                    app:layout_gravity="fill"
                     app:layout_columnWeight="2"
-                    tools:ignore="HardcodedText" />
+                    app:layout_gravity="fill"
+                    tools:ignore="HardcodedText,TextSizeCheck" />
 
                 <TextView
                     android:layout_width="88dp"
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="HSR"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -127,6 +149,7 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="LSR"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -137,6 +160,7 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="HSC"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -147,80 +171,75 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="LSC"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
                     tools:ignore="HardcodedText" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/fork_hsr"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,SpeakableTextPresentCheck,TextContrastCheck" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/fork_lsr"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
+                <EditText
+                    android:id="@+id/fork_hsc"
+                    android:layout_width="86dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/fork_lsc"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
+                    android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
             </androidx.gridlayout.widget.GridLayout>
 
@@ -240,15 +259,35 @@
                     android:id="@+id/shock"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:gravity="center"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
                     android:background="@color/bike_grey_blue"
+                    android:gravity="center"
+                    android:textColor="@color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
                     app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    app:layout_columnWeight="1"/>
+                    tools:ignore="TextSizeCheck" />
+
+                <EditText
+                    android:id="@+id/shock_notes"
+                    android:layout_width="88dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/tb_start_bott_end_withmargin"
+                    android:gravity="start|center_vertical"
+                    android:hint="@string/You_can_add_notes_here"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="45"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/green_strings"
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="16sp"
+                    app:layout_columnSpan="4"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
 
 
                 <TextView
@@ -258,6 +297,7 @@
                     android:gravity="center"
                     android:background="@drawable/tb_end_start"
                     android:text="Rebound"
+                    android:paddingBottom="2dp"
                     android:textColor="@color/white"
                     app:layout_columnSpan="2"
                     app:layout_gravity="fill"
@@ -267,21 +307,23 @@
                 <TextView
                     android:layout_width="88dp"
                     android:layout_height="wrap_content"
-                    android:textSize="21sp"
-                    android:gravity="center"
                     android:background="@drawable/tb_end_start"
+                    android:gravity="center"
                     android:text="Compression"
+                    android:paddingBottom="2dp"
                     android:textColor="@color/white"
+                    android:textSize="21sp"
                     app:layout_columnSpan="2"
-                    app:layout_gravity="fill"
                     app:layout_columnWeight="2"
-                    tools:ignore="HardcodedText" />
+                    app:layout_gravity="fill"
+                    tools:ignore="HardcodedText,TextSizeCheck" />
 
                 <TextView
                     android:layout_width="88dp"
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="HSR"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -292,6 +334,7 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="LSR"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -302,6 +345,7 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="HSC"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
@@ -312,80 +356,77 @@
                     android:layout_height="39dp"
                     android:gravity="center"
                     android:text="LSC"
+                    android:background="@drawable/tb_start_bott_end"
                     android:textSize="19sp"
                     android:textColor="@color/white"
                     app:layout_columnWeight="1"
                     tools:ignore="HardcodedText" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/shock_hsr"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/shock_lsr"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/shock_hsc"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/shock_lsc"
                     android:layout_width="88dp"
-                    android:layout_height="39dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="2"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
 
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
-                <TextView
-                    android:layout_width="88dp"
-                    android:layout_height="39dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
             </androidx.gridlayout.widget.GridLayout>
 
             <androidx.gridlayout.widget.GridLayout
@@ -398,7 +439,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shock_table"
-                app:rowCount="2">
+                app:rowCount="3">
 
                 <!-- 2 рядки, 2 стовпці -->
                 <TextView
@@ -407,7 +448,6 @@
                     android:layout_height="55dp"
                     android:gravity="center"
                     android:textSize="26sp"
-                    android:text="@string/test"
                     android:textColor="@color/white"
                     android:background="@color/bike_grey_blue"
                     android:textStyle="bold"
@@ -419,30 +459,64 @@
                     android:layout_height="55dp"
                     android:gravity="center"
                     android:textSize="26sp"
-                    android:text="@string/test"
                     android:textColor="@color/white"
                     android:background="@color/bike_grey_blue"
                     android:textStyle="bold"
                     app:layout_columnWeight="1"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
-                    android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                <EditText
+                    android:id="@+id/tyre_notes"
+                    android:layout_width="88dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/tb_start_bott_end_withmargin"
+                    android:gravity="start|center_vertical"
+                    android:hint="@string/You_can_add_notes_here"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="45"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/green_strings"
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="16sp"
+                    app:layout_columnSpan="2"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill"
+                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
 
-                <TextView
+                <EditText
+                    android:id="@+id/front_tyre_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:gravity="center"
-                    android:textSize="19sp"
-                    android:text="@string/test"
+                    android:hint="@string/_1"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:imeOptions="actionDone"
                     android:textColor="@color/white"
-                    app:layout_columnWeight="1"/>
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,VisualLintTextFieldSize,TextContrastCheck" />
+
+                <EditText
+                    android:id="@+id/rear_tyre_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:hint="@string/_1"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/transparent_white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,VisualLintTextFieldSize,TextContrastCheck" />
             </androidx.gridlayout.widget.GridLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

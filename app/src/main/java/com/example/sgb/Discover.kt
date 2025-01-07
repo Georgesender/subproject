@@ -30,8 +30,8 @@ class Discover : AppCompatActivity() {
             val intent = Intent(this, ComponentsCheker::class.java)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this,
-                R.anim.fade_in,
-                R.anim.fade_out
+                R.anim.fade_in_faster,
+                R.anim.fade_out_faster
             )
             startActivity(intent, options.toBundle())
             finish()
@@ -42,7 +42,7 @@ class Discover : AppCompatActivity() {
                 val intent = Intent(this@Discover, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
                 val options = ActivityOptionsCompat.makeCustomAnimation(
-                    this, R.anim.fade_in, R.anim.fade_out
+                    this, R.anim.fade_in_faster, R.anim.fade_out_faster
                 )
                 startActivity(intent, options.toBundle())
                 finish()

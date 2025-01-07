@@ -72,10 +72,9 @@
     <string name="Rear">Задня</string>
     <string name="Other_optional_">Інше(опціонально):</string>
     <string name="wheel_size_string">%1$s in</string>
-    <array name="spinner_setups">
-        <item>Додати сетап</item>
-        <item>Видалити сетап</item>
-    </array>
+    <string name="You_can_add_notes_here">Сюди можна додати нотатки…</string>
+    <string name="_2">--</string>
+    <string name="_3">---</string>
 
 
 </resources>

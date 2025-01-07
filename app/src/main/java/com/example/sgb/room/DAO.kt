@@ -55,14 +55,28 @@ interface SetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetup(setup: MarksForSetup)
 
-    @Query("SELECT * FROM setup_table WHERE bikeId = :bikeId")
-    suspend fun getSetupsByBikeId(bikeId: Int): List<MarksForSetup>
-
     @Query("SELECT * FROM setup_table WHERE id = :setupId")
     suspend fun getSetupById(setupId: Int): MarksForSetup?
 
     @Delete
     suspend fun deleteSetup(setup: MarksForSetup)
+}
+//BP -скорочено від Bike Park
+@Dao
+interface BPSetupDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBikeParkSetup(setup: BikeParkSetupData): Long
+
+    @Query("SELECT * FROM bikepark_table WHERE id = :id")
+    suspend fun getBikeParkSetupById(id: Int): BikeParkSetupData?
+
+    @Update
+    suspend fun updateBikeParkSetup(setup: BikeParkSetupData)
+
+    @Query("DELETE FROM bikepark_table WHERE id = :id")
+    suspend fun deleteBikeParkSetupById(id: Int)
+
+
 }
 
 
