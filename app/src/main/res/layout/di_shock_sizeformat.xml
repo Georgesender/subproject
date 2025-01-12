@@ -14,12 +14,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:hint="@string/_3"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/green_strings"
         android:importantForAutofill="no"
         android:inputType="number"
         android:imeOptions="actionNext"
         android:maxLength="3"
-        android:textColor="@color/white"
+        android:textColor="@color/green_strings"
         tools:ignore="TouchTargetSizeCheck" />
 
     <!-- "x" -->
@@ -38,13 +38,13 @@
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/green_strings"
         android:hint="@string/_2"
         android:importantForAutofill="no"
         android:imeOptions="actionDone"
         android:inputType="number"
         android:maxLength="2"
-        android:textColor="@color/white"
+        android:textColor="@color/green_strings"
         tools:ignore="TouchTargetSizeCheck" />
 
     <!-- "mm" -->

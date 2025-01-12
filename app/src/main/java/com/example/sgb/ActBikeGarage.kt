@@ -160,6 +160,7 @@ class ActBikeGarage : AppCompatActivity() {
             val bikeDao = database.bikeDao()
             val geometryDao = database.geometryDao()
             val componentsDao = database.componentsDao()  // Додаємо DAO для компонентів
+            val bpSetupDao = database.bpSetupDao()
 
             // Видаляємо компоненти байка
             componentsDao.deleteComponentsByBikeId(bikeId)
@@ -169,6 +170,8 @@ class ActBikeGarage : AppCompatActivity() {
 
             // Видаляємо сам байк
             bikeDao.deleteBikeById(bikeId)
+
+            bpSetupDao.deleteBikeParkSetupById(bikeId)
 
             // Очищаємо вибір у SharedPreferences
             val sharedPreferences: SharedPreferences = getSharedPreferences("bike_prefs", MODE_PRIVATE)

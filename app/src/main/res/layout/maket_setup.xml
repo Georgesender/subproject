@@ -46,6 +46,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_name_container">
 
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/setups"
             android:layout_width="match_parent"
@@ -58,31 +60,98 @@
             app:layout_constraintTop_toBottomOf="@id/bike_name_container"
             app:layout_constraintVertical_bias="0.0">
 
+            <TextView
+                android:id="@+id/fork_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@string/Fork"
+                android:textSize="26sp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/fork_table"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
-                android:layout_margin="16dp"
                 app:columnCount="4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fork_header"
                 app:rowCount="5">
 
-                <TextView
-                    android:id="@+id/fork"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
                     app:layout_columnSpan="4"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    tools:ignore="TextSizeCheck" />
+                    app:layout_gravity="fill">
+
+                    <!-- Зображення зліва -->
+                    <ImageView
+                        android:id="@+id/fork_icon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:contentDescription="@string/_1"
+                        android:background="@drawable/img_fork"
+                        android:scaleType="centerCrop"
+                        android:layout_marginStart="2dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ImageContrastCheck" />
+
+                    <!-- Основний текст -->
+                    <TextView
+                        android:id="@+id/fork"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/fork_average_mark"
+                        app:layout_constraintStart_toEndOf="@id/fork_icon"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <!-- Текст справа -->
+                    <TextView
+                        android:id="@+id/fork_average_mark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginEnd="6dp"
+                        android:text="--/--"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/fork_marks"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <!-- Кнопка справа -->
+                    <Button
+                        android:id="@+id/fork_marks"
+                        android:layout_width="58dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:text="@string/mark"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="TextSizeCheck,DuplicateSpeakableTextCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
                     android:id="@+id/fork_notes"
@@ -243,31 +312,97 @@
 
             </androidx.gridlayout.widget.GridLayout>
 
+            <TextView
+                android:id="@+id/shock_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="@string/Shock"
+                android:textSize="26sp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fork_table"/>
+
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/shock_table"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:background="@drawable/tb_with_strike"
                 app:columnCount="4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fork_table"
+                app:layout_constraintTop_toBottomOf="@id/shock_header"
                 app:rowCount="5">
 
-                <TextView
-                    android:id="@+id/shock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
+                <!-- Рядок таблиці -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
                     app:layout_columnSpan="4"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="fill"
-                    tools:ignore="TextSizeCheck" />
+                    app:layout_gravity="fill">
+
+                    <!-- Зображення зліва -->
+                    <ImageView
+                        android:id="@+id/shock_icon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:contentDescription="@string/_1"
+                        android:background="@drawable/img_shock"
+                        android:scaleType="centerCrop"
+                        android:layout_marginStart="2dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ImageContrastCheck" />
+
+                    <!-- Основний текст -->
+                    <TextView
+                        android:id="@+id/shock"
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/shock_average_mark"
+                        app:layout_constraintStart_toEndOf="@id/shock_icon"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <!-- Текст справа -->
+                    <TextView
+                        android:id="@+id/shock_average_mark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginEnd="6dp"
+                        android:text="--/--"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/shock_marks"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="HardcodedText" />
+
+                    <!-- Кнопка справа -->
+                    <Button
+                        android:id="@+id/shock_marks"
+                        android:layout_width="58dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:text="@string/mark"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="TextSizeCheck" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
                     android:id="@+id/shock_notes"
@@ -429,40 +564,105 @@
 
             </androidx.gridlayout.widget.GridLayout>
 
+            <TextView
+                android:id="@+id/tyres_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="@string/Tyres"
+                android:textSize="26sp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/shock_table"/>
+
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/tyres_set"
-                android:layout_width="match_parent"
+                android:layout_width="360dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:background="@drawable/tb_with_strike"
                 app:columnCount="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/shock_table"
+                app:layout_constraintTop_toBottomOf="@id/tyres_header"
                 app:rowCount="3">
 
-                <!-- 2 рядки, 2 стовпці -->
-                <TextView
-                    android:id="@+id/front_tyre"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="180dp"
                     android:layout_height="55dp"
-                    android:gravity="center"
-                    android:textSize="26sp"
-                    android:textColor="@color/white"
                     android:background="@color/bike_grey_blue"
-                    android:textStyle="bold"
-                    app:layout_columnWeight="1"/>
+                    app:layout_columnSpan="1"
+                    app:layout_gravity="fill">
 
-                <TextView
-                    android:id="@+id/rear_tyre"
-                    android:layout_width="wrap_content"
+                    <!-- Зображення зліва -->
+                    <ImageView
+                        android:id="@+id/ftyre_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:contentDescription="@string/_1"
+                        android:background="@drawable/img_tyre"
+                        android:scaleType="centerCrop"
+                        android:layout_marginBottom="25dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ImageContrastCheck" />
+
+                    <!-- Основний текст -->
+                    <TextView
+                        android:id="@+id/front_tyre"
+                        android:layout_width="135dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="180dp"
                     android:layout_height="55dp"
-                    android:gravity="center"
-                    android:textSize="26sp"
-                    android:textColor="@color/white"
                     android:background="@color/bike_grey_blue"
-                    android:textStyle="bold"
-                    app:layout_columnWeight="1"/>
+                    app:layout_columnSpan="1"
+                    app:layout_gravity="fill">
+
+                    <!-- Зображення зліва -->
+                    <ImageView
+                        android:id="@+id/rtyre_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:contentDescription="@string/_1"
+                        android:background="@drawable/img_tyre"
+                        android:scaleType="centerCrop"
+                        android:layout_marginBottom="25dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ImageContrastCheck" />
+
+                    <!-- Основний текст -->
+                    <TextView
+                        android:id="@+id/rear_tyre"
+                        android:layout_width="135dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
                     android:id="@+id/tyre_notes"
@@ -490,10 +690,11 @@
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLength="10"
-                    android:imeOptions="actionDone"
+                    android:minWidth="48dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -506,15 +707,15 @@
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLength="10"
-                    android:imeOptions="actionDone"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
                     app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,VisualLintTextFieldSize,TextContrastCheck" />
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,VisualLintTextFieldSize,TextContrastCheck,TouchTargetSizeCheck" />
             </androidx.gridlayout.widget.GridLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

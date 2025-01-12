@@ -10,8 +10,7 @@
     <!-- Поле для введення ширини -->
     <EditText
         android:id="@+id/inputText"
-        android:textColorHint="@color/white"
-        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/green_strings"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -19,7 +18,7 @@
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxLength="12"
-        android:textColor="@color/white"
+        android:textColor="@color/green_strings"
         tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
     <!-- "mm" -->
