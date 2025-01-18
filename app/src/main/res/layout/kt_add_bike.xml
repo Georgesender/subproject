@@ -77,7 +77,7 @@
     <Button
         android:textColor="@color/white"
         android:id="@+id/confirm_selection"
-        android:background="@drawable/kt_textviews_basic"
+        android:background="@drawable/btn_trwhite_anim_2pxstroke"
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_marginTop="44dp"

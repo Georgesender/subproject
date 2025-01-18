@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/tr50_white"> <!-- Колір хвилі -->
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" /> <!-- Білий колір маски -->
+        </shape>
+    </item>
+
+    <item>
+        <layer-list>
+            <!-- Векторна іконка -->
+            <item>
+                <vector
+                    android:width="16dp"
+                    android:height="16dp"
+                    android:autoMirrored="true"
+                    android:tint="#FFFFFF"
+                    android:viewportWidth="24"
+                    android:viewportHeight="24">
+
+                    <path
+                        android:fillColor="@android:color/white"
+                        android:pathData="M14,7l-5,5 5,5V7z" />
+
+                </vector>
+            </item>
+        </layer-list>
+    </item>
+
+</ripple>

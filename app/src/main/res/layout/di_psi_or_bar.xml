@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/kt_textviews_basic1"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:ignore="TextSizeCheck">
+
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/Choose_option_in_proc_or_mm"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <Button
+        android:id="@+id/btn_psi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_trwhite_anim_2pxstroke"
+        android:text="psi"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btn_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_trwhite_anim_2pxstroke"
+        android:text="bar"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
+
+
+</LinearLayout>

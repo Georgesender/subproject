@@ -169,7 +169,7 @@ class ActSetups : AppCompatActivity() {
         burgerMenuButton.setBackgroundColor(resources.getColor(android.R.color.holo_red_dark, theme))
         burgerMenuButton.setOnClickListener {
             isDeleteMode = false
-            burgerMenuButton.setBackgroundResource(R.drawable.img_burger)
+            burgerMenuButton.setBackgroundResource(R.drawable.btn_burger)
             setupAlertDialog(burgerMenuButton, bikeId)
         }
     }

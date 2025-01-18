@@ -77,6 +77,23 @@
     <string name="_3">---</string>
     <string name="Tyres">Покришки</string>
     <string name="mark">оцінка</string>
+    <string name="General">Загальне</string>
+    <string name="g_outs">G-outs</string>
+    <string name="numb_hands">Оніміння рук</string>
+    <string name="square_edged_hits">Square-edged hits</string>
+    <string name="rider_weight_shifts">Зміна положення тіла</string>
+    <string name="bottom_out_sus">Пробивка підвіски</string>
+    <string name="sus_swinging">Розкачка підвіски при педалюванні</string>
+    <string name="stability">Стабільність</string>
+    <string name="__24">--/24</string>
+    <string name="Choose_option_in_proc_or_mm">Оберіть одиниці вимірювання в % або в mm</string>
 
-
+    <string-array name="fork_seg_units_array">
+        <item>%</item>
+        <item>mm</item>
+    </string-array>
+    <string-array name="shock_seg_units_array">
+        <item>%</item>
+        <item>mm</item>
+    </string-array>
 </resources>

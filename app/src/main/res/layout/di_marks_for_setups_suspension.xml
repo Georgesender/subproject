@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/kt_textviews_basic1"
+    tools:ignore="TextSizeCheck">
+
+    <!-- Заголовок -->
+    <TextView
+        android:id="@+id/tv_setup_rating_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Оцінка сетапу для "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/marks_table"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_setup_rating_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:columnCount="2"
+            app:rowCount="4">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="center"
+                android:text="@string/General"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="2"
+                app:layout_gravity="fill"/>
+
+            <!-- Рядки таблиці -->
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/g_outs"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/numb_hands"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/square_edged_hits"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TextSizeCheck" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/rider_weight_shifts"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TextSizeCheck" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/bottom_out_sus"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TextSizeCheck" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/sus_swinging"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TextSizeCheck" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="48dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/stability"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_columnSpan="1" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:hint="@string/__24"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="17sp"
+                app:layout_columnSpan="1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+
+
+            <!-- Повторити ще 6 рядків для повного оформлення таблиці -->
+
+        </androidx.gridlayout.widget.GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

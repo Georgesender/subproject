@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/transparent_white"> <!-- Колір хвилі, який буде видимий на чорному фоні -->
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white"/> <!-- Колір маски для хвилі -->
+            <corners android:radius="20px"/> <!-- Заокруглені краї -->
+        </shape>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <stroke
+                        android:width="2px"
+                        android:color="@color/white"/>
+                    <solid android:color="@color/black"/> <!-- Чорний фон -->
+                    <corners android:radius="20px"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</ripple>

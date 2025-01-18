@@ -91,7 +91,11 @@ data class BikeParkSetupData(
     var rearTyrePressure: String = "",
     var forkNotes: String = "",
     var shockNotes: String = "",
-    var tyreNotes: String = ""
+    var tyreNotes: String = "",
+    var shockSag: String = "",
+    var forkSag: String = "",
+    var forkPressure: String = "",
+    var shockPressure: String = ""
 )
 
 

@@ -40,7 +40,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="6dp"
             android:layout_marginTop="1dp"
-            android:background="@drawable/img_back_button"
+            android:background="@drawable/btn_back"
             android:contentDescription="@string/go_back"
             tools:ignore="TouchTargetSizeCheck" />
     </FrameLayout>

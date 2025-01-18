@@ -23,7 +23,7 @@
             android:layout_height="46dp"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="6dp"
-            android:background="@drawable/img_back_button"
+            android:background="@drawable/btn_back"
             android:contentDescription="@string/go_back"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -52,7 +52,7 @@
             android:layout_height="46dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="9dp"
-            android:background="@drawable/img_burger"
+            android:background="@drawable/btn_burger"
             android:contentDescription="@string/_1"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -75,7 +75,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="120dp"
             android:layout_marginBottom="672dp"
-            android:background="@drawable/kt_textviews_basic"
+            android:background="@drawable/btn_trwhite_anim_2pxstroke"
             android:text="Bike Park"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
