@@ -1,16 +1,25 @@
 package com.example.sgb
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -18,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.BPSetupDao
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.BikeParkSetupData
+import com.example.sgb.room.BpMarksSuspenshion
 import com.example.sgb.room.Component
 import com.example.sgb.room.ComponentsDao
 import com.example.sub.R
@@ -55,6 +65,32 @@ class MaketSetup : AppCompatActivity() {
     private lateinit var shockPressureUnits: TextView
     private lateinit var tyresPressureUnits: TextView
 
+    // Збережені посилання на вью
+    private lateinit var marksHandle: Button
+
+    // Збереження стану
+    private var isExpanded = false
+
+    // Кешовані анімації
+    private lateinit var expandHeightAnimation: ValueAnimator
+    private lateinit var collapseHeightAnimation: ValueAnimator
+    private lateinit var expandWidthAnimation: ValueAnimator
+    private lateinit var collapseWidthAnimation: ValueAnimator
+
+
+    // Зберігаємо посилання на вью, що постійно є у layout
+    private lateinit var marksOverlay: FrameLayout
+    private lateinit var gOut: EditText
+    private lateinit var numbHands: EditText
+    private lateinit var squareEdgedHits: EditText
+    private lateinit var riderShifts: EditText
+    private lateinit var bottomOutSus: EditText
+    private lateinit var susSwinging: EditText
+    private lateinit var stability: EditText
+    private lateinit var btnCancel: Button
+
+    // Зберігаємо DAO, оскільки база даних – сінглтон
+    private val bpMarksSusDao by lazy { BikeDatabase.getDatabase(this).bpMarksSusDao() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_maket_setup)
@@ -65,18 +101,74 @@ class MaketSetup : AppCompatActivity() {
         val checkedText = intent.getStringExtra("BikePark")
         val setupId = intent.getIntExtra("setup_id", -1)
 
-        // Обробка натискання на fork_marks
-        findViewById<TextView>(R.id.fork_marks).setOnClickListener {
-            showSetupDialog("вилки")
-        }
-
-        // Обробка натискання на shock_marks
-        findViewById<TextView>(R.id.shock_marks).setOnClickListener {
-            showSetupDialog("аморта")
-        }
-
         // Ініціалізація View
         initView()
+
+        // Ініціалізація вью
+        marksHandle = findViewById(R.id.marks_handle)
+        marksOverlay = findViewById(R.id.marks_overlay)
+
+        // Ініціалізація кешованих анімацій
+        expandHeightAnimation = ValueAnimator.ofInt(110, 950).apply {
+            duration = 1000
+            addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.height = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+        }
+        collapseHeightAnimation = ValueAnimator.ofInt(950, 110).apply {
+            duration = 1000
+            addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.height = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+        }
+        expandWidthAnimation = ValueAnimator.ofInt(19, 22).apply {
+            duration = 1000
+            addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.width = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+        }
+        collapseWidthAnimation = ValueAnimator.ofInt(22, 19).apply {
+            duration = 1000
+            addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.width = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+        }
+
+        // Обробка натискання на marksHandle
+        marksHandle.setOnClickListener {
+//            hideKeyboardAndClearFocus()
+            if (isExpanded) {
+                // Закриття: запускаємо collapse-анімації та анімацію overlay
+                marksOverlay.startAnimation(
+                    AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+                )
+                marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
+                collapseWidthAnimation.start()
+                collapseHeightAnimation.start()
+            } else {
+                // Відкриття: викликаємо діалог, запускаємо expand-анімації та анімацію overlay
+                dialogForMarks(bikeId) { isExpanded = false } // callback для встановлення isExpanded = false при закритті діалогу
+                marksOverlay.visibility = View.VISIBLE
+                marksOverlay.startAnimation(
+                    AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+                )
+                expandWidthAnimation.start()
+                expandHeightAnimation.start()
+            }
+            isExpanded = !isExpanded
+        }
+
+        // Інший ваш код (ініціалізація інших вью, завантаження даних, діалоги тощо)
+
+
 
         // Ініціалізація вибору одиниць для Sag
         shockSegUnits.setOnClickListener {
@@ -120,7 +212,39 @@ class MaketSetup : AppCompatActivity() {
         if (setupId != -1) {
             loadSetupById(setupId)
         }
+
+
     }
+    // functions for hiding focus and keyboard
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        fun Activity.closeKeyboard() {
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val view = currentFocus ?: View(this) // Якщо немає фокусу, створюємо новий View
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+        // Якщо це клік поза EditText
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val view = currentFocus
+            if (view is EditText) {
+                val outRect = Rect()
+                view.getGlobalVisibleRect(outRect)
+                // Якщо натискання було поза EditText
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    closeKeyboard()  // Закриваємо клавіатуру перед скиданням фокусу
+                    view.clearFocus() // Прибираємо фокус
+                }
+            }
+        }
+
+
+        return super.dispatchTouchEvent(event)
+    }
+
+
+
+
+
 
     private fun initView() {
         // Ініціалізація текстових полів
@@ -147,6 +271,8 @@ class MaketSetup : AppCompatActivity() {
         forkPressure = findViewById(R.id.fork_pressure_value)
         shockPressure = findViewById(R.id.shock_pressure_value)
 
+
+
         forkSegUnits = findViewById(R.id.fork_seg_units)
         forkPressureUnits = findViewById(R.id.fork_pressure_units)
         shockSegUnits = findViewById(shock_seg_units)
@@ -165,6 +291,16 @@ class MaketSetup : AppCompatActivity() {
         forkPressureUnits.text = forkPressureUnitShared
         shockPressureUnits.text = shockPressureUnitShared
         tyresPressureUnits.text = tyresPressureUnitShared
+
+        // Ініціалізація вью
+        gOut = findViewById(R.id.g_out)
+        numbHands = findViewById(R.id.numb_hands)
+        squareEdgedHits = findViewById(R.id.square_edged_hits)
+        riderShifts = findViewById(R.id.rider_shifts)
+        bottomOutSus = findViewById(R.id.bottom_out_sus)
+        susSwinging = findViewById(R.id.sus_swinging)
+        stability = findViewById(R.id.stability)
+        btnCancel = findViewById(R.id.btn_cancel)
 
     }
 
@@ -312,25 +448,6 @@ class MaketSetup : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun showSetupDialog(componentName: String) {
-        // Надування макета для діалогового вікна
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.di_marks_for_setups_suspension, null)
-
-        // Оновлення тексту заголовка
-        val titleTextView = dialogView.findViewById<TextView>(R.id.tv_setup_rating_title)
-        titleTextView.text = "Оцінка сетапу для $componentName"
-
-        // Побудова та відображення діалогового вікна
-        val dialogBuilder = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
-        val transparentColor = resources.getColor(R.color.transparent, theme)
-        dialogBuilder.window?.setBackgroundDrawable(ColorDrawable(transparentColor))
-
-
-        dialogBuilder.show()
-    }
 
     private fun showUnitSelectionDialogForShock() {
         // Надування кастомного макета
@@ -360,6 +477,7 @@ class MaketSetup : AppCompatActivity() {
         // Показ діалогу
         dialogBuilder.show()
     }
+
     private fun showUnitSelectionDialogForFork() {
         // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_percent_or_mm, null)
@@ -397,6 +515,7 @@ class MaketSetup : AppCompatActivity() {
         // Оновлення TextView
         forkSegUnits.text = unit
     }
+
     // Метод для збереження вибраної одиниці
     private fun saveSelectedUnit(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -472,6 +591,7 @@ class MaketSetup : AppCompatActivity() {
         // Оновлення TextView
         forkPressureUnits.text = unit
     }
+
     // Метод для збереження вибраної одиниці
     private fun savePressureUnitForShock(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -518,4 +638,164 @@ class MaketSetup : AppCompatActivity() {
         // Оновлення TextView
         tyresPressureUnits.text = unit
     }
+
+    private fun dialogForMarks(bikeId: Int, onExpandChange: (Boolean) -> Unit) {
+        // Знаходимо overlay із розміткою діалогу, який вже включено в DrawerLayout
+        val marksOverlay = findViewById<FrameLayout>(R.id.marks_overlay)
+
+
+        // Завантаження даних із бази
+        lifecycleScope.launch {
+            val existingMarks = bpMarksSusDao.getBpMarksSusByBikeId(bikeId)
+            existingMarks?.let {
+                gOut.setText(it.gOut)
+                numbHands.setText(it.numbHands)
+                squareEdgedHits.setText(it.squareEdgedHits)
+                riderShifts.setText(it.riderShifts)
+                bottomOutSus.setText(it.bottomOutSus)
+                susSwinging.setText(it.susSwinging)
+                stability.setText(it.stability)
+            }
+        }
+        fun updateMarks() {
+            lifecycleScope.launch {
+                val newMarks = BpMarksSuspenshion(
+                    bikeId = bikeId,
+                    gOut = gOut.text.toString(),
+                    numbHands = numbHands.text.toString(),
+                    squareEdgedHits = squareEdgedHits.text.toString(),
+                    riderShifts = riderShifts.text.toString(),
+                    bottomOutSus = bottomOutSus.text.toString(),
+                    susSwinging = susSwinging.text.toString(),
+                    stability = stability.text.toString()
+                )
+                val existingMarks = bpMarksSusDao.getBpMarksSusByBikeId(bikeId)
+                if (existingMarks == null) {
+                    bpMarksSusDao.insertBpMarksSus(newMarks)
+                } else {
+                    bpMarksSusDao.updateBpMarksSus(newMarks.copy(id = existingMarks.id))
+                }
+            }
+        }
+        // Налаштовуємо кожен EditText із callback-ом, який зберігає дані після зміни тексту
+        setupEditTextWithLimit(gOut, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(numbHands, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(squareEdgedHits, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(riderShifts, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(bottomOutSus, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(susSwinging, onValidTextChanged = { updateMarks() })
+        setupEditTextWithLimit(stability, onValidTextChanged = { updateMarks() })
+        // Спільна функція для закриття overlay з анімацією і анімацією кнопки marks_handle
+        fun closeOverlayWithAnimation() {
+            // Анімація для кнопки marks_handle (закриття)
+            val marksHandle: Button = findViewById(R.id.marks_handle)
+
+            // Створюємо collapse-анімації для висоти та ширини
+            val collapseHeightAnimation =
+                ValueAnimator.ofInt(950, 110) // Наприклад: від 950 до 110px
+            val collapseWidthAnimation = ValueAnimator.ofInt(22, 19)    // Наприклад: від 22 до 19px
+
+            collapseHeightAnimation.duration = 1000
+            collapseWidthAnimation.duration = 1000
+
+            collapseWidthAnimation.addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.width = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+            collapseHeightAnimation.addUpdateListener { animation ->
+                val params = marksHandle.layoutParams
+                params.height = animation.animatedValue as Int
+                marksHandle.layoutParams = params
+            }
+
+            collapseWidthAnimation.start()
+            collapseHeightAnimation.start()
+
+            // Анімація закриття overlay (slide_out_right)
+            marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right))
+            marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
+// Передаємо isExpanded = false у зовнішню функцію
+            onExpandChange(false)
+        }
+
+        // Обробка кнопок: і btnCancel, і btnOk використовують ту саму функцію для закриття з анімацією
+        btnCancel.setOnClickListener {
+            closeOverlayWithAnimation()
+        }
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    fun setupEditTextWithLimit(editText: EditText, onValidTextChanged: (() -> Unit)? = null) {
+        val suffix = "/24"
+
+        // Якщо поле порожнє, встановлюємо лише суфікс і курсор на початку
+        if (editText.text.isEmpty()) {
+            editText.setText(suffix)
+            editText.setSelection(0)
+        }
+        // Збереження останнього валідного значення (тільки числова частина)
+        var previousNumeric = ""
+        editText.addTextChangedListener(object : TextWatcher {
+            var isEditing = false
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            @SuppressLint("SetTextI18n")
+            override fun afterTextChanged(s: Editable?) {
+                if (isEditing) return
+                isEditing = true
+
+                // Отримуємо поточний текст та видаляємо суфікс (якщо він є)
+                var fullText = s.toString()
+                if (fullText.endsWith(suffix)) {
+                    fullText = fullText.substring(0, fullText.length - suffix.length)
+                } else {
+                    // Якщо випадково з'явився символ '/', обрізаємо все після нього
+                    val slashIndex = fullText.indexOf('/')
+                    if (slashIndex != -1) {
+                        fullText = fullText.substring(0, slashIndex)
+                    }
+                }
+
+                // Перевіряємо, чи введене число не перевищує 24
+                val number = fullText.toIntOrNull()
+                if (number != null && number > 24) {
+                    // Якщо число перевищує 24 – повертаємо попереднє валідне значення
+                    Toast.makeText(
+                        editText.context,
+                        "Максимальний бал дорівнює 24!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    fullText = previousNumeric
+                }
+                // Зберігаємо поточне валідне значення
+                previousNumeric = fullText
+
+                // Встановлюємо текст знову: числова частина + незмінний суфікс
+                editText.setText(fullText + suffix)
+                // Курсор розташовується на кінці числової частини (тобто перед суфіксом)
+                editText.setSelection(fullText.length)
+
+                isEditing = false
+
+                // Викликаємо callback для збереження даних
+                onValidTextChanged?.invoke()
+            }
+        })
+        // Забороняємо переміщення курсора у зону суфікса
+        editText.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val allowedPosition = editText.text.toString().indexOf(suffix)
+                if (editText.selectionStart > allowedPosition) {
+                    editText.setSelection(allowedPosition)
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+    }
 }
+
+

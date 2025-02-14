@@ -2,40 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="320dp"
+    android:layout_height="550dp"
     android:background="@drawable/kt_textviews_basic1"
     tools:ignore="TextSizeCheck">
 
     <!-- Заголовок -->
-    <TextView
-        android:id="@+id/tv_setup_rating_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Оцінка сетапу для "
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        app:columnCount="2"
+        app:rowCount="1">
 
-
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/marks_table"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_setup_rating_title"
+        <TextView
+            android:id="@+id/tv_setup_rating_title"
+            android:layout_width="240dp"
+            android:layout_height="55dp"
+            android:gravity="end"
+            android:padding="16dp"
+            android:text="Оцінка сетапу для "
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:columnCount="2"
-            app:rowCount="4">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
+
+    <!-- Кнопка "Скасувати" -->
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="34dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_trwhite_anim_2pxstroke"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_columnSpan="1"
+            app:layout_gravity="fill"
+            tools:ignore="ButtonStyle,HardcodedText,TouchTargetSizeCheck" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/marks_table"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:columnCount="2"
+        app:rowCount="4">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="55dp"
                 android:gravity="center"
                 android:text="@string/General"
@@ -43,6 +71,8 @@
                 android:textSize="14sp"
                 app:layout_columnSpan="2"
                 app:layout_gravity="fill"/>
+
+
 
             <!-- Рядки таблиці -->
             <TextView
@@ -55,6 +85,7 @@
                 app:layout_columnSpan="1" />
 
             <EditText
+                android:id="@+id/g_out"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -77,6 +108,7 @@
                 app:layout_columnSpan="1" />
 
             <EditText
+                android:id="@+id/numb_hands"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -100,6 +132,7 @@
                 tools:ignore="TextSizeCheck" />
 
             <EditText
+                android:id="@+id/square_edged_hits"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -122,6 +155,7 @@
                 tools:ignore="TextSizeCheck" />
 
             <EditText
+                android:id="@+id/rider_shifts"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -145,6 +179,7 @@
                 tools:ignore="TextSizeCheck" />
 
             <EditText
+                android:id="@+id/bottom_out_sus"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"
@@ -168,8 +203,9 @@
                 tools:ignore="TextSizeCheck" />
 
             <EditText
+                android:id="@+id/sus_swinging"
                 android:layout_width="50dp"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="@string/__24"
                 android:importantForAutofill="no"
@@ -190,6 +226,7 @@
                 app:layout_columnSpan="1" />
 
             <EditText
+                android:id="@+id/stability"
                 android:layout_width="50dp"
                 android:layout_height="48dp"
                 android:gravity="center"

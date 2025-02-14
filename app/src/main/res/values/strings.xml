@@ -87,6 +87,7 @@
     <string name="stability">Стабільність</string>
     <string name="__24">--/24</string>
     <string name="Choose_option_in_proc_or_mm">Оберіть одиниці вимірювання в % або в mm</string>
+    <string name="Redem">Скасувати</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

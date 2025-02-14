@@ -75,9 +75,24 @@ interface BPSetupDao {
 
     @Query("DELETE FROM bikepark_table WHERE id = :id")
     suspend fun deleteBikeParkSetupById(id: Int)
-
-
 }
+// Sus- скорочено від suspension
+@Dao
+interface BPMarksSuspensionDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBpMarksSus(bpMarksFork: BpMarksSuspenshion): Long
+
+    @Query("SELECT * FROM bp_marks_fork_table WHERE bikeId = :bikeId LIMIT 1")
+    suspend fun getBpMarksSusByBikeId(bikeId: Int): BpMarksSuspenshion?
+
+    @Update
+    suspend fun updateBpMarksSus(bpMarksFork: BpMarksSuspenshion)
+
+    @Query("DELETE FROM bp_marks_fork_table WHERE bikeId = :bikeId")
+    suspend fun deleteBpMarksSusByBikeId(bikeId: Int)
+}
+
+
 
 
 

@@ -95,7 +95,20 @@ data class BikeParkSetupData(
     var shockSag: String = "",
     var forkSag: String = "",
     var forkPressure: String = "",
-    var shockPressure: String = ""
+    var shockPressure: String = "",
+)
+
+@Entity(tableName = "bp_marks_fork_table")
+data class BpMarksSuspenshion(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val bikeId: Int,           // Додано для зв’язку з байком
+    var gOut: String = "",
+    var numbHands: String = "",
+    var squareEdgedHits: String = "",
+    var riderShifts: String = "",
+    var bottomOutSus: String = "",
+    var susSwinging: String = "",
+    var stability: String = ""
 )
 
 
