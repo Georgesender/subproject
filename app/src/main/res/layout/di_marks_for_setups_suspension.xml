@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="320dp"
     android:layout_height="550dp"
     android:background="@drawable/kt_textviews_basic1"
     tools:ignore="TextSizeCheck">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/marks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
     <!-- Заголовок -->
     <androidx.gridlayout.widget.GridLayout
@@ -41,6 +57,7 @@
             android:layout_marginStart="27dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/btn_trwhite_anim_2pxstroke"
             android:gravity="center"
             android:text="X"
@@ -60,10 +77,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:columnCount="2"
-        app:rowCount="4">
+        app:rowCount="14">
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="251dp"
                 android:layout_height="55dp"
                 android:gravity="center"
                 android:text="@string/General"
@@ -76,7 +93,7 @@
 
             <!-- Рядки таблиці -->
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/g_outs"
@@ -86,7 +103,7 @@
 
             <EditText
                 android:id="@+id/g_out"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -99,7 +116,7 @@
                 tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/numb_hands"
@@ -109,7 +126,7 @@
 
             <EditText
                 android:id="@+id/numb_hands"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -122,7 +139,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/square_edged_hits"
@@ -133,7 +150,7 @@
 
             <EditText
                 android:id="@+id/square_edged_hits"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -145,7 +162,7 @@
                 app:layout_columnSpan="1"
                 tools:ignore="TouchTargetSizeCheck" />
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/rider_weight_shifts"
@@ -156,7 +173,7 @@
 
             <EditText
                 android:id="@+id/rider_shifts"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -169,7 +186,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/bottom_out_sus"
@@ -180,7 +197,7 @@
 
             <EditText
                 android:id="@+id/bottom_out_sus"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -193,7 +210,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/sus_swinging"
@@ -204,7 +221,7 @@
 
             <EditText
                 android:id="@+id/sus_swinging"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -217,7 +234,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
-                android:layout_width="250dp"
+                android:layout_width="230dp"
                 android:layout_height="48dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/stability"
@@ -227,7 +244,7 @@
 
             <EditText
                 android:id="@+id/stability"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:hint="@string/__24"
@@ -239,10 +256,148 @@
                 app:layout_columnSpan="1"
                 tools:ignore="TouchTargetSizeCheck" />
 
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="48dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/Tyre_plussines"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_columnSpan="1" />
 
+        <EditText
+            android:id="@+id/tyres_plussiness"
+            android:layout_width="70dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:hint="@string/__24"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="17sp"
+            app:layout_columnSpan="1"
+            tools:ignore="TouchTargetSizeCheck" />
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="48dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/Pulling"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_columnSpan="1" />
 
-            <!-- Повторити ще 6 рядків для повного оформлення таблиці -->
+        <EditText
+            android:id="@+id/corers"
+            android:layout_width="70dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:hint="@string/__24"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="17sp"
+            app:layout_columnSpan="1"
+            tools:ignore="TouchTargetSizeCheck" />
 
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="48dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/Pulling"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_columnSpan="1" />
+
+        <EditText
+            android:id="@+id/feet_tired"
+            android:layout_width="70dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:hint="@string/__24"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="17sp"
+            app:layout_columnSpan="1"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="48dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/Pulling"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_columnSpan="1" />
+
+        <EditText
+            android:id="@+id/pulling"
+            android:layout_width="70dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:hint="@string/__24"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="17sp"
+            app:layout_columnSpan="1"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="48dp"
+            android:gravity="end|center_vertical"
+            android:text="@string/Average_mark"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            app:layout_columnSpan="1" />
+        <TextView
+            android:id="@+id/average_mark"
+            android:layout_width="70dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="@string/__24"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            app:layout_columnSpan="1" />
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            app:layout_columnSpan="1" />
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
         </androidx.gridlayout.widget.GridLayout>
 
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -108,7 +108,10 @@ data class BpMarksSuspenshion(
     var riderShifts: String = "",
     var bottomOutSus: String = "",
     var susSwinging: String = "",
-    var stability: String = ""
+    var stability: String = "",
+    var tyresPlussiness: String = "",
+    var pulling: String = "",
+    var corners: String = "",
+    var tiredFeet: String = "",
+    var averageMark: Int
 )
-
-

@@ -88,6 +88,9 @@
     <string name="__24">--/24</string>
     <string name="Choose_option_in_proc_or_mm">Оберіть одиниці вимірювання в % або в mm</string>
     <string name="Redem">Скасувати</string>
+    <string name="Tyre_plussines">Амортизація покришок</string>
+    <string name="Pulling">Витягуваність</string>
+    <string name="Average_mark">Середня оцінка:</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

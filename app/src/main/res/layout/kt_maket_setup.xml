@@ -8,14 +8,17 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fitsSystemWindows="true"
-    android:background="@color/black">
+    android:background="@color/transparent">
 
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dp"
     android:background="@color/black">
+
+
 
     <FrameLayout
         android:id="@+id/bike_name_container"
@@ -46,6 +49,24 @@
             android:textColor="@color/white"
             android:textSize="28sp"
             tools:ignore="HardcodedText" />
+        <FrameLayout
+            android:id="@+id/marks_handle_container"
+            android:layout_width="40dp"
+            android:layout_height="70dp"
+            android:layout_gravity="end|center_vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <Button
+                android:id="@+id/marks_handle"
+                android:layout_width="30px"
+                android:layout_height="150px"
+                android:background="@drawable/btn_right_handle"
+                android:layout_gravity="end|center"
+                android:focusable="false"
+                android:clickable="false"
+                tools:ignore="PxUsage" />
+        </FrameLayout>
 
 
     </FrameLayout>
@@ -55,6 +76,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="70dp"
+        android:focusable="true"
+        android:fillViewport="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bike_name_container">
@@ -63,24 +87,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/setups"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
             android:background="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bike_name_container"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <Button
-                android:id="@+id/marks_handle"
-                android:layout_width="11dp"
-                android:layout_height="55dp"
-                android:background="@drawable/btn_right_handle"
-                app:layout_constraintBottom_toTopOf="@id/shock_table"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fork_table"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
 
 
 
@@ -100,7 +113,7 @@
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/fork_table"
-                android:layout_width="wrap_content"
+                android:layout_width="381dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
                 app:columnCount="6"
@@ -110,7 +123,7 @@
                 app:rowCount="5">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
                     app:layout_columnSpan="6"
@@ -133,7 +146,7 @@
                     <!-- Основний текст -->
                     <TextView
                         android:id="@+id/fork"
-                        android:layout_width="300dp"
+                        android:layout_width="285dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp"
                         android:gravity="center"
@@ -151,14 +164,15 @@
                 <EditText
                     android:id="@+id/fork_notes"
                     android:layout_width="match_parent"
-                    android:layout_height="34dp"
+                    android:layout_height="48dp"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
                     android:hint="@string/You_can_add_notes_here"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:maxLength="45"
+                    android:maxLength="120"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
                     android:paddingStart="10dp"
                     android:textColor="@color/green_strings"
                     android:textColorHint="@color/transparent_white"
@@ -170,7 +184,7 @@
 
 
                 <TextView
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
@@ -182,7 +196,7 @@
 
                 <TextView
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
@@ -195,8 +209,8 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="122dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="120dp"
+                    android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
@@ -221,7 +235,7 @@
 
                 <TextView
                     android:id="@+id/fork_pressure_units"
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -255,7 +269,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -266,7 +280,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -292,13 +306,14 @@
 
                 <EditText
                     android:id="@+id/fork_pressure_value"
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="number"
+                    android:maxLength="3"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -339,7 +354,7 @@
 
                 <EditText
                     android:id="@+id/fork_hsc"
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -355,7 +370,7 @@
 
                 <EditText
                     android:id="@+id/fork_lsc"
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -378,6 +393,7 @@
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="number"
+                    android:maxLength="3"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -397,11 +413,12 @@
                 android:textSize="26sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fork_table" />
+                app:layout_constraintTop_toBottomOf="@id/fork_table"
+                tools:ignore="TextContrastCheck" />
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/shock_table"
-                android:layout_width="wrap_content"
+                android:layout_width="381dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
                 app:columnCount="6"
@@ -412,7 +429,7 @@
 
                 <!-- Рядок таблиці -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
                     app:layout_columnSpan="6"
@@ -435,7 +452,7 @@
                     <!-- Основний текст -->
                     <TextView
                         android:id="@+id/shock"
-                        android:layout_width="300dp"
+                        android:layout_width="285dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="8dp"
                         android:gravity="center"
@@ -451,15 +468,16 @@
 
                 <EditText
                     android:id="@+id/shock_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="34dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
                     android:hint="@string/You_can_add_notes_here"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:maxLength="45"
+                    android:maxLength="120"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
                     android:paddingStart="10dp"
                     android:textColor="@color/green_strings"
                     android:textColorHint="@color/transparent_white"
@@ -471,7 +489,7 @@
 
 
                 <TextView
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
@@ -497,7 +515,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="122dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
@@ -525,7 +543,7 @@
 
                 <TextView
                     android:id="@+id/shock_pressure_units"
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -560,7 +578,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -571,7 +589,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -598,13 +616,14 @@
 
                 <EditText
                     android:id="@+id/shock_pressure_value"
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="number"
+                    android:maxLength="3"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -646,7 +665,7 @@
 
                 <EditText
                     android:id="@+id/shock_hsc"
-                    android:layout_width="61dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -686,6 +705,7 @@
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="number"
+                    android:maxLength="3"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -710,7 +730,7 @@
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/tyres_set"
-                android:layout_width="360dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
                 app:columnCount="2"
@@ -798,14 +818,15 @@
                 <EditText
                     android:id="@+id/tyre_notes"
                     android:layout_width="88dp"
-                    android:layout_height="34dp"
+                    android:layout_height="48dp"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
                     android:hint="@string/You_can_add_notes_here"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:maxLength="45"
+                    android:maxLength="120"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
                     android:paddingStart="10dp"
                     android:textColor="@color/green_strings"
                     android:textColorHint="@color/transparent_white"
@@ -817,7 +838,7 @@
 
                 <TextView
                     android:id="@+id/tyres_pressure_units"
-                    android:layout_width="82dp"
+                    android:layout_width="80dp"
                     android:layout_height="45dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -838,7 +859,7 @@
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    android:maxLength="10"
+                    android:maxLength="5"
                     android:minWidth="48dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
@@ -855,7 +876,7 @@
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
                     android:inputType="numberDecimal"
-                    android:maxLength="10"
+                    android:maxLength="5"
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
@@ -874,9 +895,9 @@
         <include layout="@layout/di_marks_for_setups_suspension"
             android:layout_width="320dp"
             android:layout_height="550dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginBottom="65dp"
-            android:layout_gravity="end|center_vertical"/>
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="end"/>
     </FrameLayout>
 
 

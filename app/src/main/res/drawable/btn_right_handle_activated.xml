@@ -4,7 +4,7 @@
     <!-- Основна форма -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/tr30_white"/>
+            <solid android:color="@color/linux_violet"/>
             <stroke android:width="1px" android:color="@color/transparent_black"/>
             <corners android:topLeftRadius="15px" android:bottomLeftRadius="15px"/>
         </shape>
