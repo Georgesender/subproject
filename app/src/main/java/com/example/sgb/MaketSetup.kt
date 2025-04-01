@@ -1,9 +1,12 @@
 package com.example.sgb
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +19,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -35,7 +39,10 @@ import com.example.sgb.room.ComponentsDao
 import com.example.sub.R
 import com.example.sub.R.id.average_mark
 import com.example.sub.R.id.shock_seg_units
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class MaketSetup : AppCompatActivity() {
     // View змінні
@@ -77,7 +84,6 @@ class MaketSetup : AppCompatActivity() {
     private var isExpanded = false
 
 
-
     // Зберігаємо посилання на вью, що постійно є у layout
     private lateinit var marksOverlay: FrameLayout
     private lateinit var gOut: EditText
@@ -95,6 +101,41 @@ class MaketSetup : AppCompatActivity() {
 
     private lateinit var gestureDetector: GestureDetector
 
+
+//test
+private val initialValues = mutableMapOf<Int, Int>()
+
+    private lateinit var inForkHsr: ImageButton
+    private lateinit var deForkHsr: ImageButton
+    private lateinit var inForkLsr: ImageButton
+    private lateinit var deForkLsr: ImageButton
+    private lateinit var inForkHsc: ImageButton
+    private lateinit var deForkHsc: ImageButton
+    private lateinit var inForkLsc: ImageButton
+    private lateinit var deForkLsc: ImageButton
+
+    private lateinit var inShockHsr: ImageButton
+    private lateinit var deShockHsr: ImageButton
+    private lateinit var inShockLsr: ImageButton
+    private lateinit var deShockLsr: ImageButton
+    private lateinit var inShockHsc: ImageButton
+    private lateinit var deShockHsc: ImageButton
+    private lateinit var inShockLsc: ImageButton
+    private lateinit var deShockLsc: ImageButton
+
+
+
+    // Delta TextViews for each EditText (ensure these IDs match your XML)
+    private lateinit var forkHSRDelta: TextView
+    private lateinit var forkLSRDelta: TextView
+    private lateinit var forkHSCDelta: TextView
+    private lateinit var forkLSCDelta: TextView
+    private lateinit var shockHSRDelta: TextView
+    private lateinit var shockLSRDelta: TextView
+    private lateinit var shockHSCDelta: TextView
+    private lateinit var shockLSCDelta: TextView
+
+
     // Зберігаємо DAO, оскільки база даних – сінглтон
     private val bpMarksSusDao by lazy { BikeDatabase.getDatabase(this).bpMarksSusDao() }
 
@@ -103,41 +144,44 @@ class MaketSetup : AppCompatActivity() {
         setContentView(R.layout.kt_maket_setup)
         fun closeKeyboard() {
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             val view = currentFocus ?: View(this)
             inputMethodManager.hideSoftInputFromWindow(
                 view.windowToken,
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+// In your onCreate or similar initialization code:
         val nestedScrollView = findViewById<NestedScrollView>(R.id.scroll_view)
 
-// Додаємо слухача змін розміру вікна
         nestedScrollView.viewTreeObserver.addOnGlobalLayoutListener {
             val rect = Rect()
             nestedScrollView.getWindowVisibleDisplayFrame(rect)
             val screenHeight = nestedScrollView.rootView.height
             val keyboardHeight = screenHeight - rect.bottom
 
-            if (keyboardHeight > screenHeight * 0.15) { // Якщо клавіатура займає більше 15% екрану
+            // If the keyboard occupies more than 30% of the screen...
+            if (keyboardHeight > screenHeight * 0.3) {
                 val focusedView = currentFocus
                 if (focusedView is EditText) {
-                    nestedScrollView.post {
-                        val extraScroll = (screenHeight * 0.1).toInt() // 10% від екрану
-                        val targetScrollY = focusedView.bottom + extraScroll
+                    // Get the visible rectangle of the focused view.
+                    val focusedRect = Rect()
+                    focusedView.getGlobalVisibleRect(focusedRect)
 
-                        if (targetScrollY > nestedScrollView.bottom) {
-                            nestedScrollView.fullScroll(View.FOCUS_DOWN)
-                        } else {
-                            nestedScrollView.smoothScrollTo(0, targetScrollY)
+                    // Only scroll if the bottom of the focused view is below the visible area.
+                    if (focusedRect.bottom > rect.bottom) {
+                        nestedScrollView.post {
+                            // Calculate the scroll amount:
+                            // Scroll just enough so that the bottom of the view moves within the visible area,
+                            // optionally add a small extra offset if desired.
+                            val extraOffset = 20  // you can adjust this value
+                            val scrollDelta = (focusedRect.bottom - rect.bottom) + extraOffset
+                            nestedScrollView.smoothScrollBy(0, scrollDelta)
                         }
                     }
-
-
                 }
             }
         }
-
         // Ініціалізація GestureDetector
         gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapUp(e: MotionEvent): Boolean {
@@ -160,49 +204,65 @@ class MaketSetup : AppCompatActivity() {
         val bikeId = intent.getIntExtra("bike_id", -1)
         val setupName = intent.getStringExtra("setup_name")
         val checkedText = intent.getStringExtra("BikePark")
-        val setupId = intent.getIntExtra("setup_id", -1)
+       // val setupId = intent.getIntExtra("setup_id", -1)
 
         // Ініціалізація View
         initView()
 
-// Обробка натискання на marksHandle
+
+        val handleNormal = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
+        val handleActive = ContextCompat.getDrawable(this, R.drawable.btn_right_handle_activated)
+
+        val fadeDuration = 800 // duration in milliseconds
+
         marksHandleCon.setOnClickListener {
-            marksHandle.isEnabled = false // Блокування кнопки
+            marksHandle.isEnabled = false // disable during transition
 
-            // Change the color based on expansion state
-            val btnHandle = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
-
-            val btnHandleActive = ContextCompat.getDrawable(this, R.drawable.btn_right_handle_activated)
-
-            // Change the button color without animation
             if (isExpanded) {
-                marksHandle.background = btnHandle
-                dialogForMarks(bikeId) { isExpanded = false }
-            } else {
-                marksHandle.background = btnHandleActive
-            }
+                // Create a TransitionDrawable to crossfade from active to normal.
+                val transition = TransitionDrawable(arrayOf(handleActive, handleNormal))
+                transition.isCrossFadeEnabled = true
+                marksHandle.background = transition
+                transition.startTransition(fadeDuration)
 
-            // Handle the overlay visibility with animation
-            if (isExpanded) {
-                marksOverlay.startAnimation(
-                    AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
-                )
+                // Animate overlay out as before.
+                marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right))
                 marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
+
+                // Once the transition is complete, force the final drawable.
+                marksHandle.postDelayed({
+                    marksHandle.background = handleNormal
+                }, fadeDuration.toLong())
             } else {
+                // Create a TransitionDrawable to crossfade from normal to active.
+                val transition = TransitionDrawable(arrayOf(handleNormal, handleActive))
+                transition.isCrossFadeEnabled = true
+                marksHandle.background = transition
+                transition.startTransition(fadeDuration)
+
+                // Show overlay and open marks dialog as before.
+                dialogForMarks(bikeId) { isExpanded = false }
                 marksOverlay.visibility = View.VISIBLE
-                marksOverlay.startAnimation(
-                    AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
-                )
+                marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right))
+
+                // Force the final drawable after the transition.
+                marksHandle.postDelayed({
+                    marksHandle.background = handleActive
+                }, fadeDuration.toLong())
             }
 
-            // Re-enable the button after a delay
+            // Re-enable the button after a delay a bit longer than the fade.
             marksHandle.postDelayed({
                 marksHandle.isEnabled = true
-            }, 600) // Delay before re-enabling the button
+            }, 400)
 
             isExpanded = !isExpanded
         }
 
+
+
+
+        // Інший ваш код (ініціалізація інших вью, завантаження даних, діалоги тощо)
 
 
         // Ініціалізація вибору одиниць для Sag
@@ -238,18 +298,135 @@ class MaketSetup : AppCompatActivity() {
         val componentsDao = bikeDatabase.componentsDao()
         val bpSetupDao = bikeDatabase.bpSetupDao()
 
-        // Завантаження даних
-        if (bikeId != -1) {
-            loadBikeData(bikeId, componentsDao)
-            loadSetupData(bikeId, bpSetupDao)
-            loadMarksData(bikeId)
+
+        loadBikeData(bikeId, componentsDao)
+        loadSetupData(bikeId, bpSetupDao)
+        loadSetupById(bikeId)
+        loadMarksData(bikeId)
+            // Load and display all saved delta values for 10 seconds.
+        loadDeltaValues(bikeId, bpSetupDao)
+
+
+
+
+
+
+// test
+        inForkHsr.setOnClickListener {
+            val currentValue = forkHSR.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            forkHSR.setText(newValue.toString())
+            updateFieldInDb("forkHSR", newValue, bikeId, bpSetupDao)
+
         }
 
-        if (setupId != -1) {
-            loadSetupById(setupId)
+
+        deForkHsr.setOnClickListener {
+            val currentValue = forkHSR.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            forkHSR.setText(newValue.toString())
+            updateFieldInDb("forkHSR", newValue, bikeId, bpSetupDao)
+        }
+
+        inForkLsr.setOnClickListener {
+            val currentValue = forkLSR.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            forkLSR.setText(newValue.toString())
+            updateFieldInDb("forkLSR", newValue, bikeId, bpSetupDao)
+        }
+
+        deForkLsr.setOnClickListener {
+            val currentValue = forkLSR.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            forkLSR.setText(newValue.toString())
+            updateFieldInDb("forkLSR", newValue, bikeId, bpSetupDao)
+        }
+
+        inForkHsc.setOnClickListener {
+            val currentValue = forkHSC.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            forkHSC.setText(newValue.toString())
+            updateFieldInDb("forkHSC", newValue, bikeId, bpSetupDao)
+        }
+
+        deForkHsc.setOnClickListener {
+            val currentValue = forkHSC.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            forkHSC.setText(newValue.toString())
+            updateFieldInDb("forkHSC", newValue, bikeId, bpSetupDao)
+        }
+
+        inForkLsc.setOnClickListener {
+            val currentValue = forkLSC.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            forkLSC.setText(newValue.toString())
+            updateFieldInDb("forkLSC", newValue, bikeId, bpSetupDao)
+        }
+
+        deForkLsc.setOnClickListener {
+            val currentValue = forkLSC.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            forkLSC.setText(newValue.toString())
+            updateFieldInDb("forkLSC", newValue, bikeId, bpSetupDao)
+        }
+
+
+        inShockHsr.setOnClickListener {
+            val currentValue = shockHSR.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            shockHSR.setText(newValue.toString())
+            updateFieldInDb("shockHSR", newValue, bikeId, bpSetupDao)
 
         }
 
+        deShockHsr.setOnClickListener {
+            val currentValue = shockHSR.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            shockHSR.setText(newValue.toString())
+            updateFieldInDb("shockHSR", newValue, bikeId, bpSetupDao)
+        }
+
+        inShockLsr.setOnClickListener {
+            val currentValue = shockLSR.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            shockLSR.setText(newValue.toString())
+            updateFieldInDb("shockLSR", newValue, bikeId, bpSetupDao)
+        }
+
+        deShockLsr.setOnClickListener {
+            val currentValue = shockLSR.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            shockLSR.setText(newValue.toString())
+            updateFieldInDb("shockLSR", newValue, bikeId, bpSetupDao)
+        }
+
+        inShockHsc.setOnClickListener {
+            val currentValue = shockHSC.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            shockHSC.setText(newValue.toString())
+            updateFieldInDb("shockHSC", newValue, bikeId, bpSetupDao)
+        }
+
+        deShockHsc.setOnClickListener {
+            val currentValue = shockHSC.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            shockHSC.setText(newValue.toString())
+            updateFieldInDb("shockHSC", newValue, bikeId, bpSetupDao)
+        }
+
+        inShockLsc.setOnClickListener {
+            val currentValue = shockLSC.text.toString().toIntOrNull() ?: 0
+            val newValue = currentValue + 1
+            shockLSC.setText(newValue.toString())
+            updateFieldInDb("shockLSC", newValue, bikeId, bpSetupDao)
+        }
+
+        deShockLsc.setOnClickListener {
+            val currentValue = shockLSC.text.toString().toIntOrNull() ?: 0
+            val newValue = if (currentValue > 0) currentValue - 1 else 0
+            shockLSC.setText(newValue.toString())
+            updateFieldInDb("shockLSC", newValue, bikeId, bpSetupDao)
+        }
 
     }
     // functions for hiding focus and keyboard
@@ -294,7 +471,7 @@ class MaketSetup : AppCompatActivity() {
         tyresPressureUnits = findViewById(R.id.tyres_pressure_units)
 
         // Завантаження збережених одиниць вимірювання
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         val shockUnit = sharedPreferences.getString("shockSegUnit", "")
         val forkUnit = sharedPreferences.getString("forkSegUnit", "")
         val forkPressureUnitShared = sharedPreferences.getString("forkPressureShared", "")
@@ -323,6 +500,123 @@ class MaketSetup : AppCompatActivity() {
         marksHandleCon = findViewById(R.id.marks_handle_container)
         marksOverlay = findViewById(R.id.marks_overlay)
 
+
+        // testing
+        // Initialize delta TextViews for the composite cells.
+        forkHSRDelta = findViewById(R.id.fork_hsr_delta)
+        forkLSRDelta = findViewById(R.id.fork_lsr_delta)
+        forkHSCDelta = findViewById(R.id.fork_hsc_delta)
+        forkLSCDelta = findViewById(R.id.fork_lsc_delta)
+        inForkHsr = findViewById(R.id.increment_fhsr)
+        deForkHsr = findViewById(R.id.decrement_fhsr)
+        inForkLsr = findViewById(R.id.increment_flsr)
+        deForkLsr = findViewById(R.id.decrement_flsr)
+        inForkHsc = findViewById(R.id.increment_fhsc)
+        deForkHsc = findViewById(R.id.decrement_fhsc)
+        inForkLsc = findViewById(R.id.increment_flsc)
+        deForkLsc = findViewById(R.id.decrement_flsc)
+
+        shockHSRDelta = findViewById(R.id.shock_hsr_delta)
+        shockLSRDelta = findViewById(R.id.shock_lsr_delta)
+        shockHSCDelta = findViewById(R.id.shock_hsc_delta)
+        shockLSCDelta = findViewById(R.id.shock_lsc_delta)
+        inShockHsr = findViewById(R.id.increment_shsr)
+        deShockHsr = findViewById(R.id.decrement_shsr)
+        inShockLsr = findViewById(R.id.increment_slsr)
+        deShockLsr = findViewById(R.id.decrement_slsr)
+        inShockHsc = findViewById(R.id.increment_shsc)
+        deShockHsc = findViewById(R.id.decrement_shsc)
+        inShockLsc = findViewById(R.id.increment_slsc)
+        deShockLsc = findViewById(R.id.decrement_slsc)
+
+
+    }
+
+    private fun updateFieldInDb(
+        fieldName: String,
+        newValue: Int,
+        bikeId: Int,
+        bpSetupDao: BPSetupDao
+    ) {
+        // Використовуємо lifecycleScope для контролю життєвого циклу корутин
+        lifecycleScope.launch {
+            // Працюємо з БД на IO-потоці
+            withContext(Dispatchers.IO) {
+                val setup = bpSetupDao.getBikeParkSetupById(bikeId)
+                if (setup != null) {
+                    when (fieldName) {
+                        "forkHSR" -> setup.forkHSR = newValue
+                        "forkLSR" -> setup.forkLSR = newValue
+                        "forkHSC" -> setup.forkHSC = newValue
+                        "forkLSC" -> setup.forkLSC = newValue
+                        "shockHSR" -> setup.shockHSR = newValue
+                        "shockLSR" -> setup.shockLSR = newValue
+                        "shockHSC" -> setup.shockHSC = newValue
+                        "shockLSC" -> setup.shockLSC = newValue
+                    }
+                    bpSetupDao.updateBikeParkSetup(setup)
+                }
+            }
+            // Перемикаємося на головний потік для оновлення UI
+            when (fieldName) {
+                "forkHSR" -> updateDeltaForField(
+                    forkHSR,
+                    forkHSRDelta,
+                    "forkHSR",
+                    bikeId,
+                    bpSetupDao
+                )
+                "forkLSR" -> updateDeltaForField(
+                    forkLSR,
+                    forkLSRDelta,
+                    "forkLSR",
+                    bikeId,
+                    bpSetupDao
+                )
+                "forkHSC" -> updateDeltaForField(
+                    forkHSC,
+                    forkHSCDelta,
+                    "forkHSC",
+                    bikeId,
+                    bpSetupDao
+                )
+                "forkLSC" -> updateDeltaForField(
+                    forkLSC,
+                    forkLSCDelta,
+                    "forkLSC",
+                    bikeId,
+                    bpSetupDao
+                )
+                "shockHSR" -> updateDeltaForField(
+                    shockHSR,
+                    shockHSRDelta,
+                    "shockHSR",
+                    bikeId,
+                    bpSetupDao
+                )
+                "shockLSR" -> updateDeltaForField(
+                    shockLSR,
+                    shockLSRDelta,
+                    "shockLSR",
+                    bikeId,
+                    bpSetupDao
+                )
+                "shockHSC" -> updateDeltaForField(
+                    shockHSC,
+                    shockHSCDelta,
+                    "shockHSC",
+                    bikeId,
+                    bpSetupDao
+                )
+                "shockLSC" -> updateDeltaForField(
+                    shockLSC,
+                    shockLSCDelta,
+                    "shockLSC",
+                    bikeId,
+                    bpSetupDao
+                )
+            }
+        }
     }
 
     private fun navigateBackToActSetups(bikeId: Int) {
@@ -343,13 +637,70 @@ class MaketSetup : AppCompatActivity() {
         textViewHeader.text = checkedText ?: setupName ?: getString(R.string.test)
     }
 
+
+    private fun updateDeltaForField(
+        editText: EditText,
+        deltaTextView: TextView,
+        field: String,
+        bikeId: Int,
+        bpSetupDao: BPSetupDao,
+        delayMillis: Long = 2000
+    ) {
+        val baseline = initialValues[editText.id] ?: 0
+        val currentValue = editText.text.toString().toIntOrNull() ?: 0
+        val diff = currentValue - baseline
+
+        // Перемикаємося на головний потік для роботи з UI
+        lifecycleScope.launch(Dispatchers.Main) {
+            if (diff == 0) {
+                // Якщо різниця нуль — fade out та приховування
+                deltaTextView.animate().alpha(0f).setDuration(500).withEndAction {
+                    deltaTextView.visibility = View.GONE
+                }
+            } else {
+                val deltaStr = if (diff > 0) "+$diff" else diff.toString()
+                deltaTextView.text = deltaStr
+
+                // Встановлюємо потрібний колір: зелений для позитивного, червоний для негативного
+                val colorRes = if (diff > 0) R.color.green else R.color.red_dark
+                deltaTextView.setTextColor(ContextCompat.getColor(deltaTextView.context, colorRes))
+
+                // Анімація fade in
+                deltaTextView.alpha = 0f
+                deltaTextView.visibility = View.VISIBLE
+                deltaTextView.animate().alpha(1f).setDuration(500).start()
+
+                // Оновлюємо дельту в БД (цей метод можна залишити в IO, якщо він не змінює UI)
+                updateDeltaFieldInDb(bikeId, bpSetupDao, field, deltaStr)
+
+                // Плануємо fade out після затримки
+                scheduleHideDelta(deltaTextView, delayMillis)
+            }
+        }
+    }
+
+    private fun scheduleHideDelta(deltaTextView: TextView, delayMillis: Long = 2000) {
+        // Використовуємо postDelayed, який гарантує виконання на UI-потоці
+        deltaTextView.postDelayed({
+            deltaTextView.animate().alpha(0f).setDuration(500).withEndAction {
+                deltaTextView.visibility = View.GONE
+            }
+        }, delayMillis)
+    }
+
+
+
+    // --- When loading data from Room, load baselines and attach delta listeners ---
     @SuppressLint("SetTextI18n")
     private fun loadSetupData(bikeId: Int, bpSetupDao: BPSetupDao) {
         lifecycleScope.launch {
-            val bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
-                ?: BikeParkSetupData(bikeId = bikeId).also { bpSetupDao.insertBikeParkSetup(it) }
-
-            mapOf(
+            // Отримуємо запис за bikeId. Завдяки унікальному індексу гарантовано буде лише один запис.
+            var bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
+            if (bpSetups == null) {
+                bpSetups = BikeParkSetupData(bikeId = bikeId)
+                bpSetupDao.insertBikeParkSetup(bpSetups)
+            }
+            val fields = mapOf(
                 forkHSR to "forkHSR",
                 forkLSR to "forkLSR",
                 forkHSC to "forkHSC",
@@ -359,7 +710,6 @@ class MaketSetup : AppCompatActivity() {
                 shockLSR to "shockLSR",
                 shockHSC to "shockHSC",
                 shockLSC to "shockLSC",
-                shockNotes to "shockNotes",
                 fTyrePressure to "frontTyrePressure",
                 rTyrePressure to "rearTyrePressure",
                 tyreNotes to "tyreNotes",
@@ -367,12 +717,97 @@ class MaketSetup : AppCompatActivity() {
                 shockSag to "shockSag",
                 forkPressure to "forkPressure",
                 shockPressure to "shockPressure"
-            ).forEach { (editText, field) ->
-                editText.setText(bpSetups.getFieldValue(field))
-                setupEditTextListener(editText, bikeId, field, bpSetupDao)
+            )
+
+            fields.forEach { (editText, fieldName) ->
+                val savedValue = bpSetups.getFieldValue(fieldName)
+                editText.setText(savedValue)
+                // Записуємо базове значення для delta
+                initialValues[editText.id] = savedValue.toIntOrNull() ?: 0
+                // Додаємо слухач для оновлення
+                setupEditTextListener(editText, bikeId, fieldName, bpSetupDao)
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+    // Get the value as a String for display purposes.
+    private fun BikeParkSetupData.getFieldValue(field: String): String {
+        return when (field) {
+            "forkHSR" -> forkHSR.toString()
+            "forkLSR" -> forkLSR.toString()
+            "forkHSC" -> forkHSC.toString()
+            "forkLSC" -> forkLSC.toString()
+            "forkNotes" -> forkNotes
+            "shockHSR" -> shockHSR.toString()
+            "shockLSR" -> shockLSR.toString()
+            "shockHSC" -> shockHSC.toString()
+            "shockLSC" -> shockLSC.toString()
+            "shockNotes" -> shockNotes
+            "frontTyrePressure" -> frontTyrePressure
+            "rearTyrePressure" -> rearTyrePressure
+            "tyreNotes" -> tyreNotes
+            "forkSag" -> forkSag
+            "shockSag" -> shockSag
+            "forkPressure" -> forkPressure
+            "shockPressure" -> shockPressure
+            else -> ""
+        }
+    }
+
+    // Save the value, converting strings to ints where needed.
+    private fun BikeParkSetupData.setFieldValue(field: String, value: String) {
+        when (field) {
+            "forkHSR" -> forkHSR = value.toIntOrNull() ?: 0
+            "forkLSR" -> forkLSR = value.toIntOrNull() ?: 0
+            "forkHSC" -> forkHSC = value.toIntOrNull() ?: 0
+            "forkLSC" -> forkLSC = value.toIntOrNull() ?: 0
+            "forkNotes" -> forkNotes = value
+            "shockHSR" -> shockHSR = value.toIntOrNull() ?: 0
+            "shockLSR" -> shockLSR = value.toIntOrNull() ?: 0
+            "shockHSC" -> shockHSC = value.toIntOrNull() ?: 0
+            "shockLSC" -> shockLSC = value.toIntOrNull() ?: 0
+            "shockNotes" -> shockNotes = value
+            "frontTyrePressure" -> frontTyrePressure = value
+            "rearTyrePressure" -> rearTyrePressure = value
+            "tyreNotes" -> tyreNotes = value
+            "forkSag" -> forkSag = value
+            "shockSag" -> shockSag = value
+            "forkPressure" -> forkPressure = value
+            "shockPressure" -> shockPressure = value
+        }
+    }
+    private fun BikeParkSetupData.setDeltaFieldValue(field: String, delta: String) {
+        when (field) {
+            "forkHSR" -> this.forkHSRDelta = delta
+            "forkLSR" -> this.forkLSRDelta = delta
+            "forkHSC" -> this.forkHSCDelta = delta
+            "forkLSC" -> this.forkLSCDelta = delta
+            "shockHSR" -> this.shockHSRDelta = delta
+            "shockLSR" -> this.shockLSRDelta = delta
+            "shockHSC" -> this.shockHSCDelta = delta
+            "shockLSC" -> this.shockLSCDelta = delta
+            // Add other fields as needed.
+        }
+    }
+
+
+    private fun updateDeltaFieldInDb(bikeId: Int, bpSetupDao: BPSetupDao, field: String, delta: String) {
+        lifecycleScope.launch {
+            val bpSetup = bpSetupDao.getBikeParkSetupById(bikeId)
+            bpSetup?.let {
+                it.setDeltaFieldValue(field, delta)
+                bpSetupDao.updateBikeParkSetup(it)
             }
         }
     }
+
 
     private fun loadBikeData(bikeId: Int, componentsDao: ComponentsDao) {
         lifecycleScope.launch {
@@ -392,10 +827,10 @@ class MaketSetup : AppCompatActivity() {
         }
     }
 
-    private fun loadSetupById(setupId: Int) {
+    private fun loadSetupById(bikeId: Int) {
         lifecycleScope.launch {
             val setupDao = BikeDatabase.getDatabase(this@MaketSetup).setupDao()
-            val setup = setupDao.getSetupById(setupId)
+            val setup = setupDao.getSetupById(bikeId)
             setup?.let {
                 findViewById<TextView>(R.id.setup_name).append("\nДані: ${it.setupName}")
             }
@@ -470,53 +905,110 @@ class MaketSetup : AppCompatActivity() {
             }
         })
     }
+    private fun loadDeltaValues(bikeId: Int, bpSetupDao: BPSetupDao) {
+        lifecycleScope.launch {
+            val bpSetup = bpSetupDao.getBikeParkSetupById(bikeId)
+            bpSetup?.let {
+                // forkHSR delta
+                if (it.forkHSRDelta.isNotEmpty()) {
+                    forkHSRDelta.text = it.forkHSRDelta
+                    val colorRes = when {
+                        it.forkHSRDelta.startsWith("+") -> R.color.green
+                        it.forkHSRDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    forkHSRDelta.setTextColor(ContextCompat.getColor(forkHSRDelta.context, colorRes))
+                    forkHSRDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(forkHSRDelta)
+                }
+                // forkLSR delta
+                if (it.forkLSRDelta.isNotEmpty()) {
+                    forkLSRDelta.text = it.forkLSRDelta
+                    val colorRes = when {
+                        it.forkLSRDelta.startsWith("+") -> R.color.green
+                        it.forkLSRDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    forkLSRDelta.setTextColor(ContextCompat.getColor(forkLSRDelta.context, colorRes))
+                    forkLSRDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(forkLSRDelta)
+                }
+                // forkHSC delta
+                if (it.forkHSCDelta.isNotEmpty()) {
+                    forkHSCDelta.text = it.forkHSCDelta
+                    val colorRes = when {
+                        it.forkHSCDelta.startsWith("+") -> R.color.green
+                        it.forkHSCDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    forkHSCDelta.setTextColor(ContextCompat.getColor(forkHSCDelta.context, colorRes))
+                    forkHSCDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(forkHSCDelta)
+                }
+                // forkLSC delta
+                if (it.forkLSCDelta.isNotEmpty()) {
+                    forkLSCDelta.text = it.forkLSCDelta
+                    val colorRes = when {
+                        it.forkLSCDelta.startsWith("+") -> R.color.green
+                        it.forkLSCDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    forkLSCDelta.setTextColor(ContextCompat.getColor(forkLSCDelta.context, colorRes))
+                    forkLSCDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(forkLSCDelta)
+                }
+                if (it.shockHSRDelta.isNotEmpty()) {
+                    shockHSRDelta.text = it.shockHSRDelta
+                    val colorRes = when {
+                        it.shockHSRDelta.startsWith("+") -> R.color.green
+                        it.shockHSRDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    shockHSRDelta.setTextColor(ContextCompat.getColor(shockHSRDelta.context, colorRes))
+                    shockHSRDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(shockHSRDelta)
+                }
+                // forkLSR delta
+                if (it.shockLSRDelta.isNotEmpty()) {
+                    shockLSRDelta.text = it.shockLSRDelta
+                    val colorRes = when {
+                        it.shockLSRDelta.startsWith("+") -> R.color.green
+                        it.shockLSRDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    shockLSRDelta.setTextColor(ContextCompat.getColor(shockLSRDelta.context, colorRes))
+                    shockLSRDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(shockLSRDelta)
+                }
+                // forkHSC delta
+                if (it.shockHSCDelta.isNotEmpty()) {
+                    shockHSCDelta.text = it.shockHSCDelta
+                    val colorRes = when {
+                        it.shockHSCDelta.startsWith("+") -> R.color.green
+                        it.shockHSCDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    shockHSCDelta.setTextColor(ContextCompat.getColor(shockHSCDelta.context, colorRes))
+                    shockHSCDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(shockHSCDelta)
+                }
+                // forkLSC delta
+                if (it.shockLSCDelta.isNotEmpty()) {
+                    shockLSCDelta.text = it.shockLSCDelta
+                    val colorRes = when {
+                        it.shockLSCDelta.startsWith("+") -> R.color.green
+                        it.shockLSCDelta.startsWith("-") -> R.color.red_dark
+                        else -> R.color.green
+                    }
+                    shockLSCDelta.setTextColor(ContextCompat.getColor(shockLSCDelta.context, colorRes))
+                    shockLSCDelta.visibility = View.VISIBLE
+                    scheduleHideDelta(shockLSCDelta)
+                }
 
-
-    // Допоміжні методи для доступу до полів BikeParkSetupData
-    private fun BikeParkSetupData.getFieldValue(field: String): String {
-        return when (field) {
-            "forkHSR" -> forkHSR
-            "forkLSR" -> forkLSR
-            "forkHSC" -> forkHSC
-            "forkLSC" -> forkLSC
-            "forkNotes" -> forkNotes
-            "shockHSR" -> shockHSR
-            "shockLSR" -> shockLSR
-            "shockHSC" -> shockHSC
-            "shockLSC" -> shockLSC
-            "shockNotes" -> shockNotes
-            "frontTyrePressure" -> frontTyrePressure
-            "rearTyrePressure" -> rearTyrePressure
-            "tyreNotes" -> tyreNotes
-            "forkSag" -> forkSag
-            "shockSag" -> shockSag
-            "forkPressure" -> forkPressure
-            "shockPressure" -> shockPressure
-            else -> ""
+            }
         }
     }
 
-    private fun BikeParkSetupData.setFieldValue(field: String, value: String) {
-        when (field) {
-            "forkHSR" -> forkHSR = value
-            "forkLSR" -> forkLSR = value
-            "forkHSC" -> forkHSC = value
-            "forkLSC" -> forkLSC = value
-            "forkNotes" -> forkNotes = value
-            "shockHSR" -> shockHSR = value
-            "shockLSR" -> shockLSR = value
-            "shockHSC" -> shockHSC = value
-            "shockLSC" -> shockLSC = value
-            "shockNotes" -> shockNotes = value
-            "frontTyrePressure" -> frontTyrePressure = value
-            "rearTyrePressure" -> rearTyrePressure = value
-            "tyreNotes" -> tyreNotes = value
-            "forkSag" -> forkSag = value
-            "shockSag" -> shockSag = value
-            "forkPressure" -> forkPressure = value
-            "shockPressure" -> shockPressure = value
-        }
-    }
 
 
     private fun showUnitSelectionDialogForShock() {
@@ -579,7 +1071,7 @@ class MaketSetup : AppCompatActivity() {
 
     // Метод для збереження вибраної одиниці для Fork
     private fun saveSelectedUnitForFork(unit: String) {
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("forkSegUnit", unit) }
 
         // Оновлення TextView
@@ -588,7 +1080,7 @@ class MaketSetup : AppCompatActivity() {
 
     // Метод для збереження вибраної одиниці
     private fun saveSelectedUnit(unit: String) {
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("shockSegUnit", unit) }
 
         // Оновлення TextView
@@ -611,12 +1103,12 @@ class MaketSetup : AppCompatActivity() {
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
-            savePressureUnitForFork("psi")
+            savePressureUnitForFork("PSI")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
         btnBar.setOnClickListener {
-            savePressureUnitForFork("bar")
+            savePressureUnitForFork("BAR")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
@@ -640,12 +1132,12 @@ class MaketSetup : AppCompatActivity() {
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
-            savePressureUnitForShock("psi")
+            savePressureUnitForShock("PSI")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
         btnBar.setOnClickListener {
-            savePressureUnitForShock("bar")
+            savePressureUnitForShock("BAR")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
@@ -655,7 +1147,7 @@ class MaketSetup : AppCompatActivity() {
 
     // Метод для збереження вибраної одиниці для Fork
     private fun savePressureUnitForFork(unit: String) {
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("forkPressureShared", unit) }
 
         // Оновлення TextView
@@ -664,7 +1156,7 @@ class MaketSetup : AppCompatActivity() {
 
     // Метод для збереження вибраної одиниці
     private fun savePressureUnitForShock(unit: String) {
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("shockPressureShared", unit) }
 
         // Оновлення TextView
@@ -687,12 +1179,12 @@ class MaketSetup : AppCompatActivity() {
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
-            savePressureUnitForTyres("psi")
+            savePressureUnitForTyres("PSI")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
         btnBar.setOnClickListener {
-            savePressureUnitForTyres("bar")
+            savePressureUnitForTyres("BAR")
             dialogBuilder.dismiss() // Закриття діалогу
         }
 
@@ -702,7 +1194,7 @@ class MaketSetup : AppCompatActivity() {
 
     // Метод для збереження вибраної одиниці для Fork
     private fun savePressureUnitForTyres(unit: String) {
-        val sharedPreferences = getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("tyresPressureUnit", unit) }
 
         // Оновлення TextView
@@ -776,32 +1268,40 @@ class MaketSetup : AppCompatActivity() {
         setupEditTextWithLimit(pulling, onValidTextChanged = { updateMarks() })
         setupEditTextWithLimit(cornersEdit, onValidTextChanged = { updateMarks()})
         setupEditTextWithLimit(feetTired, onValidTextChanged = { updateMarks()})
+        // Спільна функція для закриття overlay з анімацією і анімацією кнопки marks_handle
         fun closeOverlayWithAnimation() {
-            marksHandle.isEnabled = false // Disable the button before changing the color
+            marksHandle.isEnabled = false // Блокуємо кнопку перед анімацією
+             val handleNormal = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
+            val handleActive = ContextCompat.getDrawable(this, R.drawable.btn_right_handle_activated)
+            val fadeDuration = 800 // duration in milliseconds
+            val animationSet = AnimatorSet().apply {
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        // Додаємо затримку перед розблокуванням кнопки
+                        marksHandle.postDelayed({
+                            marksHandle.isEnabled = true
+                        }, 650) // Додаємо 500 мс до загального часу блокування
+                    }
+                })
+            }
 
-            // Change the color to normal using the color from resources
-            val btnHandle = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
-            marksHandle.background = btnHandle
+            // Запуск анімацій
+            animationSet.start()
+            // Create a TransitionDrawable to crossfade from active to normal.
+            val transition = TransitionDrawable(arrayOf(handleActive, handleNormal))
+            transition.isCrossFadeEnabled = true
+            marksHandle.background = transition
+            transition.startTransition(fadeDuration)
 
-
-
-            // Start the slide-out animation for marksOverlay
-            val slideOutAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
-            marksOverlay.startAnimation(slideOutAnimation)
-
-            // After the animation ends, hide the overlay
-            marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, slideOutAnimation.duration)
-
-            // After the color change, re-enable the button after a short delay
+            // Анімація закриття overlay (slide_out_right)
+            marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right))
+            marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
             marksHandle.postDelayed({
-                marksHandle.isEnabled = true
-            }, 400)
-
-            // Pass isExpanded = false to the external function
+                marksHandle.background = handleNormal
+            }, fadeDuration.toLong())
+            // Передаємо isExpanded = false у зовнішню функцію
             onExpandChange(false)
         }
-
-
 
         // Обробка кнопок: і btnCancel, і btnOk використовують ту саму функцію для закриття з анімацією
         btnCancel.setOnClickListener {
@@ -851,7 +1351,7 @@ class MaketSetup : AppCompatActivity() {
                     // Якщо число перевищує 24 – повертаємо попереднє валідне значення
                     Toast.makeText(
                         editText.context,
-                        "Максимальний бал дорівнює 24!",
+                        "Maximum - 24!",
                         Toast.LENGTH_SHORT
                     ).show()
                     fullText = previousNumeric

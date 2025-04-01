@@ -1,5 +1,6 @@
 package com.example.sgb.room
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -67,8 +68,11 @@ interface BPSetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBikeParkSetup(setup: BikeParkSetupData): Long
 
-    @Query("SELECT * FROM bikepark_table WHERE id = :id")
-    suspend fun getBikeParkSetupById(id: Int): BikeParkSetupData?
+    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
+    suspend fun getBikeParkSetupById(bikeId: Int): BikeParkSetupData?
+
+    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
+    fun getBikeParkSetupLive(bikeId: Int): LiveData<BikeParkSetupData>
 
     @Update
     suspend fun updateBikeParkSetup(setup: BikeParkSetupData)

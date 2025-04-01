@@ -1,6 +1,7 @@
 package com.example.sgb.room
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 // BikeEntity.kt
@@ -75,18 +76,29 @@ data class MarksForSetup(
     val setupName: String // Назва сетапу
 )
 // cетап для байкпарку
-@Entity(tableName = "bikepark_table")
+@Entity(
+    tableName = "bikepark_table",
+    indices = [Index(value = ["bikeId"], unique = true)]
+)
 data class BikeParkSetupData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var bikeId: Int,
-    var forkHSR: String = "",
-    var forkLSR: String = "",
-    var forkHSC: String = "",
-    var forkLSC: String = "",
-    var shockHSR: String = "",
-    var shockLSR: String = "",
-    var shockHSC: String = "",
-    var shockLSC: String = "",
+    var forkHSR: Int = 0,
+    var forkHSRDelta: String = "",
+    var forkLSR: Int = 0,
+    var forkLSRDelta: String = "",
+    var forkHSC: Int = 0,
+    var forkHSCDelta: String = "",
+    var forkLSC: Int = 0,
+    var forkLSCDelta: String = "",
+    var shockHSR: Int = 0,
+    var shockHSRDelta: String = "",
+    var shockLSR: Int = 0,
+    var shockLSRDelta: String = "",
+    var shockHSC: Int = 0,
+    var shockHSCDelta: String = "",
+    var shockLSC: Int = 0,
+    var shockLSCDelta: String = "",
     var frontTyrePressure: String = "",
     var rearTyrePressure: String = "",
     var forkNotes: String = "",
@@ -95,7 +107,7 @@ data class BikeParkSetupData(
     var shockSag: String = "",
     var forkSag: String = "",
     var forkPressure: String = "",
-    var shockPressure: String = "",
+    var shockPressure: String = ""
 )
 
 @Entity(tableName = "bp_marks_fork_table")

@@ -17,5 +17,9 @@
     <color name="green_strings">#6A8759</color>
     <color name="green">#008000</color>
     <color name="tr30_white">#4DFFFFFF</color>
+    <color name="tr75_white">#BFFFFFFF</color>
     <color name="linux_violet">#6c54aa</color>
+    <color name="red_rebound">#f44336</color>
+    <color name="red_dark">#B80B02</color>
+    <color name="blue_compression">#1a73e8</color>
 </resources>

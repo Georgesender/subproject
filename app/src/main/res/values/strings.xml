@@ -90,7 +90,7 @@
     <string name="Redem">Скасувати</string>
     <string name="Tyre_plussines">Амортизація покришок</string>
     <string name="Pulling">Витягуваність</string>
-    <string name="Average_mark">Середня оцінка:</string>
+    <string name="Average_mark">Average mark</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>
