@@ -91,6 +91,29 @@
     <string name="Tyre_plussines">Амортизація покришок</string>
     <string name="Pulling">Витягуваність</string>
     <string name="Average_mark">Average mark</string>
+    <string name="info">info</string>
+    <string name="Suspension">Підвіска</string>
+    <string name="Rebound">ВІДСКОК</string>
+
+    <string name="hint_hsr">High-speed-rebound(HSR) - відповідає за швидкий відскок під час великих, різких подій (наприклад, глибокого стискання або приземлення з стрибка); Рекомендація: встановити HSR на максимально повільний режим (закритий), особливо для даунхіллу, щоб уникнути надмірного rebound.</string>
+    <string name="hint_lsr">Low-speed-rebound(LSR) - контролює повільні, більш тонкі відскоки (типові для щоденних нерівностей та відриву); Рекомендація: використовуйте LSR для точного налаштування rebound, регулюючи його до оптимального балансу між «плюшевість» та стабільністю.</string>
+
+    <string name="Compression">КОМПРЕСІЯ</string>
+    <string name="hint_hsc">High-speed-compression - Контролює стискання підвіски під час різких, високошвидкісних подій – таких як drop’и, приземлення або великі удари. HSC встановлює поріг, при якому високошвидкісна частина демпфуючого контуру починає діяти, запобігаючи bottom-out. Рекомендація: Налаштовуйте HSC для забезпечення достатнього опору при великих навантаженнях. Почніть з рекомендованих виробником налаштувань, а потім експериментуйте на трасі, поступово збільшуючи або зменшуючи HSC, щоб отримати оптимальну підтримку під час різких ударів без надмірного жорсткого відгуку.</string>
+    <string name="hint_lsc">Low-speed-compression - Контролює стискання підвіски при повільних, контрольованих рухах – наприклад, при їзді по кореням, невеликих нерівностях або при педальному бобінгу. Це забезпечує плавне стиснення і підтримку геометрії під час щоденних навантажень. Рекомендація: Використовуйте LSC для тонкого налаштування підвіски на повсякденних трасах. Почніть із базових значень, рекомендованих виробником, і поступово коригуйте, щоб уникнути надмірної жорсткості, яка може призводити до затримки реакції підвіски на невеликі нерівності.</string>
+    <string name="Hint_setup">Підсказа сетапу</string>
+    <string name="Adding_component">Додавання компоненту</string>
+    <string name="Confirm">Підтвердити</string>
+    <string name="Brand_">Бренд:</string>
+    <string name="Write_brand">Введіть бренд</string>
+    <string name="Year">Рік:</string>
+    <string name="Write_year">Введіть рік</string>
+    <string name="Model_">Модель:</string>
+    <string name="Write_model">Введіть модель</string>
+    <string name="Size___travel">Розмір/Хід:</string>
+    <string name="Write_size_or_travel">Введіть розмір або хід</string>
+    <string name="Weight_">Вага:</string>
+    <string name="Write_weight">Введіть вагу</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

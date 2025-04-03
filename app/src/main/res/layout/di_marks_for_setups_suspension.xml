@@ -305,7 +305,7 @@
             android:layout_width="230dp"
             android:layout_height="48dp"
             android:gravity="start|center_vertical"
-            android:text="@string/Pulling"
+            android:text="Уставшість ніш"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_columnSpan="1" />

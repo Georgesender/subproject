@@ -22,4 +22,5 @@
     <color name="red_rebound">#f44336</color>
     <color name="red_dark">#B80B02</color>
     <color name="blue_compression">#1a73e8</color>
+    <color name="bg_hint">#6c54aa</color>
 </resources>

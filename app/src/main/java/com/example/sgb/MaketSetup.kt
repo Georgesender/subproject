@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.graphics.drawable.TransitionDrawable
@@ -206,8 +207,44 @@ private val initialValues = mutableMapOf<Int, Int>()
         val checkedText = intent.getStringExtra("BikePark")
        // val setupId = intent.getIntExtra("setup_id", -1)
 
+        fun EditText.enableLongPressEdit(context: Context) {
+            // За замовчуванням вимикаємо редагування
+            isFocusable = false
+            isClickable = true
+
+            // Налаштовуємо довгий клік для активації редагування
+            setOnLongClickListener {
+                isFocusableInTouchMode = true
+                requestFocus()
+                // Відкриваємо клавіатуру
+                val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                true
+            }
+
+            // При втраті фокусу вимикаємо редагування
+            onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    isFocusable = false
+                    // Приховуємо клавіатуру
+                    val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(this.windowToken, 0)
+                }
+            }
+        }
+
+
         // Ініціалізація View
         initView()
+        forkHSR.enableLongPressEdit(this)
+        forkLSR.enableLongPressEdit(this)
+        forkHSC.enableLongPressEdit(this)
+        forkLSC.enableLongPressEdit(this)
+        shockHSR.enableLongPressEdit(this)
+        shockLSR.enableLongPressEdit(this)
+        shockHSC.enableLongPressEdit(this)
+        shockLSC.enableLongPressEdit(this)
+
 
 
         val handleNormal = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
@@ -263,6 +300,24 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
         // Інший ваш код (ініціалізація інших вью, завантаження даних, діалоги тощо)
+        val forkhint = findViewById<ImageButton>(R.id.fork_hint)
+        forkhint.setOnClickListener {
+            // Інфлейтимо наш кастомний layout
+            val dialogView = layoutInflater.inflate(R.layout.hint_fork_setup, null)
+
+
+            // Створюємо AlertDialog із кастомним view
+            val builder = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create()
+
+            // Обробка натискання на кнопку закриття
+            dialogView.findViewById<Button>(R.id.btnClose).setOnClickListener {
+                builder.dismiss()
+            }
+
+            builder.show()
+        }
 
 
         // Ініціалізація вибору одиниць для Sag
@@ -312,15 +367,30 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
 // test
+fun handleIncrement(
+    editText: EditText,
+    fieldName: String,
+    bikeId: Int,
+    bpSetupDao: BPSetupDao,
+    context: Context
+) {
+    val currentValue = editText.text.toString().toIntOrNull() ?: 0
+    val newValue = currentValue + 1
+
+    if (newValue > 30) {
+        Toast.makeText(context, "Ви не можете мати більше 30 кліків", Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    editText.setText(newValue.toString())
+    updateFieldInDb(fieldName, newValue, bikeId, bpSetupDao)
+}
+
+
         inForkHsr.setOnClickListener {
-            val currentValue = forkHSR.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            forkHSR.setText(newValue.toString())
-            updateFieldInDb("forkHSR", newValue, bikeId, bpSetupDao)
+            handleIncrement(forkHSR, "forkHSR", bikeId, bpSetupDao, this)
 
         }
-
-
         deForkHsr.setOnClickListener {
             val currentValue = forkHSR.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
@@ -329,10 +399,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inForkLsr.setOnClickListener {
-            val currentValue = forkLSR.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            forkLSR.setText(newValue.toString())
-            updateFieldInDb("forkLSR", newValue, bikeId, bpSetupDao)
+            handleIncrement(forkLSR, "forkLSR", bikeId, bpSetupDao, this)
         }
 
         deForkLsr.setOnClickListener {
@@ -343,10 +410,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inForkHsc.setOnClickListener {
-            val currentValue = forkHSC.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            forkHSC.setText(newValue.toString())
-            updateFieldInDb("forkHSC", newValue, bikeId, bpSetupDao)
+            handleIncrement(forkHSC, "forkHSC", bikeId, bpSetupDao, this)
         }
 
         deForkHsc.setOnClickListener {
@@ -357,10 +421,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inForkLsc.setOnClickListener {
-            val currentValue = forkLSC.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            forkLSC.setText(newValue.toString())
-            updateFieldInDb("forkLSC", newValue, bikeId, bpSetupDao)
+            handleIncrement(forkLSC, "forkLSC", bikeId, bpSetupDao, this)
         }
 
         deForkLsc.setOnClickListener {
@@ -372,10 +433,7 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
         inShockHsr.setOnClickListener {
-            val currentValue = shockHSR.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            shockHSR.setText(newValue.toString())
-            updateFieldInDb("shockHSR", newValue, bikeId, bpSetupDao)
+            handleIncrement(shockHSR, "shockHSR", bikeId, bpSetupDao, this)
 
         }
 
@@ -387,10 +445,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inShockLsr.setOnClickListener {
-            val currentValue = shockLSR.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            shockLSR.setText(newValue.toString())
-            updateFieldInDb("shockLSR", newValue, bikeId, bpSetupDao)
+            handleIncrement(shockLSR, "shockLSR", bikeId, bpSetupDao, this)
         }
 
         deShockLsr.setOnClickListener {
@@ -401,10 +456,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inShockHsc.setOnClickListener {
-            val currentValue = shockHSC.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            shockHSC.setText(newValue.toString())
-            updateFieldInDb("shockHSC", newValue, bikeId, bpSetupDao)
+            handleIncrement(shockHSC, "shockHSC", bikeId, bpSetupDao, this)
         }
 
         deShockHsc.setOnClickListener {
@@ -415,10 +467,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
         inShockLsc.setOnClickListener {
-            val currentValue = shockLSC.text.toString().toIntOrNull() ?: 0
-            val newValue = currentValue + 1
-            shockLSC.setText(newValue.toString())
-            updateFieldInDb("shockLSC", newValue, bikeId, bpSetupDao)
+            handleIncrement(shockLSC, "shockLSC", bikeId, bpSetupDao, this)
         }
 
         deShockLsc.setOnClickListener {
@@ -427,6 +476,7 @@ private val initialValues = mutableMapOf<Int, Int>()
             shockLSC.setText(newValue.toString())
             updateFieldInDb("shockLSC", newValue, bikeId, bpSetupDao)
         }
+
 
     }
     // functions for hiding focus and keyboard
@@ -644,7 +694,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         field: String,
         bikeId: Int,
         bpSetupDao: BPSetupDao,
-        delayMillis: Long = 2000
+        delayMillis: Long = 1000
     ) {
         val baseline = initialValues[editText.id] ?: 0
         val currentValue = editText.text.toString().toIntOrNull() ?: 0
@@ -679,7 +729,7 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
     }
 
-    private fun scheduleHideDelta(deltaTextView: TextView, delayMillis: Long = 2000) {
+    private fun scheduleHideDelta(deltaTextView: TextView, delayMillis: Long = 4000) {
         // Використовуємо postDelayed, який гарантує виконання на UI-потоці
         deltaTextView.postDelayed({
             deltaTextView.animate().alpha(0f).setDuration(500).withEndAction {

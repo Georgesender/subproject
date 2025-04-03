@@ -48,7 +48,19 @@
             android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:textSize="28sp"
+            android:text="text"
             tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/fork_hint"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/img_info_hint"
+            android:layout_gravity="center"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/info"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -75,7 +87,7 @@
                     android:id="@+id/average_mark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="11dp"
                     android:text="@string/__24"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -188,8 +200,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/fork_icon"
                         app:layout_constraintTop_toTopOf="parent" />
-
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -348,8 +358,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -414,8 +425,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -480,8 +492,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -546,8 +559,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -566,7 +580,6 @@
                             android:background="@drawable/img_arrow_up"
                             android:contentDescription="@string/test"
                             tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
-
                         <ImageButton
                             android:id="@+id/decrement_flsc"
                             android:layout_width="24dp"
@@ -859,7 +872,7 @@
                         android:textColor="@color/blue_compression"
                         android:textSize="19sp"
                         app:layout_columnWeight="1"
-                        tools:ignore="HardcodedText" />
+                        tools:ignore="HardcodedText,TooManyViews" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -896,8 +909,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -962,8 +976,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -1028,8 +1043,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>
@@ -1094,8 +1110,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="top|start"
                             android:padding="2dp"
+                            android:layout_marginStart="5dp"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="14sp"
                             android:visibility="gone"
                             tools:ignore="SmallSp" />
                     </FrameLayout>

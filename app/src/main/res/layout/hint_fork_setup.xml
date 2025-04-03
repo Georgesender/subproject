@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/bg_hint">
+
+    <FrameLayout
+
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Hint_setup"
+        android:layout_gravity="start|center_vertical"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="x"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+    </FrameLayout>
+    <!-- Прокручуваний вміст -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_marginTop="45dp"
+        app:layout_constraintTop_toBottomOf="@id/dialogTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Перша секція: Вилка та амортизація -->
+            <TextView
+                android:id="@+id/section1Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Suspension"
+                android:textColor="@color/white"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/Rebound"
+                android:textColor="@color/red_dark"
+                android:background="@color/tr50_white"
+                android:textSize="19sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_hsr"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="VisualLintLongText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_lsr"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="VisualLintLongText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Compression"
+                android:layout_gravity="center"
+                android:textColor="@color/blue_compression"
+                android:background="@color/tr50_white"
+                android:layout_marginTop="8dp"
+                android:textSize="19sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_hsc"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="VisualLintLongText" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_lsc"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="VisualLintLongText" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/white"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:contentDescription="@string/_1"
+                android:src="@drawable/img_open_closed"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/white"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Друга секція: Покришки -->
+            <TextView
+                android:id="@+id/section2Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Покришки"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/section2Content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тут буде інформація про покришки. Додайте необхідні підказки щодо тиску, типу та іншої інформації."
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

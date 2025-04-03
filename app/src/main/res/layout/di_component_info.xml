@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/black">
+
+    <!-- Заголовок та кнопка "Підтвердити" -->
+    <TextView
+        android:id="@+id/dialogHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Adding_component"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
+        app:layout_constraintBottom_toBottomOf="@+id/btnConfirm" />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Прокручуваний вміст із таблицею параметрів -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/dialogHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/tableContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/gridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="5"
+                android:padding="8dp">
+
+                <!-- Рядок 1: Бренд -->
+                <TextView
+                    android:id="@+id/labelBrand"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Brand_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/editBrand"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_brand"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <!-- Рядок 2: Рік -->
+                <TextView
+                    android:id="@+id/labelYear"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Year"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/editYear"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_year"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="Autofill" />
+
+                <!-- Рядок 3: Модель -->
+                <TextView
+                    android:id="@+id/labelModel"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Model_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
+
+                <EditText
+                    android:id="@+id/editModel"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_model"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <!-- Рядок 4: Розмір/Хід вилки -->
+                <TextView
+                    android:id="@+id/labelForkSize"
+                        android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Size___travel"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
+
+                <EditText
+                    android:id="@+id/editForkSize"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_size_or_travel"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextFields" />
+
+                <!-- Рядок 5: Вага -->
+                <TextView
+                    android:id="@+id/labelWeight"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Weight_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/editWeight"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:hint="@string/Write_weight"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:gravity="center_vertical"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </GridLayout>
+
+
+            <FrameLayout
+                android:id="@+id/photoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_grey_square"
+                app:layout_constraintTop_toBottomOf="@id/gridLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- Placeholder для фото -->
+                <ImageView
+                    android:id="@+id/photoPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_gee_setups"
+                    android:contentDescription="@string/add"/>
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Рамочка для фото компонента -->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
