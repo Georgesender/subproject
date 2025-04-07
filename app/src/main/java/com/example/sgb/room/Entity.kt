@@ -53,19 +53,7 @@ data class BikeGeometry(
 data class Component(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var bikeId: Int, // Ідентифікатор байка
-    var shockBrand: String = "",
-    var forkBrand: String = "",
-    var frontTyreBrand: String = "",
-    var rearTyreBrand: String = "",
-    var shockSeries: String = "",
-    var forkSeries: String = "",
-    var frontTyreSeries: String = "",
-    var rearTyreSeries: String = "",
-    var sSizeWidth: String = "",
-    var sSizeGoes: String = "",
-    var fSize2: String = "",
-    var frontTyreSize: String = "",
-    var rearTyreSize: String = ""
+
 )
 
 // таблиця для MaketSetup.kt

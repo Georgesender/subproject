@@ -114,6 +114,11 @@
     <string name="Write_size_or_travel">Введіть розмір або хід</string>
     <string name="Weight_">Вага:</string>
     <string name="Write_weight">Введіть вагу</string>
+    <string name="Type">Тип компонента</string>
+    <string name="Component_Type">Тип компонента</string>
+    <string name="Click_here">Натисність сюди</string>
+    <string name="contain">включати</string>
+    <string name="Own_notes_">Власні нотатки:</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>
@@ -123,4 +128,15 @@
         <item>%</item>
         <item>mm</item>
     </string-array>
+
+    <string-array name="component_types">
+        <item>Fork</item>
+        <item>Shock</item>
+        <item>Tyre</item>
+        <item>Saddle</item>
+        <item>Cranks</item>
+        <item>Handlebar</item>
+        <item>Rim</item>
+    </string-array>
+
 </resources>

@@ -46,7 +46,6 @@ import kotlinx.coroutines.withContext
 
 
 class MaketSetup : AppCompatActivity() {
-    // View змінні
     private lateinit var fork: TextView
     private lateinit var shock: TextView
     private lateinit var fTyre: TextView
@@ -69,23 +68,20 @@ class MaketSetup : AppCompatActivity() {
     private lateinit var shockSag: EditText
     private lateinit var forkPressure: EditText
     private lateinit var shockPressure: EditText
-
-
     private lateinit var forkSegUnits: TextView
     private lateinit var forkPressureUnits: TextView
     private lateinit var shockSegUnits: TextView
     private lateinit var shockPressureUnits: TextView
     private lateinit var tyresPressureUnits: TextView
 
-    // Збережені посилання на вью
+
     private lateinit var marksHandle: Button
     private lateinit var marksHandleCon: FrameLayout
 
-    // Збереження стану
+
     private var isExpanded = false
 
 
-    // Зберігаємо посилання на вью, що постійно є у layout
     private lateinit var marksOverlay: FrameLayout
     private lateinit var gOut: EditText
     private lateinit var numbHands: EditText
@@ -103,7 +99,6 @@ class MaketSetup : AppCompatActivity() {
     private lateinit var gestureDetector: GestureDetector
 
 
-//test
 private val initialValues = mutableMapOf<Int, Int>()
 
     private lateinit var inForkHsr: ImageButton
@@ -126,7 +121,6 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
 
-    // Delta TextViews for each EditText (ensure these IDs match your XML)
     private lateinit var forkHSRDelta: TextView
     private lateinit var forkLSRDelta: TextView
     private lateinit var forkHSCDelta: TextView
@@ -136,8 +130,6 @@ private val initialValues = mutableMapOf<Int, Int>()
     private lateinit var shockHSCDelta: TextView
     private lateinit var shockLSCDelta: TextView
 
-
-    // Зберігаємо DAO, оскільки база даних – сінглтон
     private val bpMarksSusDao by lazy { BikeDatabase.getDatabase(this).bpMarksSusDao() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,7 +144,6 @@ private val initialValues = mutableMapOf<Int, Int>()
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
-// In your onCreate or similar initialization code:
         val nestedScrollView = findViewById<NestedScrollView>(R.id.scroll_view)
 
         nestedScrollView.viewTreeObserver.addOnGlobalLayoutListener {
@@ -161,21 +152,15 @@ private val initialValues = mutableMapOf<Int, Int>()
             val screenHeight = nestedScrollView.rootView.height
             val keyboardHeight = screenHeight - rect.bottom
 
-            // If the keyboard occupies more than 30% of the screen...
             if (keyboardHeight > screenHeight * 0.3) {
                 val focusedView = currentFocus
                 if (focusedView is EditText) {
-                    // Get the visible rectangle of the focused view.
                     val focusedRect = Rect()
                     focusedView.getGlobalVisibleRect(focusedRect)
 
-                    // Only scroll if the bottom of the focused view is below the visible area.
                     if (focusedRect.bottom > rect.bottom) {
                         nestedScrollView.post {
-                            // Calculate the scroll amount:
-                            // Scroll just enough so that the bottom of the view moves within the visible area,
-                            // optionally add a small extra offset if desired.
-                            val extraOffset = 20  // you can adjust this value
+                            val extraOffset = 20
                             val scrollDelta = (focusedRect.bottom - rect.bottom) + extraOffset
                             nestedScrollView.smoothScrollBy(0, scrollDelta)
                         }
@@ -183,10 +168,8 @@ private val initialValues = mutableMapOf<Int, Int>()
                 }
             }
         }
-        // Ініціалізація GestureDetector
         gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapUp(e: MotionEvent): Boolean {
-                // Перевіряємо, чи натискання відбулося поза EditText
                 val view = currentFocus
                 if (view is EditText) {
                     val outRect = Rect()
@@ -201,32 +184,25 @@ private val initialValues = mutableMapOf<Int, Int>()
         })
 
 
-        // Отримання даних з Intent
         val bikeId = intent.getIntExtra("bike_id", -1)
         val setupName = intent.getStringExtra("setup_name")
         val checkedText = intent.getStringExtra("BikePark")
-       // val setupId = intent.getIntExtra("setup_id", -1)
 
         fun EditText.enableLongPressEdit(context: Context) {
-            // За замовчуванням вимикаємо редагування
             isFocusable = false
             isClickable = true
 
-            // Налаштовуємо довгий клік для активації редагування
             setOnLongClickListener {
                 isFocusableInTouchMode = true
                 requestFocus()
-                // Відкриваємо клавіатуру
                 val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
                 true
             }
 
-            // При втраті фокусу вимикаємо редагування
             onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     isFocusable = false
-                    // Приховуємо клавіатуру
                     val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(this.windowToken, 0)
                 }
@@ -234,7 +210,6 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
 
-        // Ініціалізація View
         initView()
         forkHSR.enableLongPressEdit(this)
         forkLSR.enableLongPressEdit(this)
@@ -250,45 +225,39 @@ private val initialValues = mutableMapOf<Int, Int>()
         val handleNormal = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
         val handleActive = ContextCompat.getDrawable(this, R.drawable.btn_right_handle_activated)
 
-        val fadeDuration = 800 // duration in milliseconds
+        val fadeDuration = 800
 
         marksHandleCon.setOnClickListener {
-            marksHandle.isEnabled = false // disable during transition
+            marksHandle.isEnabled = false
 
             if (isExpanded) {
-                // Create a TransitionDrawable to crossfade from active to normal.
+
                 val transition = TransitionDrawable(arrayOf(handleActive, handleNormal))
                 transition.isCrossFadeEnabled = true
                 marksHandle.background = transition
                 transition.startTransition(fadeDuration)
 
-                // Animate overlay out as before.
                 marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right))
                 marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
 
-                // Once the transition is complete, force the final drawable.
                 marksHandle.postDelayed({
                     marksHandle.background = handleNormal
                 }, fadeDuration.toLong())
             } else {
-                // Create a TransitionDrawable to crossfade from normal to active.
                 val transition = TransitionDrawable(arrayOf(handleNormal, handleActive))
                 transition.isCrossFadeEnabled = true
                 marksHandle.background = transition
                 transition.startTransition(fadeDuration)
 
-                // Show overlay and open marks dialog as before.
                 dialogForMarks(bikeId) { isExpanded = false }
                 marksOverlay.visibility = View.VISIBLE
                 marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_right))
 
-                // Force the final drawable after the transition.
                 marksHandle.postDelayed({
                     marksHandle.background = handleActive
                 }, fadeDuration.toLong())
             }
 
-            // Re-enable the button after a delay a bit longer than the fade.
             marksHandle.postDelayed({
                 marksHandle.isEnabled = true
             }, 400)
@@ -299,19 +268,15 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
 
-        // Інший ваш код (ініціалізація інших вью, завантаження даних, діалоги тощо)
         val forkhint = findViewById<ImageButton>(R.id.fork_hint)
         forkhint.setOnClickListener {
-            // Інфлейтимо наш кастомний layout
             val dialogView = layoutInflater.inflate(R.layout.hint_fork_setup, null)
 
 
-            // Створюємо AlertDialog із кастомним view
             val builder = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .create()
 
-            // Обробка натискання на кнопку закриття
             dialogView.findViewById<Button>(R.id.btnClose).setOnClickListener {
                 builder.dismiss()
             }
@@ -320,7 +285,6 @@ private val initialValues = mutableMapOf<Int, Int>()
         }
 
 
-        // Ініціалізація вибору одиниць для Sag
         shockSegUnits.setOnClickListener {
             showUnitSelectionDialogForShock()
         }
@@ -329,7 +293,6 @@ private val initialValues = mutableMapOf<Int, Int>()
             showUnitSelectionDialogForFork()
         }
 
-        // Init choosing Pressure
         forkPressureUnits.setOnClickListener {
             showUnitPressureDialogForFork()
         }
@@ -340,25 +303,19 @@ private val initialValues = mutableMapOf<Int, Int>()
             showUnitPressureDialogForTyres()
         }
 
-        // Налаштування кнопки "Назад"
         findViewById<Button>(R.id.back).setOnClickListener {
             navigateBackToActSetups(bikeId)
         }
-
-        // Встановлення заголовка
         setHeaderText(setupName, checkedText)
 
-        // Ініціалізація бази даних DAO
         val bikeDatabase = BikeDatabase.getDatabase(this)
         val componentsDao = bikeDatabase.componentsDao()
         val bpSetupDao = bikeDatabase.bpSetupDao()
 
 
-        loadBikeData(bikeId, componentsDao)
         loadSetupData(bikeId, bpSetupDao)
         loadSetupById(bikeId)
         loadMarksData(bikeId)
-            // Load and display all saved delta values for 10 seconds.
         loadDeltaValues(bikeId, bpSetupDao)
 
 
@@ -366,7 +323,6 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
 
-// test
 fun handleIncrement(
     editText: EditText,
     fieldName: String,
@@ -479,7 +435,6 @@ fun handleIncrement(
 
 
     }
-    // functions for hiding focus and keyboard
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         gestureDetector.onTouchEvent(event)
@@ -488,7 +443,6 @@ fun handleIncrement(
 
 
     private fun initView() {
-        // Ініціалізація текстових полів
         fork = findViewById(R.id.fork)
         shock = findViewById(R.id.shock)
         fTyre = findViewById(R.id.front_tyre)
@@ -520,7 +474,6 @@ fun handleIncrement(
         shockPressureUnits = findViewById(R.id.shock_pressure_units)
         tyresPressureUnits = findViewById(R.id.tyres_pressure_units)
 
-        // Завантаження збережених одиниць вимірювання
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         val shockUnit = sharedPreferences.getString("shockSegUnit", "")
         val forkUnit = sharedPreferences.getString("forkSegUnit", "")
@@ -533,7 +486,6 @@ fun handleIncrement(
         shockPressureUnits.text = shockPressureUnitShared
         tyresPressureUnits.text = tyresPressureUnitShared
 
-        // Ініціалізація вью
         gOut = findViewById(R.id.g_out)
         numbHands = findViewById(R.id.numb_hands)
         squareEdgedHits = findViewById(R.id.square_edged_hits)
@@ -551,8 +503,6 @@ fun handleIncrement(
         marksOverlay = findViewById(R.id.marks_overlay)
 
 
-        // testing
-        // Initialize delta TextViews for the composite cells.
         forkHSRDelta = findViewById(R.id.fork_hsr_delta)
         forkLSRDelta = findViewById(R.id.fork_lsr_delta)
         forkHSCDelta = findViewById(R.id.fork_hsc_delta)
@@ -588,9 +538,7 @@ fun handleIncrement(
         bikeId: Int,
         bpSetupDao: BPSetupDao
     ) {
-        // Використовуємо lifecycleScope для контролю життєвого циклу корутин
         lifecycleScope.launch {
-            // Працюємо з БД на IO-потоці
             withContext(Dispatchers.IO) {
                 val setup = bpSetupDao.getBikeParkSetupById(bikeId)
                 if (setup != null) {
@@ -607,7 +555,6 @@ fun handleIncrement(
                     bpSetupDao.updateBikeParkSetup(setup)
                 }
             }
-            // Перемикаємося на головний потік для оновлення UI
             when (fieldName) {
                 "forkHSR" -> updateDeltaForField(
                     forkHSR,
@@ -700,10 +647,8 @@ fun handleIncrement(
         val currentValue = editText.text.toString().toIntOrNull() ?: 0
         val diff = currentValue - baseline
 
-        // Перемикаємося на головний потік для роботи з UI
         lifecycleScope.launch(Dispatchers.Main) {
             if (diff == 0) {
-                // Якщо різниця нуль — fade out та приховування
                 deltaTextView.animate().alpha(0f).setDuration(500).withEndAction {
                     deltaTextView.visibility = View.GONE
                 }
@@ -711,26 +656,21 @@ fun handleIncrement(
                 val deltaStr = if (diff > 0) "+$diff" else diff.toString()
                 deltaTextView.text = deltaStr
 
-                // Встановлюємо потрібний колір: зелений для позитивного, червоний для негативного
                 val colorRes = if (diff > 0) R.color.green else R.color.red_dark
                 deltaTextView.setTextColor(ContextCompat.getColor(deltaTextView.context, colorRes))
 
-                // Анімація fade in
                 deltaTextView.alpha = 0f
                 deltaTextView.visibility = View.VISIBLE
                 deltaTextView.animate().alpha(1f).setDuration(500).start()
 
-                // Оновлюємо дельту в БД (цей метод можна залишити в IO, якщо він не змінює UI)
                 updateDeltaFieldInDb(bikeId, bpSetupDao, field, deltaStr)
 
-                // Плануємо fade out після затримки
                 scheduleHideDelta(deltaTextView, delayMillis)
             }
         }
     }
 
     private fun scheduleHideDelta(deltaTextView: TextView, delayMillis: Long = 4000) {
-        // Використовуємо postDelayed, який гарантує виконання на UI-потоці
         deltaTextView.postDelayed({
             deltaTextView.animate().alpha(0f).setDuration(500).withEndAction {
                 deltaTextView.visibility = View.GONE
@@ -740,11 +680,9 @@ fun handleIncrement(
 
 
 
-    // --- When loading data from Room, load baselines and attach delta listeners ---
     @SuppressLint("SetTextI18n")
     private fun loadSetupData(bikeId: Int, bpSetupDao: BPSetupDao) {
         lifecycleScope.launch {
-            // Отримуємо запис за bikeId. Завдяки унікальному індексу гарантовано буде лише один запис.
             var bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
             if (bpSetups == null) {
                 bpSetups = BikeParkSetupData(bikeId = bikeId)
@@ -772,9 +710,7 @@ fun handleIncrement(
             fields.forEach { (editText, fieldName) ->
                 val savedValue = bpSetups.getFieldValue(fieldName)
                 editText.setText(savedValue)
-                // Записуємо базове значення для delta
                 initialValues[editText.id] = savedValue.toIntOrNull() ?: 0
-                // Додаємо слухач для оновлення
                 setupEditTextListener(editText, bikeId, fieldName, bpSetupDao)
             }
 
@@ -783,11 +719,6 @@ fun handleIncrement(
     }
 
 
-
-
-
-
-    // Get the value as a String for display purposes.
     private fun BikeParkSetupData.getFieldValue(field: String): String {
         return when (field) {
             "forkHSR" -> forkHSR.toString()
@@ -811,7 +742,6 @@ fun handleIncrement(
         }
     }
 
-    // Save the value, converting strings to ints where needed.
     private fun BikeParkSetupData.setFieldValue(field: String, value: String) {
         when (field) {
             "forkHSR" -> forkHSR = value.toIntOrNull() ?: 0
@@ -843,7 +773,6 @@ fun handleIncrement(
             "shockLSR" -> this.shockLSRDelta = delta
             "shockHSC" -> this.shockHSCDelta = delta
             "shockLSC" -> this.shockLSCDelta = delta
-            // Add other fields as needed.
         }
     }
 
@@ -859,23 +788,6 @@ fun handleIncrement(
     }
 
 
-    private fun loadBikeData(bikeId: Int, componentsDao: ComponentsDao) {
-        lifecycleScope.launch {
-            val components = componentsDao.getComponentsByBikeId(bikeId)
-                ?: Component(bikeId = bikeId).also { componentsDao.insertComponent(it) }
-
-            fork.text = getString(R.string.two_strings, components.forkBrand, components.forkSeries)
-            shock.text =
-                getString(R.string.two_strings, components.shockBrand, components.shockSeries)
-            fTyre.text = getString(
-                R.string.two_strings,
-                components.frontTyreBrand,
-                components.frontTyreSeries
-            )
-            rTyre.text =
-                getString(R.string.two_strings, components.rearTyreBrand, components.rearTyreSeries)
-        }
-    }
 
     private fun loadSetupById(bikeId: Int) {
         lifecycleScope.launch {
@@ -890,7 +802,6 @@ fun handleIncrement(
 
     @SuppressLint("SetTextI18n")
     private fun loadMarksData(bikeId: Int) {
-        // Завантаження даних із бази
         lifecycleScope.launch {
             val existingMarks = bpMarksSusDao.getBpMarksSusByBikeId(bikeId)
             existingMarks?.let {
@@ -927,7 +838,6 @@ fun handleIncrement(
 
                 isEditing = true
 
-                // Додаємо перенос рядка після кожних 50 символів, якщо його ще немає
                 val formattedText = StringBuilder()
                 for (i in s.indices) {
                     formattedText.append(s[i])
@@ -944,7 +854,6 @@ fun handleIncrement(
 
                 isEditing = false
 
-                // Оновлюємо дані в базі даних
                 lifecycleScope.launch {
                     val bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
                     bpSetups?.let {
@@ -959,7 +868,6 @@ fun handleIncrement(
         lifecycleScope.launch {
             val bpSetup = bpSetupDao.getBikeParkSetupById(bikeId)
             bpSetup?.let {
-                // forkHSR delta
                 if (it.forkHSRDelta.isNotEmpty()) {
                     forkHSRDelta.text = it.forkHSRDelta
                     val colorRes = when {
@@ -971,7 +879,6 @@ fun handleIncrement(
                     forkHSRDelta.visibility = View.VISIBLE
                     scheduleHideDelta(forkHSRDelta)
                 }
-                // forkLSR delta
                 if (it.forkLSRDelta.isNotEmpty()) {
                     forkLSRDelta.text = it.forkLSRDelta
                     val colorRes = when {
@@ -983,7 +890,6 @@ fun handleIncrement(
                     forkLSRDelta.visibility = View.VISIBLE
                     scheduleHideDelta(forkLSRDelta)
                 }
-                // forkHSC delta
                 if (it.forkHSCDelta.isNotEmpty()) {
                     forkHSCDelta.text = it.forkHSCDelta
                     val colorRes = when {
@@ -995,7 +901,6 @@ fun handleIncrement(
                     forkHSCDelta.visibility = View.VISIBLE
                     scheduleHideDelta(forkHSCDelta)
                 }
-                // forkLSC delta
                 if (it.forkLSCDelta.isNotEmpty()) {
                     forkLSCDelta.text = it.forkLSCDelta
                     val colorRes = when {
@@ -1018,7 +923,6 @@ fun handleIncrement(
                     shockHSRDelta.visibility = View.VISIBLE
                     scheduleHideDelta(shockHSRDelta)
                 }
-                // forkLSR delta
                 if (it.shockLSRDelta.isNotEmpty()) {
                     shockLSRDelta.text = it.shockLSRDelta
                     val colorRes = when {
@@ -1030,7 +934,6 @@ fun handleIncrement(
                     shockLSRDelta.visibility = View.VISIBLE
                     scheduleHideDelta(shockLSRDelta)
                 }
-                // forkHSC delta
                 if (it.shockHSCDelta.isNotEmpty()) {
                     shockHSCDelta.text = it.shockHSCDelta
                     val colorRes = when {
@@ -1042,7 +945,6 @@ fun handleIncrement(
                     shockHSCDelta.visibility = View.VISIBLE
                     scheduleHideDelta(shockHSCDelta)
                 }
-                // forkLSC delta
                 if (it.shockLSCDelta.isNotEmpty()) {
                     shockLSCDelta.text = it.shockLSCDelta
                     val colorRes = when {
@@ -1062,204 +964,172 @@ fun handleIncrement(
 
 
     private fun showUnitSelectionDialogForShock() {
-        // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_percent_or_mm, null)
 
-        // Створення діалогового вікна
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
         val transparentColor = resources.getColor(R.color.transparent, theme)
         dialogBuilder.window?.setBackgroundDrawable(transparentColor.toDrawable())
 
-        // Налаштування кнопок
         val btnPercent = dialogView.findViewById<Button>(R.id.btn_percent)
         val btnMm = dialogView.findViewById<Button>(R.id.btn_mm)
 
         btnPercent.setOnClickListener {
             saveSelectedUnit("%")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
         btnMm.setOnClickListener {
             saveSelectedUnit("mm")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
-        // Показ діалогу
         dialogBuilder.show()
     }
 
     private fun showUnitSelectionDialogForFork() {
-        // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_percent_or_mm, null)
 
-        // Створення діалогового вікна
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
         val transparentColor = resources.getColor(R.color.transparent, theme)
         dialogBuilder.window?.setBackgroundDrawable(transparentColor.toDrawable())
 
-        // Налаштування кнопок
         val btnPercent = dialogView.findViewById<Button>(R.id.btn_percent)
         val btnMm = dialogView.findViewById<Button>(R.id.btn_mm)
 
         btnPercent.setOnClickListener {
             saveSelectedUnitForFork("%")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
         btnMm.setOnClickListener {
             saveSelectedUnitForFork("mm")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
-        // Показ діалогу
         dialogBuilder.show()
     }
 
-    // Метод для збереження вибраної одиниці для Fork
     private fun saveSelectedUnitForFork(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("forkSegUnit", unit) }
 
-        // Оновлення TextView
         forkSegUnits.text = unit
     }
 
-    // Метод для збереження вибраної одиниці
     private fun saveSelectedUnit(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("shockSegUnit", unit) }
 
-        // Оновлення TextView
         shockSegUnits.text = unit
     }
 
     private fun showUnitPressureDialogForFork() {
-        // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_psi_or_bar, null)
 
-        // Створення діалогового вікна
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
         val transparentColor = resources.getColor(R.color.transparent, theme)
         dialogBuilder.window?.setBackgroundDrawable(transparentColor.toDrawable())
 
-        // Налаштування кнопок
         val btnPsi = dialogView.findViewById<Button>(R.id.btn_psi)
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
             savePressureUnitForFork("PSI")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
         btnBar.setOnClickListener {
             savePressureUnitForFork("BAR")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
-        // Показ діалогу
         dialogBuilder.show()
     }
 
     private fun showUnitPressureDialogForShock() {
-        // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_psi_or_bar, null)
 
-        // Створення діалогового вікна
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
         val transparentColor = resources.getColor(R.color.transparent, theme)
         dialogBuilder.window?.setBackgroundDrawable(transparentColor.toDrawable())
 
-        // Налаштування кнопок
         val btnPsi = dialogView.findViewById<Button>(R.id.btn_psi)
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
             savePressureUnitForShock("PSI")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
         btnBar.setOnClickListener {
             savePressureUnitForShock("BAR")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
-        // Показ діалогу
         dialogBuilder.show()
     }
 
-    // Метод для збереження вибраної одиниці для Fork
     private fun savePressureUnitForFork(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("forkPressureShared", unit) }
 
-        // Оновлення TextView
         forkPressureUnits.text = unit
     }
 
-    // Метод для збереження вибраної одиниці
     private fun savePressureUnitForShock(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("shockPressureShared", unit) }
 
-        // Оновлення TextView
         shockPressureUnits.text = unit
     }
 
     private fun showUnitPressureDialogForTyres() {
-        // Надування кастомного макета
         val dialogView = LayoutInflater.from(this).inflate(R.layout.di_psi_or_bar, null)
 
-        // Створення діалогового вікна
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
         val transparentColor = resources.getColor(R.color.transparent, theme)
         dialogBuilder.window?.setBackgroundDrawable(transparentColor.toDrawable())
 
-        // Налаштування кнопок
         val btnPsi = dialogView.findViewById<Button>(R.id.btn_psi)
         val btnBar = dialogView.findViewById<Button>(R.id.btn_bar)
 
         btnPsi.setOnClickListener {
             savePressureUnitForTyres("PSI")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
         btnBar.setOnClickListener {
             savePressureUnitForTyres("BAR")
-            dialogBuilder.dismiss() // Закриття діалогу
+            dialogBuilder.dismiss()
         }
 
-        // Показ діалогу
         dialogBuilder.show()
     }
 
-    // Метод для збереження вибраної одиниці для Fork
     private fun savePressureUnitForTyres(unit: String) {
         val sharedPreferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
         sharedPreferences.edit { putString("tyresPressureUnit", unit) }
 
-        // Оновлення TextView
         tyresPressureUnits.text = unit
     }
 
     private fun dialogForMarks(bikeId: Int, onExpandChange: (Boolean) -> Unit) {
-        // Знаходимо overlay із розміткою діалогу, який вже включено в DrawerLayout
         val marksOverlay = findViewById<FrameLayout>(R.id.marks_overlay)
 
 
         @SuppressLint("SetTextI18n")
         fun updateMarks() {
             lifecycleScope.launch {
-                // Видаляємо суфікс "/24" перед конвертацією в число
                 val marksList = listOf(
                     gOut.text.toString().removeSuffix("/24"),
                     numbHands.text.toString().removeSuffix("/24"),
@@ -1278,7 +1148,6 @@ fun handleIncrement(
                 val averageMark =
                     if (validMarks.isNotEmpty()) validMarks.sum() / validMarks.size else 0
 
-                // Оновлюємо відображення середнього значення в UI одразу
                 averageMark.toString().also { findViewById<TextView>(average_mark).text = it }
 
                 val newMarks = BpMarksSuspenshion(
@@ -1306,7 +1175,6 @@ fun handleIncrement(
             }
         }
 
-        // Налаштовуємо кожен EditText із callback-ом, який зберігає дані після зміни тексту
         setupEditTextWithLimit(gOut, onValidTextChanged = { updateMarks() })
         setupEditTextWithLimit(numbHands, onValidTextChanged = { updateMarks() })
         setupEditTextWithLimit(squareEdgedHits, onValidTextChanged = { updateMarks() })
@@ -1318,42 +1186,35 @@ fun handleIncrement(
         setupEditTextWithLimit(pulling, onValidTextChanged = { updateMarks() })
         setupEditTextWithLimit(cornersEdit, onValidTextChanged = { updateMarks()})
         setupEditTextWithLimit(feetTired, onValidTextChanged = { updateMarks()})
-        // Спільна функція для закриття overlay з анімацією і анімацією кнопки marks_handle
         fun closeOverlayWithAnimation() {
-            marksHandle.isEnabled = false // Блокуємо кнопку перед анімацією
+            marksHandle.isEnabled = false
              val handleNormal = ContextCompat.getDrawable(this, R.drawable.btn_right_handle)
             val handleActive = ContextCompat.getDrawable(this, R.drawable.btn_right_handle_activated)
-            val fadeDuration = 800 // duration in milliseconds
+            val fadeDuration = 800
             val animationSet = AnimatorSet().apply {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        // Додаємо затримку перед розблокуванням кнопки
                         marksHandle.postDelayed({
                             marksHandle.isEnabled = true
-                        }, 650) // Додаємо 500 мс до загального часу блокування
+                        }, 650)
                     }
                 })
             }
 
-            // Запуск анімацій
             animationSet.start()
-            // Create a TransitionDrawable to crossfade from active to normal.
             val transition = TransitionDrawable(arrayOf(handleActive, handleNormal))
             transition.isCrossFadeEnabled = true
             marksHandle.background = transition
             transition.startTransition(fadeDuration)
 
-            // Анімація закриття overlay (slide_out_right)
             marksOverlay.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_right))
             marksOverlay.postDelayed({ marksOverlay.visibility = View.GONE }, 400)
             marksHandle.postDelayed({
                 marksHandle.background = handleNormal
             }, fadeDuration.toLong())
-            // Передаємо isExpanded = false у зовнішню функцію
             onExpandChange(false)
         }
 
-        // Обробка кнопок: і btnCancel, і btnOk використовують ту саму функцію для закриття з анімацією
         btnCancel.setOnClickListener {
             closeOverlayWithAnimation()
         }
@@ -1364,12 +1225,10 @@ fun handleIncrement(
     fun setupEditTextWithLimit(editText: EditText, onValidTextChanged: (() -> Unit)? = null) {
         val suffix = "/24"
 
-        // Якщо поле порожнє, встановлюємо лише суфікс і курсор на початку
         if (editText.text.isEmpty()) {
             editText.setText(suffix)
             editText.setSelection(0)
         }
-        // Збереження останнього валідного значення (тільки числова частина)
         var previousNumeric = ""
         editText.addTextChangedListener(object : TextWatcher {
             var isEditing = false
@@ -1383,22 +1242,18 @@ fun handleIncrement(
                 if (isEditing) return
                 isEditing = true
 
-                // Отримуємо поточний текст та видаляємо суфікс (якщо він є)
                 var fullText = s.toString()
                 if (fullText.endsWith(suffix)) {
                     fullText = fullText.substring(0, fullText.length - suffix.length)
                 } else {
-                    // Якщо випадково з'явився символ '/', обрізаємо все після нього
                     val slashIndex = fullText.indexOf('/')
                     if (slashIndex != -1) {
                         fullText = fullText.substring(0, slashIndex)
                     }
                 }
 
-                // Перевіряємо, чи введене число не перевищує 24
                 val number = fullText.toIntOrNull()
                 if (number != null && number > 24) {
-                    // Якщо число перевищує 24 – повертаємо попереднє валідне значення
                     Toast.makeText(
                         editText.context,
                         "Maximum - 24!",
@@ -1406,23 +1261,18 @@ fun handleIncrement(
                     ).show()
                     fullText = previousNumeric
                 }
-                // Зберігаємо поточне валідне значення
                 previousNumeric = fullText
 
-                // Встановлюємо текст знову: числова частина + незмінний суфікс
                 editText.setText(fullText + suffix)
-                // Курсор розташовується на кінці числової частини (тобто перед суфіксом)
                 editText.setSelection(fullText.length)
 
                 isEditing = false
 
-                // Викликаємо callback для збереження даних
                 onValidTextChanged?.invoke()
             }
         })
         editText.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                // Відкладене виконання, щоб система встановила власну позицію курсора
                 editText.post {
                     val allowedPosition = editText.text.toString().indexOf(suffix)
                     if (editText.selectionStart > allowedPosition) {
