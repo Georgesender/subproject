@@ -48,8 +48,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="70dp"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frame_top">
@@ -100,7 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="4dp">
+                android:padding="4dp"
+                android:layout_marginBottom="40dp">
 
                 <androidx.gridlayout.widget.GridLayout
                     android:layout_width="match_parent"
@@ -142,10 +143,10 @@
                 <GridLayout
                     android:id="@+id/components_container_grid"
                     android:layout_width="match_parent"
-                    android:layout_height="800dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
                     android:columnCount="2"
                     android:orientation="horizontal">
-                    <!-- Ваші елементи будуть додаватися програмно -->
                 </GridLayout>
 
 

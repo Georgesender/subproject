@@ -157,7 +157,7 @@
                         tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
 
                     <CheckBox
-                        android:id="@+id/compyear_checkbox"
+                        android:id="@+id/compyear_cb"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
@@ -201,7 +201,7 @@
                         tools:ignore="Autofill" />
 
                     <CheckBox
-                        android:id="@+id/compsize_checkbox"
+                        android:id="@+id/compsize_cb"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
@@ -243,7 +243,7 @@
                         tools:ignore="Autofill" />
 
                     <CheckBox
-                        android:id="@+id/compweight_checkbox"
+                        android:id="@+id/compweight_cb"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
@@ -274,7 +274,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:hint="@string/Write_year"
-                        android:inputType="textw"
+                        android:inputType="text"
                         android:maxLength="90"
                         android:textColor="@color/white"
                         android:background="@drawable/tb_start_bott_end_tr25"
@@ -283,7 +283,7 @@
                         tools:ignore="Autofill" />
 
                     <CheckBox
-                        android:id="@+id/compnotes_checkbox"
+                        android:id="@+id/compnotes_cb"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
@@ -296,25 +296,15 @@
 
 
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_grey_square"
-                app:layout_constraintTop_toBottomOf="@id/gridLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
                 <!-- Placeholder для фото -->
                 <ImageButton
                     android:id="@+id/photoPlaceholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:contentDescription="@string/add"
                     android:scaleType="centerInside"
                     android:src="@drawable/img_gee_setups"
                     tools:ignore="ImageContrastCheck" />
-            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -52,9 +52,17 @@ data class BikeGeometry(
 @Entity(tableName = "components_table")
 data class Component(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    var bikeId: Int, // Ідентифікатор байка
-
+    val bikeId: Int,           // Ідентифікатор байка, до якого належить компонент
+    val compType: String,      // Тип компонента (Fork, Shock, Tyre, і т.д.)
+    val compBrand: String,
+    val compYear: String,
+    val compModel: String,
+    val compSize: String,
+    val compWeight: String,
+    val compNotes: String,
+    val photoUri: String? = null // нове поле, за замовчуванням null
 )
+
 
 // таблиця для MaketSetup.kt
 @Entity(tableName = "setup_table")

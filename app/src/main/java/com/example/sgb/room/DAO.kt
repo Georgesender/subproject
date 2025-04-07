@@ -39,17 +39,14 @@ interface GeometryDao {
 @Dao
 interface ComponentsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertComponent(component: Component)
+    suspend fun insertComponent(component: Component): Long
 
-    @Query("SELECT * FROM components_table WHERE bikeId = :bikeId LIMIT 1")
-    suspend fun getComponentsByBikeId(bikeId: Int): Component?
+    @Query("SELECT * FROM components_table WHERE bikeId = :bikeId")
+    suspend fun getComponentsByBikeId(bikeId: Int): List<Component>
 
-    @Update
-    suspend fun updateComponent(component: Component)
-    // Додати метод для видалення компонентів
-    @Query("DELETE FROM components_table WHERE bikeId = :bikeId")
-    suspend fun deleteComponentsByBikeId(bikeId: Int)
+    // За потреби додайте оновлення та видалення
 }
+
 
 @Dao
 interface SetupDao {
