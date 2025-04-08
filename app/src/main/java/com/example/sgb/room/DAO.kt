@@ -44,8 +44,16 @@ interface ComponentsDao {
     @Query("SELECT * FROM components_table WHERE bikeId = :bikeId")
     suspend fun getComponentsByBikeId(bikeId: Int): List<Component>
 
-    // За потреби додайте оновлення та видалення
+    @Update
+    suspend fun updateComponent(component: Component)
+
+    @Delete
+    suspend fun deleteComponent(component: Component)
+
+    @Query("DELETE FROM components_table WHERE id = :componentId")
+    suspend fun deleteComponentById(componentId: Int)
 }
+
 
 
 @Dao
