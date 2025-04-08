@@ -305,7 +305,7 @@
             android:layout_width="230dp"
             android:layout_height="48dp"
             android:gravity="start|center_vertical"
-            android:text="@string/Pulling"
+            android:text="Уставшість ніш"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_columnSpan="1" />
@@ -347,24 +347,6 @@
             app:layout_columnSpan="1"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <TextView
-            android:layout_width="230dp"
-            android:layout_height="48dp"
-            android:gravity="end|center_vertical"
-            android:text="@string/Average_mark"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            app:layout_columnSpan="1" />
-        <TextView
-            android:id="@+id/average_mark"
-            android:layout_width="70dp"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:text="@string/__24"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="230dp"

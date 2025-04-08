@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/black">
+
+    <!-- Заголовок та кнопка "Підтвердити" -->
+    <TextView
+        android:id="@+id/dialogHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Adding_component"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
+        app:layout_constraintBottom_toBottomOf="@+id/btnConfirm" />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Прокручуваний вміст із таблицею параметрів -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/dialogHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/tableContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/gridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="6"
+                android:padding="8dp">
+
+                <!-- Рядок 1: Тип компонента -->
+                <TextView
+                    android:id="@+id/labelCompType"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Component_Type"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
+
+                <Spinner
+                    android:id="@+id/compType"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:background="@color/tr50_white" />
+
+                <!-- Рядок 2: Бренд -->
+                <TextView
+                    android:id="@+id/labelBrand"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Brand_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/compbrand"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_brand"
+                    android:maxLength="30"
+                    android:importantForAutofill="no"
+                    android:background="@drawable/tb_start_bott_end_tr25"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+
+
+
+                <!-- Рядок 4: Модель -->
+                <TextView
+                    android:id="@+id/labelModel"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Model_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
+
+                <EditText
+                    android:id="@+id/compmodel"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/Write_model"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:background="@drawable/tb_start_bott_end_tr25"
+                    android:maxLength="30"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+                <!-- Рядок 3: Рік -->
+                <TextView
+                    android:id="@+id/labelYear"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Year"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/compyear"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/Write_year"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:paddingTop="8dp"
+                        android:maxLength="4"
+                        android:inputType="number"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
+
+                    <CheckBox
+                        android:id="@+id/compyear_cb"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:text="@string/contain"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+                </LinearLayout>
+
+
+                <!-- Рядок 5: Розмір/Хід вилки -->
+                <TextView
+                    android:id="@+id/labelForkSize"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Size___travel"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/compsize"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/Write_year"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:paddingTop="8dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="Autofill" />
+
+                    <CheckBox
+                        android:id="@+id/compsize_cb"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:text="@string/contain"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <!-- Рядок 6: Вага -->
+                <TextView
+                    android:id="@+id/labelWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Weight_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/compweight"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/Write_year"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:textColor="@color/white"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:paddingTop="8dp"
+                        android:textSize="16sp"
+                        tools:ignore="Autofill" />
+
+                    <CheckBox
+                        android:id="@+id/compweight_cb"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:text="@string/contain"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+                <!-- Рядок 6: Вага -->
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Own_notes_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/compnotes"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/Write_year"
+                        android:inputType="text"
+                        android:maxLength="90"
+                        android:textColor="@color/white"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:paddingTop="8dp"
+                        android:textSize="14sp"
+                        tools:ignore="Autofill" />
+
+                    <CheckBox
+                        android:id="@+id/compnotes_cb"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </LinearLayout>
+
+            </GridLayout>
+
+
+
+                <!-- Placeholder для фото -->
+                <ImageButton
+                    android:id="@+id/photoPlaceholder"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/add"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/img_gee_setups"
+                    tools:ignore="ImageContrastCheck" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Рамочка для фото компонента -->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

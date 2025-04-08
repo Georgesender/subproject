@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/btn_trwhite_anim_2pxstroke"
-        android:text="psi"
+        android:text="PSI"
         android:textAllCaps="false"
         android:textColor="@color/white"
         tools:ignore="HardcodedText" />
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/btn_trwhite_anim_2pxstroke"
-        android:text="bar"
+        android:text="BAR"
         android:textColor="@color/white"
         android:textAllCaps="false"
         tools:ignore="HardcodedText" />

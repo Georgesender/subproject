@@ -162,8 +162,7 @@ class ActBikeGarage : AppCompatActivity() {
             val componentsDao = database.componentsDao()  // Додаємо DAO для компонентів
             val bpSetupDao = database.bpSetupDao()
 
-            // Видаляємо компоненти байка
-            componentsDao.deleteComponentsByBikeId(bikeId)
+
 
             // Видаляємо геометрію байка
             geometryDao.deleteGeometryByBikeId(bikeId)

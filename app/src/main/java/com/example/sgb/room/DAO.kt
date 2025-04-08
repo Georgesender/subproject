@@ -1,5 +1,6 @@
 package com.example.sgb.room
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -38,17 +39,22 @@ interface GeometryDao {
 @Dao
 interface ComponentsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertComponent(component: Component)
+    suspend fun insertComponent(component: Component): Long
 
-    @Query("SELECT * FROM components_table WHERE bikeId = :bikeId LIMIT 1")
-    suspend fun getComponentsByBikeId(bikeId: Int): Component?
+    @Query("SELECT * FROM components_table WHERE bikeId = :bikeId")
+    suspend fun getComponentsByBikeId(bikeId: Int): List<Component>
 
     @Update
     suspend fun updateComponent(component: Component)
-    // Додати метод для видалення компонентів
-    @Query("DELETE FROM components_table WHERE bikeId = :bikeId")
-    suspend fun deleteComponentsByBikeId(bikeId: Int)
+
+    @Delete
+    suspend fun deleteComponent(component: Component)
+
+    @Query("DELETE FROM components_table WHERE id = :componentId")
+    suspend fun deleteComponentById(componentId: Int)
 }
+
+
 
 @Dao
 interface SetupDao {
@@ -67,8 +73,11 @@ interface BPSetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBikeParkSetup(setup: BikeParkSetupData): Long
 
-    @Query("SELECT * FROM bikepark_table WHERE id = :id")
-    suspend fun getBikeParkSetupById(id: Int): BikeParkSetupData?
+    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
+    suspend fun getBikeParkSetupById(bikeId: Int): BikeParkSetupData?
+
+    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
+    fun getBikeParkSetupLive(bikeId: Int): LiveData<BikeParkSetupData>
 
     @Update
     suspend fun updateBikeParkSetup(setup: BikeParkSetupData)

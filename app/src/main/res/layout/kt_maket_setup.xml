@@ -48,24 +48,71 @@
             android:layout_marginTop="1dp"
             android:textColor="@color/white"
             android:textSize="28sp"
+            android:text="text"
             tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/fork_hint"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/img_info_hint"
+            android:layout_gravity="center"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/info"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="25dp"
+            tools:ignore="TextSizeCheck">
+
+            <androidx.gridlayout.widget.GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:columnCount="1"
+                app:rowCount="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Average_mark"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/average_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:text="@string/__24"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_gravity="center" />
+            </androidx.gridlayout.widget.GridLayout>
+        </FrameLayout>
+
         <FrameLayout
             android:id="@+id/marks_handle_container"
-            android:layout_width="40dp"
+            android:layout_width="30dp"
             android:layout_height="70dp"
             android:layout_gravity="end|center_vertical"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            tools:ignore="TouchTargetSizeCheck">
 
             <Button
                 android:id="@+id/marks_handle"
                 android:layout_width="30px"
                 android:layout_height="150px"
-                android:background="@drawable/btn_right_handle"
                 android:layout_gravity="end|center"
-                android:focusable="false"
+                android:background="@drawable/btn_right_handle"
                 android:clickable="false"
-                tools:ignore="PxUsage" />
+                android:focusable="false"
+                tools:ignore="PxUsage,VisualLintBounds" />
         </FrameLayout>
 
 
@@ -94,14 +141,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-
-
-
             <TextView
                 android:id="@+id/fork_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/ubuntu"
                 android:gravity="center"
                 android:text="@string/Fork"
                 android:textColor="@color/white"
@@ -113,20 +158,20 @@
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/fork_table"
-                android:layout_width="381dp"
+                android:layout_width="376dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
-                app:columnCount="6"
+                app:columnCount="4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fork_header"
-                app:rowCount="5">
+                app:rowCount="9">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
-                    app:layout_columnSpan="6"
+                    app:layout_columnSpan="4"
                     app:layout_gravity="fill">
 
                     <!-- Зображення зліва -->
@@ -146,9 +191,8 @@
                     <!-- Основний текст -->
                     <TextView
                         android:id="@+id/fork"
-                        android:layout_width="285dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
+                        android:layout_width="288dp"
+                        android:layout_height="54dp"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="26sp"
@@ -156,8 +200,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/fork_icon"
                         app:layout_constraintTop_toTopOf="parent" />
-
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -177,31 +219,22 @@
                     android:textColor="@color/green_strings"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="16sp"
-                    app:layout_columnSpan="6"
+                    app:layout_columnSpan="4"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
+                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+
 
 
                 <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_end_start"
-                    android:gravity="center"
-                    android:text="Pressure"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText,TextSizeCheck" />
-
-                <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
                     android:text="Rebound"
-                    android:textColor="@color/white"
+                    android:textColor="@color/red_rebound"
                     android:textSize="20sp"
                     app:layout_columnSpan="2"
                     app:layout_columnWeight="2"
@@ -209,33 +242,383 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
                     android:text="Compression"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue_compression"
                     android:textSize="20sp"
                     app:layout_columnSpan="2"
                     app:layout_columnWeight="2"
                     app:layout_gravity="fill"
+                    tools:ignore="HardcodedText,TextSizeCheck,TextContrastCheck" />
+
+
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:text="HSR"
+                        android:textColor="@color/red_rebound"
+                        android:textSize="19sp"
+                        tools:ignore="HardcodedText" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tb_start_bott_end"
+                    android:gravity="center"
+                    android:text="LSR"
+                    android:textColor="@color/red_rebound"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tb_start_bott_end"
+                    android:gravity="center"
+                    android:text="HSC"
+                    android:textColor="@color/blue_compression"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tb_start_bott_end"
+                    android:gravity="center"
+                    android:text="LSC"
+                    android:textColor="@color/blue_compression"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="1"
+                    tools:ignore="HardcodedText" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/fork_hsr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/fork_hsr_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_fhsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_fhsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/fork_lsr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/fork_lsr_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_flsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_flsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/fork_hsc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/fork_hsc_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_fhsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_fhsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/fork_hsr_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/fork_lsc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/fork_lsc_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_flsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+                        <ImageButton
+                            android:id="@+id/decrement_flsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="188dp"
+                    android:layout_height="39dp"
+                    android:background="@drawable/tb_end_start"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Pressure"
+                    android:textColor="@color/white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,TextSizeCheck" />
 
                 <TextView
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:text="Sag"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_columnWeight="1"
+                    android:layout_marginTop="10dp"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,TextSizeCheck" />
 
                 <TextView
                     android:id="@+id/fork_pressure_units"
-                    android:layout_width="80dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -243,57 +626,14 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="17sp"
-                    app:layout_columnWeight="1"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,LabelFor,TouchTargetSizeCheck,TextContrastCheck" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="HSR"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="LSR"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="HSC"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="LSC"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
 
 
                 <TextView
                     android:id="@+id/fork_seg_units"
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -301,12 +641,13 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="17sp"
-                    app:layout_columnWeight="1"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,LabelFor,TouchTargetSizeCheck,TextContrastCheck" />
 
                 <EditText
                     android:id="@+id/fork_pressure_value"
-                    android:layout_width="80dp"
+                    android:layout_width="188dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -317,76 +658,19 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
+                    app:layout_columnSpan="2"
                     app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
-                <EditText
-                    android:id="@+id/fork_hsr"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,SpeakableTextPresentCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/fork_lsr"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/fork_hsc"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/fork_lsc"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+
 
                 <EditText
                     android:id="@+id/fork_seg_value"
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -398,7 +682,11 @@
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
                     app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
+                    app:layout_columnSpan="2"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize" />
+
+
+
 
             </androidx.gridlayout.widget.GridLayout>
 
@@ -418,21 +706,20 @@
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/shock_table"
-                android:layout_width="381dp"
+                android:layout_width="376dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tb_with_strike"
-                app:columnCount="6"
+                app:columnCount="4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/shock_header"
-                app:rowCount="5">
+                app:rowCount="9">
 
-                <!-- Рядок таблиці -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="@color/bike_grey_blue"
-                    app:layout_columnSpan="6"
+                    app:layout_columnSpan="4"
                     app:layout_gravity="fill">
 
                     <!-- Зображення зліва -->
@@ -452,9 +739,8 @@
                     <!-- Основний текст -->
                     <TextView
                         android:id="@+id/shock"
-                        android:layout_width="285dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
+                        android:layout_width="288dp"
+                        android:layout_height="54dp"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="26sp"
@@ -464,11 +750,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
 
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <EditText
                     android:id="@+id/shock_notes"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
@@ -482,32 +769,22 @@
                     android:textColor="@color/green_strings"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="16sp"
-                    app:layout_columnSpan="6"
+                    app:layout_columnSpan="4"
                     app:layout_columnWeight="1"
                     app:layout_gravity="fill"
-                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck" />
+                    tools:ignore="DuplicateSpeakableTextCheck,LabelFor,RtlSymmetry,TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+
 
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
-                    android:background="@drawable/tb_end_start"
-                    android:gravity="center"
-                    android:text="Pressure"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText,TextSizeCheck" />
-
-
-                <TextView
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
                     android:text="Rebound"
-                    android:textColor="@color/white"
+                    android:textColor="@color/red_rebound"
                     android:textSize="20sp"
                     app:layout_columnSpan="2"
                     app:layout_columnWeight="2"
@@ -515,35 +792,385 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="188dp"
+                    android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:paddingBottom="2dp"
                     android:text="Compression"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue_compression"
                     android:textSize="20sp"
                     app:layout_columnSpan="2"
                     app:layout_columnWeight="2"
                     app:layout_gravity="fill"
-                    tools:ignore="HardcodedText,TextSizeCheck" />
+                    tools:ignore="HardcodedText,TextSizeCheck,TextContrastCheck" />
 
-                <!-- Третій рядок -->
+
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:text="HSR"
+                        android:textColor="@color/red_rebound"
+                        android:textSize="19sp"
+                        tools:ignore="HardcodedText" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:text="LSR"
+                        android:textColor="@color/red_rebound"
+                        android:textSize="19sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="HardcodedText" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:text="HSC"
+                        android:textColor="@color/blue_compression"
+                        android:textSize="19sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="HardcodedText" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="94dp"
+                    android:layout_height="39dp"
+                    app:layout_columnWeight="1"
+                    app:layout_gravity="fill">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tb_start_bott_end"
+                        android:gravity="center"
+                        android:text="LSC"
+                        android:textColor="@color/blue_compression"
+                        android:textSize="19sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="HardcodedText,TooManyViews" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:ignore="TooManyViews">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/shock_hsr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/shock_hsr_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_shsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_shsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/shock_lsr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/shock_lsr_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_slsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_slsr"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/shock_hsc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/shock_hsc_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_shsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_shsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shock_hsr_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Wrap the number cell and the delta overlay in a FrameLayout -->
+                    <FrameLayout
+                        android:layout_width="70dp"
+                        android:layout_height="48dp">
+
+                        <!-- The number cell -->
+                        <EditText
+                            android:id="@+id/shock_lsc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:hint="@string/_1"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/transparent_white"
+                            android:textSize="19sp"
+                            tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
+
+                        <!-- Delta indicator overlayed in the top-right corner -->
+                        <TextView
+                            android:id="@+id/shock_lsc_delta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:padding="2dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:ignore="SmallSp" />
+                    </FrameLayout>
+
+                    <!-- Container for up and down arrows -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/increment_slsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_up"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+
+                        <ImageButton
+                            android:id="@+id/decrement_slsc"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/img_arrow_down"
+                            android:contentDescription="@string/test"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </LinearLayout>
+                </LinearLayout>
                 <TextView
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
+                    android:layout_height="39dp"
+                    android:background="@drawable/tb_end_start"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Pressure"
+                    android:textColor="@color/white"
+                    android:textSize="19sp"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
+                    tools:ignore="HardcodedText,TextSizeCheck,TooManyViews" />
+
+                <TextView
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_end_start"
                     android:gravity="center"
                     android:text="Sag"
                     android:textColor="@color/white"
                     android:textSize="20sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
+                    android:layout_marginTop="10dp"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
+                    tools:ignore="HardcodedText,TextSizeCheck" />
 
                 <TextView
                     android:id="@+id/shock_pressure_units"
-                    android:layout_width="80dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -551,58 +1178,14 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="17sp"
-                    app:layout_columnWeight="1"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,LabelFor,TouchTargetSizeCheck,TextContrastCheck" />
 
 
                 <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="HSR"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="LSR"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="HSC"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/tb_start_bott_end"
-                    android:gravity="center"
-                    android:text="LSC"
-                    android:textColor="@color/white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="HardcodedText" />
-
-                <!-- Четвертий рядок -->
-                <TextView
                     android:id="@+id/shock_seg_units"
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
                     android:layout_height="39dp"
                     android:background="@drawable/tb_start_bott_end"
                     android:gravity="center"
@@ -610,13 +1193,13 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="17sp"
-                    app:layout_columnWeight="1"
+                    app:layout_columnWeight="2"
+                    app:layout_columnSpan="2"
                     tools:ignore="HardcodedText,LabelFor,TouchTargetSizeCheck,TextContrastCheck" />
-
 
                 <EditText
                     android:id="@+id/shock_pressure_value"
-                    android:layout_width="80dp"
+                    android:layout_width="188dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -627,78 +1210,19 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
+                    app:layout_columnSpan="2"
                     app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
 
-                <EditText
-                    android:id="@+id/shock_hsr"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/shock_lsr"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/shock_hsc"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <EditText
-                    android:id="@+id/shock_lsc"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/_1"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/transparent_white"
-                    android:textSize="19sp"
-                    app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
 
-                <!-- П’ятий рядок -->
+
                 <EditText
                     android:id="@+id/shock_seg_value"
-                    android:layout_width="60dp"
+                    android:layout_width="188dp"
                     android:layout_height="48dp"
                     android:gravity="center"
                     android:hint="@string/_1"
@@ -710,7 +1234,10 @@
                     android:textColorHint="@color/transparent_white"
                     android:textSize="19sp"
                     app:layout_columnWeight="1"
-                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck" />
+                    app:layout_columnSpan="2"
+                    tools:ignore="LabelFor,DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize" />
+
+
 
 
             </androidx.gridlayout.widget.GridLayout>
@@ -848,7 +1375,7 @@
                     android:textSize="19sp"
                     app:layout_columnSpan="2"
                     app:layout_columnWeight="2"
-                    tools:ignore="HardcodedText,LabelFor,TouchTargetSizeCheck,TextContrastCheck" />
+                    tools:ignore="HardcodedText,LabelFor,TextContrastCheck,TooManyViews,TouchTargetSizeCheck" />
 
                 <EditText
                     android:id="@+id/front_tyre_pressure"
@@ -896,10 +1423,8 @@
             android:layout_width="320dp"
             android:layout_height="550dp"
             android:layout_marginEnd="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="100dp"
             android:layout_gravity="end"/>
     </FrameLayout>
-
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
