@@ -140,15 +140,16 @@
                         tools:ignore="TextContrastCheck" />
 
                 </androidx.gridlayout.widget.GridLayout>
-                <GridLayout
+
+                <androidx.gridlayout.widget.GridLayout
                     android:id="@+id/components_container_grid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="70dp"
-                    android:columnCount="2"
-                    android:orientation="horizontal">
-                </GridLayout>
-
+                    android:padding="10dp"
+                    app:columnCount="2"
+                    app:orientation="vertical" >
+            </androidx.gridlayout.widget.GridLayout>
 
 
             </LinearLayout>

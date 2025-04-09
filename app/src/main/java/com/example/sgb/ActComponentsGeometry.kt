@@ -14,10 +14,11 @@ import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.view.Gravity
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -46,14 +47,16 @@ class ActComponentsGeometry : AppCompatActivity() {
 
     private lateinit var bikeAndModelView: TextView
     private lateinit var bikeImageView: ImageView
-    // Глобальна змінна для зберігання доступних типів
+
+    // Global variable to store available component types
     private lateinit var availableComponentTypes: MutableList<String>
-    // Використовуємо OpenDocument, тому параметр – Array<String>
+
+    // Using OpenDocument, so parameter is Array<String>
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Array<String>>
     private val REQUEST_CODE_READ_MEDIA_IMAGES = 1001
     private val REQUEST_CODE_READ_EXTERNAL_STORAGE = 1002
 
-    // Глобальна змінна для збереження вибраного URI
+    // Global variable to hold the selected image URI
     private var selectedImageUri: Uri? = null
 
     @SuppressLint("SetTextI18n")
@@ -64,84 +67,92 @@ class ActComponentsGeometry : AppCompatActivity() {
         val bikeId = intent.getIntExtra("bike_id", -1)
         val sharedPreferences: SharedPreferences = getSharedPreferences("bike_prefs", MODE_PRIVATE)
         val selectedBikeId = sharedPreferences.getInt("selected_bike_id", -1)
-// Ініціалізація списку доступних типів з ресурсів
+
+        // Initialize list of available component types from resources
         availableComponentTypes = resources.getStringArray(R.array.component_types).toMutableList()
+
         initViews()
         backButtonListener(selectedBikeId)
 
-        // Ініціалізація imagePickerLauncher з використанням OpenDocument
+        // Initialize imagePickerLauncher using OpenDocument
         imagePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-            if (uri != null) {
-                // Встановлюємо фіксовані флаги для збереження дозволів
+            uri?.let {
+                // Set fixed flags for persisting URI permission
                 val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 try {
-                    contentResolver.takePersistableUriPermission(uri, takeFlags)
+                    contentResolver.takePersistableUriPermission(it, takeFlags)
                 } catch (e: SecurityException) {
                     e.printStackTrace()
-                    Toast.makeText(this, "Не вдалося зберегти дозвіл на доступ до зображення", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Failed to save permission for image access", Toast.LENGTH_SHORT).show()
                 }
-                selectedImageUri = uri
+                selectedImageUri = it
             }
         }
 
+        // Load bike data if bikeId is valid
         if (bikeId != -1) {
             loadBikeData(bikeId)
         }
+
         val btnAddComponent: Button = findViewById(R.id.Add_component_info)
-        // Допоміжна функція для конвертації dp в px
-        fun Int.toPx(context: Context): Int = (this * context.resources.displayMetrics.density).toInt()
+
+
+
         fun addComponentToUI(component: Component) {
-            val gridContainer = findViewById<GridLayout>(R.id.components_container_grid)
+            val gridContainer = findViewById<androidx.gridlayout.widget.GridLayout>(R.id.components_container_grid)
             var nextRowIndex = gridContainer.childCount
 
-            // Контейнер для рядка, який міститиме кнопки та назву компонента
+            val componentViews = mutableListOf<View>()
+
+            // Container for row that includes delete/edit buttons and component type text
             val rowContainer = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
                 setPadding(8, 8, 8, 8)
             }
 
-            // Кнопка для видалення (25x25dp)
+            // Delete button (25x25dp)
             val btnDelete = ImageButton(this).apply {
-                setImageResource(R.drawable.img_delete) // Ваш ресурс для іконки видалення
+                setImageResource(R.drawable.img_delete) // Resource for delete icon
                 layoutParams = LinearLayout.LayoutParams(25.toPx(this@ActComponentsGeometry), 25.toPx(this@ActComponentsGeometry))
-                setBackgroundResource(0) // робимо фон прозорим, або задаємо кастомний стиль
+                setBackgroundResource(0) // Remove background or apply custom style
             }
 
-            // Кнопка для редагування (25x25dp)
+            // Edit button (25x25dp)
             val btnEdit = ImageButton(this).apply {
-                setImageResource(R.drawable.img_edit) // Ваш ресурс для іконки редагування
+                setImageResource(R.drawable.img_edit) // Resource for edit icon
                 layoutParams = LinearLayout.LayoutParams(25.toPx(this@ActComponentsGeometry), 25.toPx(this@ActComponentsGeometry))
                 setBackgroundResource(0)
             }
 
-            // TextView для відображення типу компонента
+            // TextView to display component type
             val tvType = TextView(this).apply {
                 text = component.compType
                 textSize = 25f
                 setTypeface(null, Typeface.BOLD)
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
-                // Можна задати свій background чи відступи
                 setPadding(16, 8, 8, 8)
             }
 
-            // Додаємо кнопки та текст до контейнера
-            rowContainer.addView(btnDelete)
-            rowContainer.addView(btnEdit)
-            rowContainer.addView(tvType)
+            // Add buttons and text to row container
+            rowContainer.apply {
+                addView(btnDelete)
+                addView(btnEdit)
+                addView(tvType)
+            }
 
-            // Розміщуємо контейнер у GridLayout
-            val rowParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(nextRowIndex, 1)
-                columnSpec = GridLayout.spec(0, 2)
-                width = GridLayout.LayoutParams.WRAP_CONTENT
+            // Add row container to androidx.gridlayout.widget.GridLayout
+            val rowParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+                width = androidx.gridlayout.widget.GridLayout.LayoutParams.WRAP_CONTENT
                 height = 44.toPx(this@ActComponentsGeometry)
                 setGravity(Gravity.CENTER)
             }
             gridContainer.addView(rowContainer, rowParams)
-
-            // Наступні рядки (заголовок, розмір, вага, фото, нотатки) – як раніше
-            // 2-й рядок: Заголовок
+            componentViews.add(rowContainer)
+            // Next rows for header, size, weight, photo, notes
+            // 2nd row: Header (brand and model, with optional year)
             val brandModel = "${component.compBrand} ${component.compModel}"
             val spannable = SpannableStringBuilder(brandModel)
             if (component.compYear.isNotEmpty()) {
@@ -150,54 +161,55 @@ class ActComponentsGeometry : AppCompatActivity() {
                 spannable.setSpan(SuperscriptSpan(), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 spannable.setSpan(RelativeSizeSpan(0.7f), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-
             val tvHeader = TextView(this).apply {
                 text = spannable
                 textSize = 24f
-                background = ContextCompat.getDrawable(this@ActComponentsGeometry, R.drawable.tb_start_bott_end_tr25)
+                setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
                 gravity = Gravity.CENTER
                 setPadding(0, 12.toPx(this@ActComponentsGeometry), 0, 0)
             }
-
-            val tvHeaderParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(nextRowIndex + 1, 1)
-                columnSpec = GridLayout.spec(0, 2)
+            val tvHeaderParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 1, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
                 height = 42.toPx(this@ActComponentsGeometry)
                 width = 200.toPx(this@ActComponentsGeometry)
                 setGravity(Gravity.CENTER)
             }
             gridContainer.addView(tvHeader, tvHeaderParams)
-
-            // 3-й рядок: Розмір
+            componentViews.add(tvHeader)
+            // 3rd row: Size
             val tvSize = TextView(this).apply {
                 text = if (component.compSize.isNotEmpty()) "Size: ${component.compSize}" else ""
                 textSize = 18f
                 gravity = Gravity.CENTER_VERTICAL
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+                setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
             }
-            val tvSizeParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(nextRowIndex + 2, 1)
-                columnSpec = GridLayout.spec(0)
-                height = 48.toPx(this@ActComponentsGeometry)
+            val tvSizeParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 2, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
+                height = 50.toPx(this@ActComponentsGeometry)
             }
             gridContainer.addView(tvSize, tvSizeParams)
+            componentViews.add(tvSize)
 
-            // 4-й рядок: Вага
+            // 4th row: Weight
             val tvWeight = TextView(this).apply {
                 text = if (component.compWeight.isNotEmpty()) "Weight: ${component.compWeight}" else ""
                 textSize = 18f
                 gravity = Gravity.CENTER_VERTICAL
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+                setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
             }
-            val tvWeightParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(nextRowIndex + 3, 1)
-                columnSpec = GridLayout.spec(0)
-                height = 48.toPx(this@ActComponentsGeometry)
+            val tvWeightParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 3, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
+                height = 50.toPx(this@ActComponentsGeometry)
             }
             gridContainer.addView(tvWeight, tvWeightParams)
-
-            // Фото: у другій колонці, займає третій та четвертий рядок
+            componentViews.add(tvWeight)
+            // Photo: occupies 3rd and 4th row in 2nd column
             val ivPhoto = ImageView(this).apply {
                 scaleType = ImageView.ScaleType.FIT_CENTER
                 isClickable = true
@@ -209,119 +221,113 @@ class ActComponentsGeometry : AppCompatActivity() {
                 if (!component.photoUri.isNullOrEmpty()) {
                     setImageURI(component.photoUri.toUri())
                 } else {
-                    setImageResource(R.drawable.img_fork) // замініть на свій ресурс за потребою
+                    setImageResource(R.drawable.img_fork) // Default image resource if no photo exists
                 }
             }
-            val ivPhotoParams = GridLayout.LayoutParams().apply {
-                // Розміщуємо фото, починаючи з третього рядка (індекс 2) і займаючи 2 рядки (тобто третій та четвертий)
-                rowSpec = GridLayout.spec(nextRowIndex + 2, 2)
-                // Розміщення у другій колонці (індекс 1)
-                columnSpec = GridLayout.spec(1)
-                width = 100.toPx(this@ActComponentsGeometry)
+            val ivPhotoParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 2, 2)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(1)
+                width = androidx.gridlayout.widget.GridLayout.LayoutParams.MATCH_PARENT
                 height = 100.toPx(this@ActComponentsGeometry)
-                setMargins(
-                    8.toPx(this@ActComponentsGeometry),
-                    8.toPx(this@ActComponentsGeometry),
-                    8.toPx(this@ActComponentsGeometry),
-                    8.toPx(this@ActComponentsGeometry)
-                )
+                setMargins(8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry))
             }
             gridContainer.addView(ivPhoto, ivPhotoParams)
-
-            // 5-й рядок: Нотатки (якщо є)
-            // 5-й рядок: Нотатки – тепер завжди створюємо TextView для нотаток
+            componentViews.add(ivPhoto)
+            // 5th row: Notes
             val tvNotes = TextView(this).apply {
                 text = component.compNotes
-                textSize = 16f
-                gravity = Gravity.CENTER_VERTICAL or Gravity.START
+                textSize = 18f
+                gravity = Gravity.CENTER
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+                setBackgroundResource(R.color.tr_white)
                 setPadding(8, 4, 8, 4)
             }
-            val tvNotesParams = GridLayout.LayoutParams().apply {
-                rowSpec = GridLayout.spec(nextRowIndex + 4, 1)
-                columnSpec = GridLayout.spec(0, 2)
-                width = GridLayout.LayoutParams.WRAP_CONTENT
-                height = GridLayout.LayoutParams.WRAP_CONTENT
-                setGravity(Gravity.CENTER)
+            val tvNotesParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 4, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+                height = 48.toPx(this@ActComponentsGeometry)
+                width = androidx.gridlayout.widget.GridLayout.LayoutParams.MATCH_PARENT
+
             }
             gridContainer.addView(tvNotes, tvNotesParams)
-            // Оновлюємо nextRowIndex (якщо даних нотаток не було, цей TextView може бути порожнім)
+            componentViews.add(tvNotes)
             nextRowIndex += 5
 
-            // Видалення компонента
+            // --- Delete component event ---
             btnDelete.setOnClickListener {
                 AlertDialog.Builder(this)
-                    .setTitle("Підтвердження видалення")
-                    .setMessage("Ви впевнені, що хочете видалити цей компонент?")
-                    .setPositiveButton("Так") { dialog, _ ->
+                    .setTitle("Confirm Deletion")
+                    .setMessage("Are you sure you want to delete this component?")
+                    .setPositiveButton("Yes") { dialog, _ ->
                         lifecycleScope.launch(Dispatchers.IO) {
-                            // Видаляємо компонент з бази даних
-                            BikeDatabase.getDatabase(applicationContext).componentsDao().deleteComponent(component)
+                            // Delete component from the database
+                            BikeDatabase.getDatabase(applicationContext)
+                                .componentsDao()
+                                .deleteComponent(component)
                             withContext(Dispatchers.Main) {
-                                // Видаляємо рядок з GridLayout
-                                gridContainer.removeView(rowContainer)
-                                // (Можна також видалити і пов’язані з компонентом рядки, наприклад, заголовок тощо)
-                                // Повертаємо тип компонента у список доступних
+                                // Remove all views associated with this component from the androidx.gridlayout.widget.GridLayout
+                                componentViews.forEach { view ->
+                                    gridContainer.removeView(view)
+                                }
+                                // Optionally, add the component type back to available types
                                 availableComponentTypes.add(component.compType)
                             }
                         }
                         dialog.dismiss()
                     }
-                    .setNegativeButton("Ні") { dialog, _ ->
+                    .setNegativeButton("No") { dialog, _ ->
                         dialog.dismiss()
                     }
                     .show()
             }
 
-            // Редагування компонента
+            // Edit component event
             btnEdit.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.di_component_info, null)
                 val editDialog = AlertDialog.Builder(this)
                     .setView(dialogView)
                     .create()
 
-                // Попереднє заповнення полів поточними даними
+                // Pre-fill fields with current component data
                 dialogView.findViewById<EditText>(R.id.compbrand).setText(component.compBrand)
                 dialogView.findViewById<EditText>(R.id.compyear).setText(component.compYear)
                 dialogView.findViewById<EditText>(R.id.compmodel).setText(component.compModel)
                 dialogView.findViewById<EditText>(R.id.compsize).setText(component.compSize)
                 dialogView.findViewById<EditText>(R.id.compweight).setText(component.compWeight)
                 dialogView.findViewById<EditText>(R.id.compnotes).setText(component.compNotes)
-                // Зберігаємо посилання на чекбокси
-                val yearCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compyear_cb)
-                val sizeCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compsize_cb)
-                val weightCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compweight_cb)
-                val notesCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compnotes_cb)
 
-                // Автоматичне встановлення стану чекбоксів (це виконується лише на початку)
-                yearCb?.isChecked = component.compYear.isNotEmpty()
-                sizeCb?.isChecked = component.compSize.isNotEmpty()
-                weightCb?.isChecked = component.compWeight.isNotEmpty()
-                notesCb?.isChecked = component.compNotes.isNotEmpty()
+                val yearCb = dialogView.findViewById<CheckBox>(R.id.compyear_cb)
+                val sizeCb = dialogView.findViewById<CheckBox>(R.id.compsize_cb)
+                val weightCb = dialogView.findViewById<CheckBox>(R.id.compweight_cb)
+                val notesCb = dialogView.findViewById<CheckBox>(R.id.compnotes_cb)
 
-                // Кнопка для вибору фото (як у вас)
+                // Automatically set checkbox states based on data
+                yearCb.isChecked = component.compYear.isNotEmpty()
+                sizeCb.isChecked = component.compSize.isNotEmpty()
+                weightCb.isChecked = component.compWeight.isNotEmpty()
+                notesCb.isChecked = component.compNotes.isNotEmpty()
+
+                // Photo selection button in the dialog
                 dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)?.setOnClickListener {
                     pickImageForComponent()
                 }
 
-                // Обробка підтвердження редагування
+                // Confirm edit button event
                 dialogView.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
-                    // Зчитування значень з діалогу для редагування
+                    // Read values from dialog for updating component
                     val updatedCompBrand = dialogView.findViewById<EditText>(R.id.compbrand).text.toString()
-                    val updatedCompYear = if (yearCb?.isChecked == true)
+                    val updatedCompYear = if (yearCb.isChecked)
                         dialogView.findViewById<EditText>(R.id.compyear).text.toString() else ""
                     val updatedCompModel = dialogView.findViewById<EditText>(R.id.compmodel).text.toString()
-                    val updatedCompSize = if (sizeCb?.isChecked == true)
+                    val updatedCompSize = if (sizeCb.isChecked)
                         dialogView.findViewById<EditText>(R.id.compsize).text.toString() else ""
-                    val updatedCompWeight = if (weightCb?.isChecked == true)
+                    val updatedCompWeight = if (weightCb.isChecked)
                         dialogView.findViewById<EditText>(R.id.compweight).text.toString() else ""
-                    val updatedCompNotes = if (notesCb?.isChecked == true)
-                        dialogView.findViewById<EditText>(R.id.compnotes).text.toString()  else ""
-                    val photoUriString =
-                        selectedImageUri?.toString() ?: component.photoUri  // якщо фото не змінювалось, залишаємо старе значення
+                    val updatedCompNotes = if (notesCb.isChecked)
+                        dialogView.findViewById<EditText>(R.id.compnotes).text.toString() else ""
+                    // If the photo was not changed, keep the old value
+                    val photoUriString = selectedImageUri?.toString() ?: component.photoUri
 
-
-                    // Створюємо оновлений об'єкт компонента (ідентифікатор залишається незмінним)
                     val updatedComponent = component.copy(
                         compBrand = updatedCompBrand,
                         compYear = updatedCompYear,
@@ -335,21 +341,23 @@ class ActComponentsGeometry : AppCompatActivity() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         BikeDatabase.getDatabase(applicationContext).componentsDao().updateComponent(updatedComponent)
                         withContext(Dispatchers.Main) {
-
-                            // Оновлюємо UI (наприклад, tvHeader, tvSize, tvWeight, ivPhoto)
-                            val newHeaderText = SpannableStringBuilder("${updatedComponent.compBrand} ${updatedComponent.compModel}")
-                            if (updatedComponent.compYear.isNotEmpty()) {
-                                newHeaderText.append(" ${updatedComponent.compYear}")
-                                val start = newHeaderText.length - updatedComponent.compYear.length
-                                newHeaderText.setSpan(SuperscriptSpan(), start, newHeaderText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                newHeaderText.setSpan(RelativeSizeSpan(0.7f), start, newHeaderText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            // Update UI fields with new data
+                            val newHeaderText = SpannableStringBuilder("${updatedComponent.compBrand} ${updatedComponent.compModel}").apply {
+                                if (updatedComponent.compYear.isNotEmpty()) {
+                                    append(" ${updatedComponent.compYear}")
+                                    val start = length - updatedComponent.compYear.length
+                                    setSpan(SuperscriptSpan(), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    setSpan(RelativeSizeSpan(0.7f), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                }
                             }
                             tvHeader.text = newHeaderText
                             tvSize.text = if (updatedComponent.compSize.isNotEmpty()) "Size: ${updatedComponent.compSize}" else ""
                             tvWeight.text = if (updatedComponent.compWeight.isNotEmpty()) "Weight: ${updatedComponent.compWeight}" else ""
-                            tvNotes.text = if (updatedComponent.compNotes.isNotEmpty()) updatedComponent.compNotes else ""
-                            if (!updatedComponent.photoUri.isNullOrEmpty()) {dialogView.findViewById<EditText>(R.id.compnotes).text
+                            tvNotes.text = updatedComponent.compNotes
+                            if (!updatedComponent.photoUri.isNullOrEmpty()) {
                                 ivPhoto.setImageURI(updatedComponent.photoUri.toUri())
+                            } else {
+                                ivPhoto.setImageResource(R.drawable.img_fork)
                             }
                             editDialog.dismiss()
                         }
@@ -357,17 +365,12 @@ class ActComponentsGeometry : AppCompatActivity() {
                 }
                 editDialog.show()
             }
-
-
         }
 
-
-
-
         btnAddComponent.setOnClickListener {
-            // Якщо немає доступних типів для вибору, показуємо повідомлення
+            // If there are no available component types, show a toast message
             if (availableComponentTypes.isEmpty()) {
-                Toast.makeText(this, "Всі типи компонентів вже додані", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "All component types have been added", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val dialogView = layoutInflater.inflate(R.layout.di_component_info, null)
@@ -375,17 +378,16 @@ class ActComponentsGeometry : AppCompatActivity() {
                 .setView(dialogView)
                 .create()
 
-            // Замість завантаження з ресурсів використовуємо availableComponentTypes
+            // Use availableComponentTypes instead of resource array
             val spinner = dialogView.findViewById<Spinner>(R.id.compType)
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableComponentTypes)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
-            // Ініціалізація ImageButton в діалоговому вікні
-            val dialogPhotoPlaceholder = dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)
-            dialogPhotoPlaceholder?.setOnClickListener {
+
+            // Initialize ImageButton for photo selection in the dialog
+            dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)?.setOnClickListener {
                 pickImageForComponent()
             }
-
 
             dialogView.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
                 val compBrand = dialogView.findViewById<EditText>(R.id.compbrand).text.toString()
@@ -396,10 +398,10 @@ class ActComponentsGeometry : AppCompatActivity() {
                 val compNotesInput = dialogView.findViewById<EditText>(R.id.compnotes)?.text?.toString() ?: ""
                 val selectedType = spinner.selectedItem.toString()
 
-                val compYearCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compyear_cb)
-                val compSizeCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compsize_cb)
-                val compWeightCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compweight_cb)
-                val compNotesCb = dialogView.findViewById<android.widget.CheckBox>(R.id.compnotes_cb)
+                val compYearCb = dialogView.findViewById<CheckBox>(R.id.compyear_cb)
+                val compSizeCb = dialogView.findViewById<CheckBox>(R.id.compsize_cb)
+                val compWeightCb = dialogView.findViewById<CheckBox>(R.id.compweight_cb)
+                val compNotesCb = dialogView.findViewById<CheckBox>(R.id.compnotes_cb)
 
                 val compYear = if (compYearCb.isChecked) compYearInput else ""
                 val compSize = if (compSizeCb.isChecked) compSizeInput else ""
@@ -424,9 +426,10 @@ class ActComponentsGeometry : AppCompatActivity() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     BikeDatabase.getDatabase(applicationContext).componentsDao().insertComponent(newComponent)
                     withContext(Dispatchers.Main) {
-                        // Видаляємо обраний тип із списку доступних
+                        // Remove the chosen type from available component types
                         availableComponentTypes.remove(selectedType)
                         addComponentToUI(newComponent)
+                        reloadComponents(bikeId)
                         dialog.dismiss()
                     }
                 }
@@ -434,14 +437,15 @@ class ActComponentsGeometry : AppCompatActivity() {
             dialog.show()
         }
 
+
         lifecycleScope.launch(Dispatchers.IO) {
             val componentsList = BikeDatabase.getDatabase(applicationContext)
                 .componentsDao()
                 .getComponentsByBikeId(bikeId)
             withContext(Dispatchers.Main) {
                 componentsList.forEach { component ->
-                    // Якщо в базі вже існує компонент із певним типом, видаляємо цей тип із availableComponentTypes,
-                    // щоб уникнути його повторного вибору
+                    // If a component of a specific type already exists in the database,
+                    // remove that type from availableComponentTypes to avoid duplicate selection
                     availableComponentTypes.remove(component.compType)
                     addComponentToUI(component)
                 }
@@ -477,6 +481,8 @@ class ActComponentsGeometry : AppCompatActivity() {
             bike?.let {
                 bikeAndModelView.text = getString(R.string.two_strings, it.brand, it.modelsJson.keys.first())
                 loadBikeImage(it)
+
+
             }
         }
     }
@@ -499,7 +505,6 @@ class ActComponentsGeometry : AppCompatActivity() {
         } else {
             android.Manifest.permission.READ_EXTERNAL_STORAGE
         }
-
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
@@ -508,7 +513,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                     REQUEST_CODE_READ_MEDIA_IMAGES else REQUEST_CODE_READ_EXTERNAL_STORAGE
             )
         } else {
-            // Використовуємо OpenDocument для отримання постійного доступу
+            // Use OpenDocument to obtain persistent access to images
             imagePickerLauncher.launch(arrayOf("image/*"))
         }
     }
@@ -525,4 +530,292 @@ class ActComponentsGeometry : AppCompatActivity() {
             Toast.makeText(this, "Permission required to access images", Toast.LENGTH_SHORT).show()
         }
     }
+    fun addComponentToUI(component: Component) {
+        val gridContainer = findViewById<androidx.gridlayout.widget.GridLayout>(R.id.components_container_grid)
+        var nextRowIndex = gridContainer.childCount
+
+        val componentViews = mutableListOf<View>()
+
+        // Container for row that includes delete/edit buttons and component type text
+        val rowContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(8, 8, 8, 8)
+        }
+
+        // Delete button (25x25dp)
+        val btnDelete = ImageButton(this).apply {
+            setImageResource(R.drawable.img_delete) // Resource for delete icon
+            layoutParams = LinearLayout.LayoutParams(25.toPx(this@ActComponentsGeometry), 25.toPx(this@ActComponentsGeometry))
+            setBackgroundResource(0) // Remove background or apply custom style
+        }
+
+        // Edit button (25x25dp)
+        val btnEdit = ImageButton(this).apply {
+            setImageResource(R.drawable.img_edit) // Resource for edit icon
+            layoutParams = LinearLayout.LayoutParams(25.toPx(this@ActComponentsGeometry), 25.toPx(this@ActComponentsGeometry))
+            setBackgroundResource(0)
+        }
+
+        // TextView to display component type
+        val tvType = TextView(this).apply {
+            text = component.compType
+            textSize = 25f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            setPadding(16, 8, 8, 8)
+        }
+
+        // Add buttons and text to row container
+        rowContainer.apply {
+            addView(btnDelete)
+            addView(btnEdit)
+            addView(tvType)
+        }
+
+        // Add row container to androidx.gridlayout.widget.GridLayout
+        val rowParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex, 1)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+            width = androidx.gridlayout.widget.GridLayout.LayoutParams.WRAP_CONTENT
+            height = 44.toPx(this@ActComponentsGeometry)
+            setGravity(Gravity.CENTER)
+        }
+        gridContainer.addView(rowContainer, rowParams)
+        componentViews.add(rowContainer)
+        // Next rows for header, size, weight, photo, notes
+        // 2nd row: Header (brand and model, with optional year)
+        val brandModel = "${component.compBrand} ${component.compModel}"
+        val spannable = SpannableStringBuilder(brandModel)
+        if (component.compYear.isNotEmpty()) {
+            spannable.append(" ${component.compYear}")
+            val start = spannable.length - component.compYear.length
+            spannable.setSpan(SuperscriptSpan(), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(RelativeSizeSpan(0.7f), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        val tvHeader = TextView(this).apply {
+            text = spannable
+            textSize = 24f
+            setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            gravity = Gravity.CENTER
+            setPadding(0, 12.toPx(this@ActComponentsGeometry), 0, 0)
+        }
+        val tvHeaderParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 1, 1)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+            height = 42.toPx(this@ActComponentsGeometry)
+            width = 200.toPx(this@ActComponentsGeometry)
+            setGravity(Gravity.CENTER)
+        }
+        gridContainer.addView(tvHeader, tvHeaderParams)
+        componentViews.add(tvHeader)
+        // 3rd row: Size
+        val tvSize = TextView(this).apply {
+            text = if (component.compSize.isNotEmpty()) "Size: ${component.compSize}" else ""
+            textSize = 18f
+            gravity = Gravity.CENTER_VERTICAL
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
+        }
+        val tvSizeParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 2, 1)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
+            height = 50.toPx(this@ActComponentsGeometry)
+        }
+        gridContainer.addView(tvSize, tvSizeParams)
+        componentViews.add(tvSize)
+
+        // 4th row: Weight
+        val tvWeight = TextView(this).apply {
+            text = if (component.compWeight.isNotEmpty()) "Weight: ${component.compWeight}" else ""
+            textSize = 18f
+            gravity = Gravity.CENTER_VERTICAL
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
+        }
+        val tvWeightParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 3, 1)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
+            height = 50.toPx(this@ActComponentsGeometry)
+        }
+        gridContainer.addView(tvWeight, tvWeightParams)
+        componentViews.add(tvWeight)
+        // Photo: occupies 3rd and 4th row in 2nd column
+        val ivPhoto = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            isClickable = true
+            isFocusable = true
+            setOnClickListener {
+                android.util.Log.d("ActComponentsGeometry", "ImageView clicked for component: ${component.compType}")
+                pickImageForComponent()
+            }
+            if (!component.photoUri.isNullOrEmpty()) {
+                setImageURI(component.photoUri.toUri())
+            } else {
+                setImageResource(R.drawable.img_fork) // Default image resource if no photo exists
+            }
+        }
+        val ivPhotoParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 2, 2)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(1)
+            width = androidx.gridlayout.widget.GridLayout.LayoutParams.MATCH_PARENT
+            height = 100.toPx(this@ActComponentsGeometry)
+            setMargins(8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry))
+        }
+        gridContainer.addView(ivPhoto, ivPhotoParams)
+        componentViews.add(ivPhoto)
+        // 5th row: Notes
+        val tvNotes = TextView(this).apply {
+            text = component.compNotes
+            textSize = 18f
+            gravity = Gravity.CENTER
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            setBackgroundResource(R.color.tr_white)
+            setPadding(8, 4, 8, 4)
+        }
+        val tvNotesParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 4, 1)
+            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+            height = 48.toPx(this@ActComponentsGeometry)
+            width = androidx.gridlayout.widget.GridLayout.LayoutParams.MATCH_PARENT
+
+        }
+        gridContainer.addView(tvNotes, tvNotesParams)
+        componentViews.add(tvNotes)
+        nextRowIndex += 5
+
+        // --- Delete component event ---
+        btnDelete.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Confirm Deletion")
+                .setMessage("Are you sure you want to delete this component?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        // Delete component from the database
+                        BikeDatabase.getDatabase(applicationContext)
+                            .componentsDao()
+                            .deleteComponent(component)
+                        withContext(Dispatchers.Main) {
+                            // Remove all views associated with this component from the androidx.gridlayout.widget.GridLayout
+                            componentViews.forEach { view ->
+                                gridContainer.removeView(view)
+                            }
+                            // Optionally, add the component type back to available types
+                            availableComponentTypes.add(component.compType)
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
+        // Edit component event
+        btnEdit.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.di_component_info, null)
+            val editDialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create()
+
+            // Pre-fill fields with current component data
+            dialogView.findViewById<EditText>(R.id.compbrand).setText(component.compBrand)
+            dialogView.findViewById<EditText>(R.id.compyear).setText(component.compYear)
+            dialogView.findViewById<EditText>(R.id.compmodel).setText(component.compModel)
+            dialogView.findViewById<EditText>(R.id.compsize).setText(component.compSize)
+            dialogView.findViewById<EditText>(R.id.compweight).setText(component.compWeight)
+            dialogView.findViewById<EditText>(R.id.compnotes).setText(component.compNotes)
+
+            val yearCb = dialogView.findViewById<CheckBox>(R.id.compyear_cb)
+            val sizeCb = dialogView.findViewById<CheckBox>(R.id.compsize_cb)
+            val weightCb = dialogView.findViewById<CheckBox>(R.id.compweight_cb)
+            val notesCb = dialogView.findViewById<CheckBox>(R.id.compnotes_cb)
+
+            // Automatically set checkbox states based on data
+            yearCb.isChecked = component.compYear.isNotEmpty()
+            sizeCb.isChecked = component.compSize.isNotEmpty()
+            weightCb.isChecked = component.compWeight.isNotEmpty()
+            notesCb.isChecked = component.compNotes.isNotEmpty()
+
+            // Photo selection button in the dialog
+            dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)?.setOnClickListener {
+                pickImageForComponent()
+            }
+
+            // Confirm edit button event
+            dialogView.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
+                // Read values from dialog for updating component
+                val updatedCompBrand = dialogView.findViewById<EditText>(R.id.compbrand).text.toString()
+                val updatedCompYear = if (yearCb.isChecked)
+                    dialogView.findViewById<EditText>(R.id.compyear).text.toString() else ""
+                val updatedCompModel = dialogView.findViewById<EditText>(R.id.compmodel).text.toString()
+                val updatedCompSize = if (sizeCb.isChecked)
+                    dialogView.findViewById<EditText>(R.id.compsize).text.toString() else ""
+                val updatedCompWeight = if (weightCb.isChecked)
+                    dialogView.findViewById<EditText>(R.id.compweight).text.toString() else ""
+                val updatedCompNotes = if (notesCb.isChecked)
+                    dialogView.findViewById<EditText>(R.id.compnotes).text.toString() else ""
+                // If the photo was not changed, keep the old value
+                val photoUriString = selectedImageUri?.toString() ?: component.photoUri
+
+                val updatedComponent = component.copy(
+                    compBrand = updatedCompBrand,
+                    compYear = updatedCompYear,
+                    compModel = updatedCompModel,
+                    compSize = updatedCompSize,
+                    compWeight = updatedCompWeight,
+                    compNotes = updatedCompNotes,
+                    photoUri = photoUriString
+                )
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    BikeDatabase.getDatabase(applicationContext).componentsDao().updateComponent(updatedComponent)
+                    withContext(Dispatchers.Main) {
+                        // Update UI fields with new data
+                        val newHeaderText = SpannableStringBuilder("${updatedComponent.compBrand} ${updatedComponent.compModel}").apply {
+                            if (updatedComponent.compYear.isNotEmpty()) {
+                                append(" ${updatedComponent.compYear}")
+                                val start = length - updatedComponent.compYear.length
+                                setSpan(SuperscriptSpan(), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                setSpan(RelativeSizeSpan(0.7f), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            }
+                        }
+                        tvHeader.text = newHeaderText
+                        tvSize.text = if (updatedComponent.compSize.isNotEmpty()) "Size: ${updatedComponent.compSize}" else ""
+                        tvWeight.text = if (updatedComponent.compWeight.isNotEmpty()) "Weight: ${updatedComponent.compWeight}" else ""
+                        tvNotes.text = updatedComponent.compNotes
+                        if (!updatedComponent.photoUri.isNullOrEmpty()) {
+                            ivPhoto.setImageURI(updatedComponent.photoUri.toUri())
+                        } else {
+                            ivPhoto.setImageResource(R.drawable.img_fork)
+                        }
+                        editDialog.dismiss()
+                    }
+                }
+            }
+            editDialog.show()
+        }
+    }
+
+    private fun reloadComponents(bikeId: Int) {
+        // Отримуємо посилання на GridLayout та очищаємо його
+        val gridContainer = findViewById<androidx.gridlayout.widget.GridLayout>(R.id.components_container_grid)
+        gridContainer.removeAllViews()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Отримуємо список компонентів для конкретного bikeId
+            val componentsList = BikeDatabase.getDatabase(applicationContext)
+                .componentsDao()
+                .getComponentsByBikeId(bikeId)
+            withContext(Dispatchers.Main) {
+                componentsList.forEach { component ->
+                    addComponentToUI(component)
+                }
+            }
+        }
+    }
+    // Extension function to convert dp to px
+    fun Int.toPx(context: Context): Int = (this * context.resources.displayMetrics.density).toInt()
 }

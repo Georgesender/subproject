@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.kotlinx.coroutines.android)
     implementation (libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
