@@ -255,7 +255,7 @@
                 <!-- Рядок 6: Вага -->
                 <TextView
                     android:layout_width="90dp"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="@string/Own_notes_"
                     android:textColor="@color/white"

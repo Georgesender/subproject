@@ -52,6 +52,9 @@ interface ComponentsDao {
 
     @Query("DELETE FROM components_table WHERE id = :componentId")
     suspend fun deleteComponentById(componentId: Int)
+    // Додайте новий метод в ComponentsDao
+    @Query("SELECT photoUri FROM components_table WHERE bikeId = :bikeId")
+    fun getPhotoUrisByBikeId(bikeId: Int): List<String?>
 }
 
 

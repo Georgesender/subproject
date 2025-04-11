@@ -107,7 +107,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:layout_marginBottom="80dp"
                     android:layout_gravity="center"
                     android:padding="4dp"
                     app:columnCount="2">
@@ -145,6 +144,7 @@
                     android:id="@+id/components_container_grid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="70dp"
                     android:padding="10dp"
                     app:columnCount="2"
