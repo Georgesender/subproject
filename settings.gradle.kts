@@ -17,6 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    repositories {
+        google()
+        mavenCentral()
+        maven(url = "https://jitpack.io") // <-- Додай це
+    }
 }
 
 rootProject.name = "My Application"

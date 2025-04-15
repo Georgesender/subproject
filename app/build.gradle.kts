@@ -43,7 +43,7 @@ android {
 
 dependencies {
 
-    // Додати у build.gradle (Module):
+    implementation (libs.ucrop)
     implementation (libs.glide)
     implementation(libs.kotlinx.coroutines.android)
     implementation (libs.kotlinx.coroutines.android)

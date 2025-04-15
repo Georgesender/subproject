@@ -119,6 +119,7 @@
     <string name="Click_here">Натисність сюди</string>
     <string name="contain">включати</string>
     <string name="Own_notes_">Власні нотатки:</string>
+    <string name="Cartrige_">Картридж:</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

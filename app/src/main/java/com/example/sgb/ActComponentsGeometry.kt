@@ -21,9 +21,11 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.SuperscriptSpan
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
@@ -31,6 +33,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -44,19 +47,22 @@ import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.Component
 import com.example.sub.R
+import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import androidx.core.graphics.get
-import androidx.core.graphics.set
-import com.bumptech.glide.Glide
 import java.util.UUID
+import androidx.core.graphics.get
+import androidx.core.graphics.scale
+import androidx.core.graphics.set
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ActComponentsGeometry : AppCompatActivity() {
 
@@ -71,11 +77,43 @@ class ActComponentsGeometry : AppCompatActivity() {
     // Modify the imagePickerLauncher initialization
     private val REQUEST_CODE_READ_MEDIA_IMAGES = 1001
     private val REQUEST_CODE_READ_EXTERNAL_STORAGE = 1002
-
     // Global variable to hold the selected image URI
     private var selectedImageUri: Uri? = null
+    private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(result.data!!)
+            if (resultUri != null) {
+                // Визначаємо MIME-тип через розширення, якщо contentResolver не повертає
+                val mimeType = contentResolver.getType(resultUri) ?: run {
+                    when (resultUri.path?.substringAfterLast(".")?.lowercase()) {
+                        "jpg", "jpeg" -> "image/jpeg"
+                        "png" -> "image/png"
+                        else -> null
+                    }
+                }
+                Log.d("CropImage", "MIME type: $mimeType, URI: $resultUri")
 
-    @SuppressLint("SetTextI18n")
+                if (mimeType == "image/png" || mimeType == "image/jpg") {
+                    // Взяти персистентні дозволи перед відкриттям діалогу
+                    if (isExternalUri(resultUri)) {
+                        takePersistablePermissions(resultUri)
+                    }
+                    showBackgroundRemovalDialog(resultUri)
+                } else {
+                    selectedImageUri = resultUri
+                    updatePhotoPreview(resultUri)
+                    if (isExternalUri(resultUri)) {
+                        takePersistablePermissions(resultUri)
+                    }
+                }
+            }
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(result.data!!)
+            cropError?.printStackTrace()
+            Toast.makeText(this, "Помилка обрізання: ${cropError?.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_compgeomrty)
@@ -111,40 +149,138 @@ class ActComponentsGeometry : AppCompatActivity() {
             val dialog = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .create()
+            val adaptiveEditText = dialogView.findViewById<EditText>(R.id.compAdaptive)
+            val compWeightCb = dialogView.findViewById<CheckBox>(R.id.compweight_cb)
+            val etWeight = dialogView.findViewById<EditText>(R.id.compweight)
+            // 1. Оптимізація створення списку доступних типів
+            val editAvailableTypes = (availableComponentTypes)
+                .toMutableSet() // Використовуємо Set для автоматичного видалення дублікатів
+                .toMutableList()
+// 2. Спрощена ініціалізація спінера з використанням apply
+            val spinner = dialogView.findViewById<Spinner>(R.id.compType).apply {
+                adapter = ArrayAdapter(
+                    this@ActComponentsGeometry,
+                    android.R.layout.simple_spinner_item,
+                    editAvailableTypes
+                ).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+            }
+            // 3. Отримання посилань на UI-елементи
+            val views = mapOf(
+                "adaptive" to dialogView.findViewById<TextView>(R.id.labelAdaptive),
+                "model" to dialogView.findViewById<TextView>(R.id.labelModel),
+                "adaptiveEditText" to adaptiveEditText,
+                "forkSize" to dialogView.findViewById<TextView>(R.id.labelForkSize)
+            )
 
-            // Use availableComponentTypes instead of resource array
-            val spinner = dialogView.findViewById<Spinner>(R.id.compType)
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, availableComponentTypes)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
+// Обробник зміни вибраного типу
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedType = parent?.getItemAtPosition(position).toString()
+                    if (selectedType == "Saddle") {
+                        adaptiveEditText.visibility = View.GONE
+                        dialogView.findViewById<TextView>(R.id.labelWeight).visibility = View.GONE
+                        etWeight.visibility = View.GONE
+                        compWeightCb.visibility = View.GONE
+                    }
+                    // Мапа з конфігурацією для кожного типу
+                    val typeConfig = mapOf(
+                        "Cranks" to mapOf(
+                            "adaptive" to "Підмодель",
+                            "forkSize" to "Довжина"
+                        ),
+                        "Handlebar" to mapOf(
+                            "adaptive" to "Матеріал",
+                            "forkSize" to "Довжина/ширина"
+                        ),
+                        "Rim" to mapOf(
+                            "adaptive" to "Підмодель",
+                            "forkSize" to "Розмір"
+                        ),
+                        "Fork" to mapOf(
+                            "adaptive" to "Картридж",
+                            "forkSize" to "Хід"
+                        ),
+                        "Shock" to mapOf(
+                            "adaptive" to "Картридж",
+                            "forkSize" to "Хід"
+                        ),
+                        "Tyre" to mapOf(
+                            "model" to "Переднє",
+                            "adaptive" to "Заднє",
+                            "forkSize" to "Розмір"
+                        )
+                    )
+
+                    // Оновлення значень за замовчуванням
+                    views["adaptive"]?.text = ""
+                    views["model"]?.text = "Модель"
+                    views["forkSize"]?.text = "Розмір"
+
+                    // Застосування конфігурації для обраного типу
+                    typeConfig[selectedType]?.forEach { (key , value) ->
+                        views[key]?.text = value
+                    }
+
+            }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+
+// Ініціалізуємо стан при першому відкритті
+            spinner.setSelection(0, false)
+            spinner.onItemSelectedListener?.onItemSelected(null, null, 0, 0)
 
             // Initialize ImageButton for photo selection in the dialog
             dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)?.setOnClickListener {
                 selectedImageUri = null // Скидаємо попереднє фото
                 pickImageForComponent()
+
             }
+            // Додаємо TextWatcher для кожного поля
+            fun setupAutoCheck(editText: EditText, checkBox: CheckBox) {
+                editText.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        checkBox.isChecked = !s.isNullOrBlank()
+                    }
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                })
+            }
+
+
+            // Отримуємо посилання на EditText'и та CheckBox'и
+            val etYear = dialogView.findViewById<EditText>(R.id.compyear)
+            val etSize = dialogView.findViewById<EditText>(R.id.compsize)
+            val etNotes = dialogView.findViewById<EditText>(R.id.compnotes)
+            val compYearCb = dialogView.findViewById<CheckBox>(R.id.compyear_cb)
+            val compSizeCb = dialogView.findViewById<CheckBox>(R.id.compsize_cb)
+
+            val compNotesCb = dialogView.findViewById<CheckBox>(R.id.compnotes_cb)
+
+
+            setupAutoCheck(etYear, compYearCb)
+            setupAutoCheck(etSize, compSizeCb)
+            setupAutoCheck(etWeight, compWeightCb)
+            setupAutoCheck(etNotes, compNotesCb)
 
             dialogView.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
                 val compBrand = dialogView.findViewById<EditText>(R.id.compbrand).text.toString()
-                val compYearInput = dialogView.findViewById<EditText>(R.id.compyear).text.toString()
+                etYear.text.toString()
                 val compModel = dialogView.findViewById<EditText>(R.id.compmodel).text.toString()
-                val compSizeInput = dialogView.findViewById<EditText>(R.id.compsize).text.toString()
-                val compWeightInput = dialogView.findViewById<EditText>(R.id.compweight).text.toString()
-                val compNotesInput = dialogView.findViewById<EditText>(R.id.compnotes)?.text?.toString() ?: ""
+                etSize.text.toString()
+                val compAdaptive = adaptiveEditText.text.toString()
+               etWeight.text.toString()
+                etNotes?.text?.toString() ?: ""
                 val selectedType = spinner.selectedItem.toString()
 
 
 
-
-                val compYearCb = dialogView.findViewById<CheckBox>(R.id.compyear_cb)
-                val compSizeCb = dialogView.findViewById<CheckBox>(R.id.compsize_cb)
-                val compWeightCb = dialogView.findViewById<CheckBox>(R.id.compweight_cb)
-                val compNotesCb = dialogView.findViewById<CheckBox>(R.id.compnotes_cb)
-
-                val compYear = if (compYearCb.isChecked) compYearInput else ""
-                val compSize = if (compSizeCb.isChecked) compSizeInput else ""
-                val compWeight = if (compWeightCb.isChecked) compWeightInput else ""
-                val compNotes = if (compNotesCb.isChecked) compNotesInput else null
+                // Правильний варіант
+                val compYear = if (compYearCb.isChecked) etYear.text.toString() else ""
+                val compSize = if (compSizeCb.isChecked) etSize.text.toString() else ""
+                val compWeight = if (compWeightCb.isChecked) etWeight.text.toString() else ""
+                val compNotes = if (compNotesCb.isChecked) etNotes.text.toString() else ""
 
                 val currentBikeId = intent.getIntExtra("bike_id", -1)
                 val photoUriString = selectedImageUri?.toString()
@@ -155,11 +291,12 @@ class ActComponentsGeometry : AppCompatActivity() {
                     bikeId = currentBikeId,
                     compType = selectedType,
                     compBrand = compBrand,
-                    compYear = compYear,
+                    compYear = compYear ,
                     compModel = compModel,
+                    compAdaptive = compAdaptive,
                     compSize = compSize,
                     compWeight = compWeight,
-                    compNotes = compNotes ?: "",
+                    compNotes = compNotes ,
                     photoUri = photoUriString
                 )
 
@@ -236,49 +373,41 @@ class ActComponentsGeometry : AppCompatActivity() {
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri?.let { originalUri ->
-            val mimeType = contentResolver.getType(originalUri)
-            lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    val processedUri = processImage(originalUri, mimeType)
-                    withContext(Dispatchers.Main) {
-                        selectedImageUri = processedUri
-                        updatePhotoPreview(processedUri)
-                        if (isExternalUri(processedUri)) {
-                            takePersistablePermissions(processedUri)
-                        }
-                    }
-                } catch (_: Exception) {
-                    withContext(Dispatchers.Main) {
-                        handleImageError(originalUri)
-                    }
-                }
-            }
+            startCrop(originalUri)
         }
     }
-    private fun processImage(uri: Uri, mimeType: String?): Uri {
-        return if (mimeType?.startsWith("image/") == true) {
-            contentResolver.openInputStream(uri)?.use { stream ->
-                val bitmap = BitmapFactory.decodeStream(stream)
-                val processed = if (mimeType == "image/jpeg" || mimeType == "image/jpg") removeWhiteBackground(bitmap) else bitmap
-                saveBitmapToInternalStorage(processed)
-            } ?: uri
-        } else {
-            uri
+    private fun startCrop(uri: Uri) {
+        val destinationFileName = "cropped_${System.currentTimeMillis()}.png"
+        val destinationUri = Uri.fromFile(File(cacheDir, destinationFileName))
+
+        val options = UCrop.Options().apply {
+            setHideBottomControls(false)
+            setFreeStyleCropEnabled(true)
+            setStatusBarColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.black))
+            setToolbarColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            setToolbarTitle("Обріжте фото")
+            setCompressionFormat(Bitmap.CompressFormat.PNG)
+            setCompressionQuality(100)
         }
+
+        // Створюємо об'єкт uCrop із заданими параметрами та максимальним розміром результату
+        val uCrop = UCrop.of(uri, destinationUri)
+            .withOptions(options)
+            .withMaxResultSize(2000, 2000)
+
+        // Отримуємо Intent для uCrop і запускаємо його через cropImageLauncher
+        val uCropIntent = uCrop.getIntent(this)
+        cropImageLauncher.launch(uCropIntent)
     }
-    private fun handleImageError(uri: Uri) {
-        Toast.makeText(this, "Помилка обробки фото", Toast.LENGTH_SHORT).show()
-        selectedImageUri = uri
-        updatePhotoPreview(uri)
-        if (isExternalUri(uri)) {
-            takePersistablePermissions(uri)
-        }
-    }
+
+
     private fun updatePhotoPreview(uri: Uri?) {
         currentDialogView?.findViewById<ImageButton>(R.id.photoPlaceholder)?.let { imageButton ->
             Glide.with(this)
                 .load(uri)
                 .override(500, 500)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // Вимкнути кеш
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.img_fork)
                 .error(R.drawable.img_fork)
                 .into(imageButton)
@@ -330,12 +459,14 @@ class ActComponentsGeometry : AppCompatActivity() {
         }
     }
 
+
     private fun pickImageForComponent() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             android.Manifest.permission.READ_MEDIA_IMAGES
         } else {
             android.Manifest.permission.READ_EXTERNAL_STORAGE
         }
+
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
@@ -344,7 +475,6 @@ class ActComponentsGeometry : AppCompatActivity() {
                     REQUEST_CODE_READ_MEDIA_IMAGES else REQUEST_CODE_READ_EXTERNAL_STORAGE
             )
         } else {
-            // Use OpenDocument to obtain persistent access to images
             imagePickerLauncher.launch(arrayOf("image/*"))
         }
     }
@@ -360,37 +490,23 @@ class ActComponentsGeometry : AppCompatActivity() {
         }
     }
 
-    private fun removeWhiteBackground(bitmap: Bitmap): Bitmap {
-        val result = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        for (x in 0 until result.width) {
-            for (y in 0 until result.height) {
-                val pixel = result[x , y]
-                val red = Color.red(pixel)
-                val green = Color.green(pixel)
-                val blue = Color.blue(pixel)
-                if (red >= 240 && green >= 240 && blue >= 240) { // Adjust threshold as needed
-                    result[x , y] = Color.TRANSPARENT
-                }
-            }
-        }
-        return result
-    }
-
     // Оновлений метод для збереження фото
     private fun saveBitmapToInternalStorage(bitmap: Bitmap): Uri {
         val filename = "img_${UUID.randomUUID()}.png"
         val imagesDir = File(filesDir, "images").apply { mkdirs() }
         val file = File(imagesDir, filename).apply {
             FileOutputStream(this).use { stream ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream) // Формат PNG
             }
         }
+        Log.d("ImageDebug", "Saved image path: ${file.absolutePath}")
         return FileProvider.getUriForFile(
             this,
             "${packageName}.fileprovider",
             file
         )
-    }    private fun isExternalUri(uri: Uri): Boolean {
+    }
+    private fun isExternalUri(uri: Uri): Boolean {
         return when (uri.scheme) {
             "content" -> uri.authority?.startsWith("com.android.externalstorage") == true
             else -> false
@@ -460,7 +576,7 @@ class ActComponentsGeometry : AppCompatActivity() {
 // TextView to display component type.
         val tvType = TextView(this).apply {
             text = component.compType
-            textSize = 25f
+            textSize = 26f
             setTypeface(null, Typeface.BOLD)
             setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
             // Використовуємо параметри з вагою, щоб TextView займав доступний простір між кнопками
@@ -497,35 +613,63 @@ class ActComponentsGeometry : AppCompatActivity() {
         componentViews.add(rowContainer)
         // Next rows for header, size, weight, photo, notes
         // 2nd row: Header (brand and model, with optional year)
-        val brandModel = "${component.compBrand} ${component.compModel}"
-        val spannable = SpannableStringBuilder(brandModel)
+        // Формуємо Spannable для лівої частини (бренд, модель, рік)
+        val leftText = SpannableStringBuilder("${component.compBrand} ${component.compModel}")
         if (component.compYear.isNotEmpty()) {
-            spannable.append(" ${component.compYear}")
-            val start = spannable.length - component.compYear.length
-            spannable.setSpan(SuperscriptSpan(), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannable.setSpan(RelativeSizeSpan(0.7f), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            leftText.append(" ${component.compYear}")
+            val start = leftText.length - component.compYear.length
+            leftText.setSpan(SuperscriptSpan(), start, leftText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            leftText.setSpan(RelativeSizeSpan(0.7f), start, leftText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        val tvHeader = TextView(this).apply {
-            text = spannable
-            textSize = 24f
-            setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
+
+// Ліва частина: бренд, модель і рік (вирівнюється ліворуч)
+        val tvLeft = TextView(this).apply {
+            text = leftText
+            textSize = 25f
             setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
-            gravity = Gravity.CENTER
+            gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            // При потребі можна встановити background, padding і т.п.
         }
-        val tvHeaderParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
-            rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 1, 1)
-            columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
-            height = 48.toPx(this@ActComponentsGeometry)
-            width = MATCH_PARENT
-            setGravity(Gravity.CENTER)
+
+// Права частина: значення компонента compAdaptive (вирівнюється праворуч)
+        val tvRight = TextView(this).apply {
+            text = component.compAdaptive
+            textSize = 25f
+            setTextColor(ContextCompat.getColor(this@ActComponentsGeometry, R.color.white))
+            gravity = Gravity.END or Gravity.CENTER_VERTICAL
+            // Також можна встановити додаткові налаштування: padding, background і т.п.
         }
-        gridContainer.addView(tvHeader, tvHeaderParams)
-        componentViews.add(tvHeader)
+
+// Контейнер для розміщення обох TextView поруч (займає всю ширину)
+        val headerContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
+                rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 1, 1)
+                columnSpec = androidx.gridlayout.widget.GridLayout.spec(0, 2)
+                width = MATCH_PARENT
+                height = 48.toPx(this@ActComponentsGeometry)
+                setGravity(Gravity.CENTER)
+            }
+            setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
+            // Додаємо padding за потребою:
+            // setPadding(8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry), 8.toPx(this@ActComponentsGeometry))
+        }
+
+// Додаємо лівий TextView з вагою 1 (щоб займати увесь доступний простір)
+        headerContainer.addView(tvLeft, LinearLayout.LayoutParams(0, MATCH_PARENT , 1f))
+
+// Додаємо правий TextView, розмір якого wrap_content
+        headerContainer.addView(tvRight, LinearLayout.LayoutParams(WRAP_CONTENT , MATCH_PARENT))
+
+// Додаємо контейнер до GridLayout
+        gridContainer.addView(headerContainer)
+        componentViews.add(headerContainer)
+
         // 3rd row: Size
         if(hasSize) {
             val tvSize = TextView(this).apply {
-                text = "Size: ${component.compSize}"
-                textSize = 18f
+                text = "> ${component.compSize}."
+                textSize = 24f
                 gravity = Gravity.CENTER_VERTICAL
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry , R.color.white))
                 setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
@@ -536,8 +680,8 @@ class ActComponentsGeometry : AppCompatActivity() {
                     if (shouldExpandSize) 2 else 1
                 )
                 columnSpec =  androidx.gridlayout.widget.GridLayout.spec(0)
-                height = if (shouldExpandSize) 100.toPx(this@ActComponentsGeometry) else 50.toPx(this@ActComponentsGeometry)
-                width = if (shouldExpandSize) 0 else 150.toPx(this@ActComponentsGeometry)
+                height = if (shouldExpandSize) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
+                width = if (shouldExpandSize) 250.toPx(this@ActComponentsGeometry) else 150.toPx(this@ActComponentsGeometry)
 
             }
             gridContainer.addView(tvSize , tvSizeParams)
@@ -546,8 +690,8 @@ class ActComponentsGeometry : AppCompatActivity() {
         // 4th row: Weight
         if(hasWeight) {
             val tvWeight = TextView(this).apply {
-                text = "Weight: ${component.compWeight}"
-                textSize = 18f
+                text = "> ${component.compWeight}."
+                textSize = 24f
                 gravity = Gravity.CENTER_VERTICAL
                 setTextColor(ContextCompat.getColor(this@ActComponentsGeometry , R.color.white))
                 setBackgroundResource(R.drawable.tb_start_bott_end_withmargin)
@@ -558,8 +702,8 @@ class ActComponentsGeometry : AppCompatActivity() {
                     if (shouldExpandWeight) 2 else 1
                 )
                 columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
-                height = if (shouldExpandWeight) 100.toPx(this@ActComponentsGeometry) else 50.toPx(this@ActComponentsGeometry)
-                width = if (shouldExpandWeight) 0 else 150.toPx(this@ActComponentsGeometry)
+                height = if (shouldExpandWeight) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
+                width = if (shouldExpandWeight) 250.toPx(this@ActComponentsGeometry) else 150.toPx(this@ActComponentsGeometry)
             }
             gridContainer.addView(tvWeight , tvWeightParams)
             componentViews.add(tvWeight)
@@ -568,7 +712,8 @@ class ActComponentsGeometry : AppCompatActivity() {
         if (hasPhoto) {
         val ivPhoto = ImageView(this).apply {
             ->
-            scaleType = ImageView.ScaleType.FIT_CENTER
+            scaleType = ImageView.ScaleType.CENTER
+            setBackgroundColor(Color.TRANSPARENT) // Додано прозорий фон
             try {
                 val uri = component.photoUri.toUri()
                 if (isUriValid(uri)) {
@@ -583,9 +728,9 @@ class ActComponentsGeometry : AppCompatActivity() {
         val ivPhotoParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
             rowSpec = androidx.gridlayout.widget.GridLayout.spec(nextRowIndex + 2, 2)
             columnSpec = androidx.gridlayout.widget.GridLayout.spec(1)
-            width = 100.toPx(this@ActComponentsGeometry)
-            height = 100.toPx(this@ActComponentsGeometry)
-        }
+            width = 108.toPx(this@ActComponentsGeometry)
+            height = 192.toPx(this@ActComponentsGeometry)
+            setGravity(Gravity.CENTER) }
         gridContainer.addView(ivPhoto, ivPhotoParams)
         componentViews.add(ivPhoto)
         }
@@ -663,6 +808,7 @@ class ActComponentsGeometry : AppCompatActivity() {
             // Отримуємо посилання на всі поля та чекбокси
             val etBrand = dialogView.findViewById<EditText>(R.id.compbrand)
             val etModel = dialogView.findViewById<EditText>(R.id.compmodel)
+            val adaptiveEditText = dialogView.findViewById<EditText>(R.id.compAdaptive)
             val etYear = dialogView.findViewById<EditText>(R.id.compyear)
             val etSize = dialogView.findViewById<EditText>(R.id.compsize)
             val etWeight = dialogView.findViewById<EditText>(R.id.compweight)
@@ -695,6 +841,7 @@ class ActComponentsGeometry : AppCompatActivity() {
             etBrand.setText(component.compBrand)
             etYear.setText(component.compYear)
             etModel.setText(component.compModel)
+            adaptiveEditText.setText(component.compAdaptive)
             etSize.setText(component.compSize)
             etWeight.setText(component.compWeight)
             etNotes.setText(component.compNotes)
@@ -704,9 +851,90 @@ class ActComponentsGeometry : AppCompatActivity() {
             weightCb.isChecked = component.compWeight.isNotEmpty()
             notesCb.isChecked = component.compNotes.isNotEmpty()
 
+            val currentType = component.compType
+
+// 1. Оптимізація створення списку доступних типів
+            val editAvailableTypes = (availableComponentTypes + currentType)
+                .toMutableSet() // Використовуємо Set для автоматичного видалення дублікатів
+                .toMutableList()
+
+// 2. Спрощена ініціалізація спінера з використанням apply
+            val spinner = dialogView.findViewById<Spinner>(R.id.compType).apply {
+                val arrayAdapter = ArrayAdapter<String>(
+                    this@ActComponentsGeometry,
+                    android.R.layout.simple_spinner_item,
+                    editAvailableTypes
+                ).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+
+                adapter = arrayAdapter
+                setSelection(arrayAdapter.getPosition(currentType)) // Використовуємо явну змінну
+            }
+
+// 3. Отримання посилань на UI-елементи
+            val views = mapOf(
+                "adaptive" to dialogView.findViewById<TextView>(R.id.labelAdaptive),
+                "model" to dialogView.findViewById<TextView>(R.id.labelModel),
+                "forkSize" to dialogView.findViewById<TextView>(R.id.labelForkSize)
+            )
+
+            // 4. Логіка оновлення тексту у вигляді окремої функції
+            fun updateLabels(selectedType: String) {
+                // Мапа з конфігурацією для кожного типу
+                val typeConfig = mapOf(
+                    "Cranks" to mapOf(
+                        "adaptive" to "Підмодель",
+                        "forkSize" to "Довжина"
+                    ),
+                    "Handlebar" to mapOf(
+                        "adaptive" to "Матеріал",
+                        "forkSize" to "Довжина/ширина"
+                    ),
+                    "Rim" to mapOf(
+                        "adaptive" to "Підмодель",
+                        "forkSize" to "Розмір"
+                    ),
+                    "Fork" to mapOf(
+                        "adaptive" to "Картридж",
+                        "forkSize" to "Хід"
+                    ),
+                    "Shock" to mapOf(
+                        "adaptive" to "Картридж",
+                        "forkSize" to "Хід"
+                    ),
+                    "Tyre" to mapOf(
+                        "model" to "Переднє",
+                        "adaptive" to "Заднє",
+                        "forkSize" to "Розмір"
+                    )
+                )
+
+                // Оновлення значень за замовчуванням
+                views["adaptive"]?.text = ""
+                views["model"]?.text = "Модель"
+                views["forkSize"]?.text = "Розмір"
+
+                // Застосування конфігурації для обраного типу
+                typeConfig[selectedType]?.forEach { (key, value) ->
+                    views[key]?.text = value
+                }
+            }
+
+// 5. Спрощений обробник вибору з використанням when
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    updateLabels(parent?.getItemAtPosition(position).toString())
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+// 6. Ініціалізація стану при відкритті
+            updateLabels(currentType)
+
             // Photo selection button in the dialog
             dialogView.findViewById<ImageButton>(R.id.photoPlaceholder)?.setOnClickListener {
-                selectedImageUri = null // Скидаємо попереднє фото
                 pickImageForComponent()
             }
 
@@ -717,6 +945,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                 val updatedCompYear = if (yearCb.isChecked)
                     etYear.text.toString() else ""
                 val updatedCompModel = etModel.text.toString()
+                val updatedCompAdaptive = adaptiveEditText.text.toString()
                 val updatedCompSize = if (sizeCb.isChecked)
                     etSize.text.toString() else ""
                 val updatedCompWeight = if (weightCb.isChecked)
@@ -730,6 +959,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                     compBrand = updatedCompBrand,
                     compYear = updatedCompYear,
                     compModel = updatedCompModel,
+                    compAdaptive = updatedCompAdaptive,
                     compSize = updatedCompSize,
                     compWeight = updatedCompWeight,
                     compNotes = updatedCompNotes,
@@ -739,16 +969,6 @@ class ActComponentsGeometry : AppCompatActivity() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     BikeDatabase.getDatabase(applicationContext).componentsDao().updateComponent(updatedComponent)
                     withContext(Dispatchers.Main) {
-                        // Update UI fields with new data
-                        val newHeaderText = SpannableStringBuilder("${updatedComponent.compBrand} ${updatedComponent.compModel}").apply {
-                            if (updatedComponent.compYear.isNotEmpty()) {
-                                append(" ${updatedComponent.compYear}")
-                                val start = length - updatedComponent.compYear.length
-                                setSpan(SuperscriptSpan(), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                setSpan(RelativeSizeSpan(0.7f), start, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                            }
-                        }
-                        tvHeader.text = newHeaderText
                         reloadComponents(bikeId)
                         editDialog.dismiss()
                     }
@@ -777,4 +997,94 @@ class ActComponentsGeometry : AppCompatActivity() {
     }
     // Extension function to convert dp to px
     fun Int.toPx(context: Context): Int = (this * context.resources.displayMetrics.density).toInt()
+    private fun showBackgroundRemovalDialog(originalUri: Uri) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_background_removal, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        val imagePreview = dialogView.findViewById<ImageView>(R.id.imagePreview)
+        val seekBar = dialogView.findViewById<SeekBar>(R.id.seekBarThreshold)
+
+        try { // Додаємо BitmapFactory.Options для ARGB_8888
+            val options = BitmapFactory.Options().apply {
+                inPreferredConfig = Bitmap.Config.ARGB_8888 // Формат з альфа-каналом
+            }
+
+            val originalBitmap = contentResolver.openInputStream(originalUri)?.use {
+                BitmapFactory.decodeStream(it, null, options) // Використовуємо options
+            }
+            val scaledBitmap = originalBitmap?.scale(originalBitmap.width / 4, originalBitmap.height / 4)
+
+            var currentThreshold = 50
+
+            scaledBitmap?.let {
+                imagePreview.setImageBitmap(removeWhiteBackground(it, currentThreshold))
+            }
+
+            seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    currentThreshold = progress
+                    scaledBitmap?.let {
+                        imagePreview.setImageBitmap(removeWhiteBackground(it, progress))
+                    }
+                }
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+            dialogView.findViewById<Button>(R.id.btnCancel)?.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogView.findViewById<Button>(R.id.btnConfirm)?.setOnClickListener {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    originalBitmap?.let { bitmap ->
+                        val processedBitmap = removeWhiteBackground(bitmap, currentThreshold)
+                        val processedUri = saveBitmapToInternalStorage(processedBitmap)
+                        withContext(Dispatchers.Main) {
+                            selectedImageUri = processedUri
+                            updatePhotoPreview(processedUri)
+                            if (isExternalUri(processedUri)) {
+                                takePersistablePermissions(processedUri)
+                            }
+                            dialog.dismiss()
+                        }
+                    }
+                }
+            }
+        } catch (_: Exception) {
+            Toast.makeText(this, "Помилка завантаження зображення", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun removeWhiteBackground(bitmap: Bitmap, threshold: Int): Bitmap {
+        // Створюємо копію з альфа-каналом
+        val result = bitmap.copy(Bitmap.Config.ARGB_8888, true) ?: return bitmap
+
+        // Явно активуємо альфа-канал
+        result.setHasAlpha(true)
+
+        // Корекція порогу (від 0 до 255)
+        val thresholdValue = 255 - (threshold * 255 / 100)
+
+        for (x in 0 until result.width) {
+            for (y in 0 until result.height) {
+                val pixel = result[x , y]
+                val red = Color.red(pixel)
+                val green = Color.green(pixel)
+                val blue = Color.blue(pixel)
+
+                // Якщо колір близький до білого - робимо прозорим
+                if (red >= thresholdValue && green >= thresholdValue && blue >= thresholdValue) {
+                    result[x, y] = Color.TRANSPARENT
+                }
+            }
+        }
+        return result
+    }
 }

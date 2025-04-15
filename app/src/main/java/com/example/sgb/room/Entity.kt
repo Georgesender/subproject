@@ -57,10 +57,11 @@ data class Component(
     val compBrand: String,
     val compYear: String,
     val compModel: String,
+    val compAdaptive: String,
     val compSize: String,
     val compWeight: String,
     val compNotes: String,
-    val photoUri: String? = null // нове поле, за замовчуванням null
+    val photoUri: String? = null
 )
 
 

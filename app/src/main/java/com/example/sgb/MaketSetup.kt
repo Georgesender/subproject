@@ -6,6 +6,7 @@ import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
@@ -21,6 +22,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -29,14 +31,14 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toUri
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.sgb.room.BPSetupDao
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.BikeParkSetupData
 import com.example.sgb.room.BpMarksSuspenshion
-import com.example.sgb.room.Component
-import com.example.sgb.room.ComponentsDao
 import com.example.sub.R
 import com.example.sub.R.id.average_mark
 import com.example.sub.R.id.shock_seg_units
@@ -211,6 +213,7 @@ private val initialValues = mutableMapOf<Int, Int>()
 
 
         initView()
+        updateComponentsInfo(bikeId)
         forkHSR.enableLongPressEdit(this)
         forkLSR.enableLongPressEdit(this)
         forkHSC.enableLongPressEdit(this)
@@ -309,7 +312,6 @@ private val initialValues = mutableMapOf<Int, Int>()
         setHeaderText(setupName, checkedText)
 
         val bikeDatabase = BikeDatabase.getDatabase(this)
-        val componentsDao = bikeDatabase.componentsDao()
         val bpSetupDao = bikeDatabase.bpSetupDao()
 
 
@@ -1281,6 +1283,69 @@ fun handleIncrement(
                 }
             }
             false
+        }
+    }
+    private fun updateComponentsInfo(bikeId: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Отримуємо список компонентів для даного байка
+            val components = BikeDatabase.getDatabase(applicationContext)
+                .componentsDao()
+                .getComponentsByBikeId(bikeId)
+            // Фільтруємо компонент типу "Fork" (без врахування регістру)
+            val forkComponent = components.firstOrNull {
+                it.compType.equals("Fork", ignoreCase = true)
+            }
+            val shockComponent = components.firstOrNull {
+                it.compType.equals("Shock", ignoreCase = true)
+            }
+            if (forkComponent != null) {
+                // Формуємо рядок із бренду, моделі та картриджу (compAdaptive)
+                val forkInfo = "${forkComponent.compBrand} ${forkComponent.compModel} ${forkComponent.compAdaptive}"
+                // Перетворюємо photoUri (якщо є) на Uri
+                val forkPhotoUri = forkComponent.photoUri?.toUri()
+                withContext(Dispatchers.Main) {
+                    // Оновлюємо ImageView для фото вилки, і TextView для інформації про вилку
+                    val forkIconImageView = findViewById<ImageView>(R.id.fork_icon)
+                    val forkInfoTextView = findViewById<TextView>(R.id.fork)
+                    forkIconImageView.setBackgroundColor(Color.TRANSPARENT)
+
+                    // Якщо є фото, завантажуємо його за допомогою Glide
+                    if (forkPhotoUri != null) {
+                        Glide.with(this@MaketSetup)
+                            .load(forkPhotoUri)
+                            .into(forkIconImageView)
+                    } else {
+                        // Можна встановити стандартне зображення (як placeholder)
+                        forkIconImageView.setImageResource(R.drawable.img_fork)
+                    }
+                    // Встановлюємо текст рядка для вилки
+                    forkInfoTextView.text = forkInfo
+                }
+            }
+            if (shockComponent != null) {
+                // Формуємо рядок із бренду, моделі та картриджу (compAdaptive)
+                val shockInfo = "${shockComponent.compBrand} ${shockComponent.compModel} ${shockComponent.compAdaptive}"
+                // Перетворюємо photoUri (якщо є) на Uri
+                val shockPhotoUri = shockComponent.photoUri?.toUri()
+                withContext(Dispatchers.Main) {
+                    // Оновлюємо ImageView для фото вилки, і TextView для інформації про вилку
+                    val shockIconImageView = findViewById<ImageView>(R.id.shock_icon)
+                    val shockInfoTextView = findViewById<TextView>(R.id.shock)
+                    shockIconImageView.setBackgroundColor(Color.TRANSPARENT)
+
+                    // Якщо є фото, завантажуємо його за допомогою Glide
+                    if (shockPhotoUri != null) {
+                        Glide.with(this@MaketSetup)
+                            .load(shockPhotoUri)
+                            .into(shockIconImageView)
+                    } else {
+                        // Можна встановити стандартне зображення (як placeholder)
+                        shockIconImageView.setImageResource(R.drawable.img_shock)
+                    }
+                    // Встановлюємо текст рядка для вилки
+                    shockInfoTextView.text = shockInfo
+                }
+            }
         }
     }
 }

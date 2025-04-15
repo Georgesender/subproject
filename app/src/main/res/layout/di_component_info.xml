@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogRoot"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:padding="8dp"
     android:background="@color/black">
 
     <!-- Заголовок та кнопка "Підтвердити" -->
@@ -41,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="50dp">
 
         <LinearLayout
             android:id="@+id/tableContainer"
@@ -49,13 +49,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <GridLayout
+            <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/gridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:rowCount="6"
-                android:padding="8dp">
+                android:padding="4dp"
+                app:columnCount="2"
+                app:rowCount="6">
 
                 <!-- Рядок 1: Тип компонента -->
                 <TextView
@@ -93,7 +93,7 @@
                     android:maxLength="30"
                     android:importantForAutofill="no"
                     android:background="@drawable/tb_start_bott_end_tr25"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -101,28 +101,58 @@
 
 
                 <!-- Рядок 4: Модель -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_columnSpan="2">
                 <TextView
                     android:id="@+id/labelModel"
-                    android:layout_width="90dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:text="@string/Model_"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     tools:ignore="TextSizeCheck" />
+
 
                 <EditText
                     android:id="@+id/compmodel"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="48dp"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:hint="@string/Write_model"
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:background="@drawable/tb_start_bott_end_tr25"
                     android:maxLength="30"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/labelAdaptive"
+                        android:layout_width="80dp"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/Cartrige_"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="TextSizeCheck" />
+
+
+                    <EditText
+                        android:id="@+id/compAdaptive"
+                        android:layout_width="90dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:hint="@string/Write_model"
+                        android:importantForAutofill="no"
+                        android:inputType="textCapSentences"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:maxLength="30"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
                 <!-- Рядок 3: Рік -->
                 <TextView
                     android:id="@+id/labelYear"
@@ -158,13 +188,13 @@
 
                     <CheckBox
                         android:id="@+id/compyear_cb"
-                        android:layout_width="150dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
                         android:text="@string/contain"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
-                        tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
+                        android:textSize="10sp"
+                        tools:ignore="DuplicateSpeakableTextCheck,SmallSp,TouchTargetSizeCheck" />
                 </LinearLayout>
 
 
@@ -192,25 +222,64 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:hint="@string/Write_year"
-                        android:inputType="number"
-                        android:maxLength="4"
+                        android:inputType="textCapSentences"
+                        android:maxLength="18"
                         android:background="@drawable/tb_start_bott_end_tr25"
                         android:paddingTop="8dp"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        tools:ignore="Autofill" />
+                        tools:ignore="Autofill,TextFields" />
 
                     <CheckBox
                         android:id="@+id/compsize_cb"
-                        android:layout_width="150dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
                         android:text="@string/contain"
                         android:textColor="@color/white"
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Own_notes_"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/compnotes"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/Write_year"
+                        android:inputType="textCapSentences"
+                        android:maxLength="90"
+                        android:textColor="@color/white"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:paddingTop="8dp"
+                        android:textSize="14sp"
+                        tools:ignore="Autofill" />
+
+                    <CheckBox
+                        android:id="@+id/compnotes_cb"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         tools:ignore="TouchTargetSizeCheck" />
                 </LinearLayout>
-
                 <!-- Рядок 6: Вага -->
                 <TextView
                     android:id="@+id/labelWeight"
@@ -234,74 +303,36 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:hint="@string/Write_year"
-                        android:inputType="number"
-                        android:maxLength="4"
+                        android:inputType="textCapSentences"
+                        android:maxLength="18"
                         android:textColor="@color/white"
                         android:background="@drawable/tb_start_bott_end_tr25"
                         android:paddingTop="8dp"
                         android:textSize="16sp"
-                        tools:ignore="Autofill" />
+                        tools:ignore="Autofill,TextFields" />
 
                     <CheckBox
                         android:id="@+id/compweight_cb"
-                        android:layout_width="150dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
                         android:text="@string/contain"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp,TouchTargetSizeCheck" />
                 </LinearLayout>
                 <!-- Рядок 6: Вага -->
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="50dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/Own_notes_"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <LinearLayout
-                    android:layout_width="200dp"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <EditText
-                        android:id="@+id/compnotes"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="@string/Write_year"
-                        android:inputType="text"
-                        android:maxLength="90"
-                        android:textColor="@color/white"
-                        android:background="@drawable/tb_start_bott_end_tr25"
-                        android:paddingTop="8dp"
-                        android:textSize="14sp"
-                        tools:ignore="Autofill" />
-
-                    <CheckBox
-                        android:id="@+id/compnotes_cb"
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="@color/white"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        tools:ignore="TouchTargetSizeCheck" />
-                </LinearLayout>
-
-            </GridLayout>
+            </androidx.gridlayout.widget.GridLayout>
 
 
 
                 <!-- Placeholder для фото -->
                 <ImageButton
                     android:id="@+id/photoPlaceholder"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="282dp"
+                    android:layout_height="198dp"
                     android:contentDescription="@string/add"
+                    android:layout_gravity="center"
                     android:scaleType="centerInside"
                     android:src="@drawable/img_gee_setups"
                     tools:ignore="ImageContrastCheck" />
