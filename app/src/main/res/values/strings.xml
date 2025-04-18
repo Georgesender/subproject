@@ -120,6 +120,14 @@
     <string name="contain">включати</string>
     <string name="Own_notes_">Власні нотатки:</string>
     <string name="Cartrige_">Картридж:</string>
+    <string name="Add_photo_">Додати фото</string>
+    <string name="button_process_jpg">Вирізати задній фон(для jpg)</string>
+    <string name="button_crop_no_bg">Обрізати фото</string>
+    <string name="button_add_photo">Вибрати фото без обробки</string>
+    <string name="di_adder_img_textForjpg">Це допоможе видалити задній фон з jpg(jpeg) фото. Працює тільки з білим фоном!</string>
+    <string name="di_adder_img_textForpng">Це просто додасть обрізане фото</string>
+    <string name="Delete_bg">Видалити задній фон</string>
+    <string name="Added_photo">Додане фото</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

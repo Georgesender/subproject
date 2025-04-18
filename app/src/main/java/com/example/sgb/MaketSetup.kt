@@ -1298,6 +1298,9 @@ fun handleIncrement(
             val shockComponent = components.firstOrNull {
                 it.compType.equals("Shock", ignoreCase = true)
             }
+            val tyresComponent = components.firstOrNull {
+                it.compType.equals("Tyre", ignoreCase = true)
+            }
             if (forkComponent != null) {
                 // Формуємо рядок із бренду, моделі та картриджу (compAdaptive)
                 val forkInfo = "${forkComponent.compBrand} ${forkComponent.compModel} ${forkComponent.compAdaptive}"
@@ -1344,6 +1347,39 @@ fun handleIncrement(
                     }
                     // Встановлюємо текст рядка для вилки
                     shockInfoTextView.text = shockInfo
+                }
+            }
+            if (tyresComponent != null) {
+                // Формуємо рядок із бренду, моделі та картриджу (compAdaptive)
+                val tyreFront = "${tyresComponent.compBrand} ${tyresComponent.compModel}"
+                val tyreRear = "${tyresComponent.compBrandExtra} ${tyresComponent.compAdaptive}"
+
+                // Перетворюємо photoUri (якщо є) на Uri
+                val tyresPhotoUri = tyresComponent.photoUri?.toUri()
+                withContext(Dispatchers.Main) {
+                    // Оновлюємо ImageView для фото вилки, і TextView для інформації про вилку
+                    val frontTyreIcon = findViewById<ImageView>(R.id.ftyre_icon)
+                    val rearTyreIcon = findViewById<ImageView>(R.id.rtyre_icon)
+                    val tyreInfoFront = findViewById<TextView>(R.id.front_tyre)
+                    val tyreInfoRear = findViewById<TextView>(R.id.rear_tyre)
+                    frontTyreIcon.setBackgroundColor(Color.TRANSPARENT)
+                    rearTyreIcon.setBackgroundColor(Color.TRANSPARENT)
+                    // Якщо є фото, завантажуємо його за допомогою Glide
+                    if (tyresPhotoUri != null) {
+                        Glide.with(this@MaketSetup)
+                            .load(tyresPhotoUri)
+                            .into(frontTyreIcon)
+                        Glide.with(this@MaketSetup)
+                            .load(tyresPhotoUri)
+                            .into(rearTyreIcon)
+                    } else {
+                        // Можна встановити стандартне зображення (як placeholder)
+                        frontTyreIcon.setImageResource(R.drawable.img_tyre)
+                        rearTyreIcon.setImageResource(R.drawable.img_tyre)
+                    }
+                    // Встановлюємо текст рядка для вилки
+                    tyreInfoFront.text = tyreFront
+                    tyreInfoRear.text = tyreRear
                 }
             }
         }

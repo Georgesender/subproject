@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogRoot"
     android:layout_width="400dp"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:background="@color/black">
+    android:background="@drawable/kt_textviews_basic1"
+    android:padding="4dp"
+    tools:ignore="TextSizeCheck">
 
     <!-- Заголовок та кнопка "Підтвердити" -->
     <TextView
@@ -18,10 +18,10 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/btnConfirm"
         app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
-        app:layout_constraintBottom_toBottomOf="@+id/btnConfirm" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnConfirm"
@@ -36,12 +36,13 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/dialogHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/di_scrollvw_trwhite"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialogHeader">
 
         <LinearLayout
             android:id="@+id/tableContainer"
@@ -50,17 +51,16 @@
             android:orientation="vertical">
 
             <androidx.gridlayout.widget.GridLayout
-                android:id="@+id/gridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
+                android:background="@color/bg_hint"
                 app:columnCount="2"
                 app:rowCount="6">
-
                 <!-- Рядок 1: Тип компонента -->
                 <TextView
                     android:id="@+id/labelCompType"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:text="@string/Component_Type"
@@ -70,68 +70,118 @@
 
                 <Spinner
                     android:id="@+id/compType"
-                    android:layout_width="200dp"
+                    android:layout_width="140dp"
                     android:layout_height="48dp"
-                    android:background="@color/tr50_white" />
+                    android:layout_marginStart="5dp"
+                    android:background="@color/tr50_white"
+                    android:dropDownSelector="@drawable/kt_textviews_basic" />
 
-                <!-- Рядок 2: Бренд -->
-                <TextView
-                    android:id="@+id/labelBrand"
-                    android:layout_width="90dp"
-                    android:layout_height="48dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/Brand_"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/compbrand"
-                    android:layout_width="100dp"
-                    android:layout_height="48dp"
-                    android:gravity="center_vertical"
-                    android:hint="@string/Write_brand"
-                    android:maxLength="30"
-                    android:importantForAutofill="no"
-                    android:background="@drawable/tb_start_bott_end_tr25"
-                    android:inputType="textCapSentences"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+            </androidx.gridlayout.widget.GridLayout>
+            <androidx.gridlayout.widget.GridLayout
+                android:id="@+id/gridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:columnCount="2"
+                app:rowCount="6">
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_columnSpan="2">
+
+                    <TextView
+                        android:id="@+id/labelBrand"
+                        android:layout_width="60dp"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/Brand_"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="TextSizeCheck" />
+
+
+                    <EditText
+                        android:id="@+id/compbrand"
+                        android:layout_width="100dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="textCapSentences"
+                        android:maxLength="30"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:id="@+id/labelBrandExtra"
+                        android:layout_width="70dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/Brand_"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="TextSizeCheck" />
+
+
+                    <EditText
+                        android:id="@+id/compBrandExtra"
+                        android:layout_width="100dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="textCapSentences"
+                        android:maxLength="30"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
+                </LinearLayout>
 
 
                 <!-- Рядок 4: Модель -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     app:layout_columnSpan="2">
-                <TextView
-                    android:id="@+id/labelModel"
-                    android:layout_width="60dp"
-                    android:layout_height="48dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/Model_"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    tools:ignore="TextSizeCheck" />
+
+                    <TextView
+                        android:id="@+id/labelModel"
+                        android:layout_width="60dp"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/Model_"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        tools:ignore="TextSizeCheck" />
 
 
-                <EditText
-                    android:id="@+id/compmodel"
-                    android:layout_width="80dp"
-                    android:layout_height="48dp"
-                    android:gravity="center"
-                    android:hint="@string/Write_model"
-                    android:importantForAutofill="no"
-                    android:inputType="textCapSentences"
-                    android:background="@drawable/tb_start_bott_end_tr25"
-                    android:maxLength="30"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    <EditText
+                        android:id="@+id/compmodel"
+                        android:layout_width="100dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:gravity="center"
+                        android:importantForAutofill="no"
+                        android:inputType="textCapSentences"
+                        android:maxLength="30"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
+
                     <TextView
                         android:id="@+id/labelAdaptive"
-                        android:layout_width="80dp"
+                        android:layout_width="70dp"
                         android:layout_height="48dp"
+                        android:layout_marginStart="5dp"
                         android:gravity="center_vertical"
                         android:text="@string/Cartrige_"
                         android:textColor="@color/white"
@@ -141,22 +191,25 @@
 
                     <EditText
                         android:id="@+id/compAdaptive"
-                        android:layout_width="90dp"
+                        android:layout_width="100dp"
                         android:layout_height="48dp"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:gravity="center"
-                        android:hint="@string/Write_model"
                         android:importantForAutofill="no"
                         android:inputType="textCapSentences"
-                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:maxLength="30"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="LabelFor,SpeakableTextPresentCheck" />
 
                 </LinearLayout>
                 <!-- Рядок 3: Рік -->
                 <TextView
                     android:id="@+id/labelYear"
-                    android:layout_width="90dp"
+                    android:layout_marginTop="10dp"
+
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:text="@string/Year"
@@ -164,34 +217,35 @@
                     android:textSize="16sp" />
 
 
-
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="10dp"
+
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/compyear"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:hint="@string/Write_year"
+                        android:layout_marginStart="3dp"
+
                         android:background="@drawable/tb_start_bott_end_tr25"
-                        android:paddingTop="8dp"
-                        android:maxLength="4"
+                        android:gravity="center"
                         android:inputType="number"
+                        android:maxLength="4"
+                        android:paddingTop="8dp"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        tools:ignore="Autofill,DuplicateSpeakableTextCheck" />
+                        tools:ignore="Autofill,DuplicateSpeakableTextCheck,LabelFor,SpeakableTextPresentCheck" />
 
                     <CheckBox
                         android:id="@+id/compyear_cb"
-                        android:layout_width="140dp"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
-                        android:text="@string/contain"
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         tools:ignore="DuplicateSpeakableTextCheck,SmallSp,TouchTargetSizeCheck" />
@@ -201,7 +255,7 @@
                 <!-- Рядок 5: Розмір/Хід вилки -->
                 <TextView
                     android:id="@+id/labelForkSize"
-                    android:layout_width="90dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:text="@string/Size___travel"
@@ -212,30 +266,30 @@
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/compsize"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:gravity="center"
-                        android:hint="@string/Write_year"
                         android:inputType="textCapSentences"
                         android:maxLength="18"
-                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:paddingTop="8dp"
+                        android:layout_marginStart="3dp"
+
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        tools:ignore="Autofill,TextFields" />
+                        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
 
                     <CheckBox
                         android:id="@+id/compsize_cb"
-                        android:layout_width="90dp"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
-                        android:text="@string/contain"
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         tools:ignore="SmallSp,TouchTargetSizeCheck" />
@@ -243,33 +297,35 @@
 
 
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:text="@string/Own_notes_"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="TextSizeCheck" />
 
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/compnotes"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:gravity="center"
-                        android:hint="@string/Write_year"
                         android:inputType="textCapSentences"
                         android:maxLength="90"
-                        android:textColor="@color/white"
-                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:paddingTop="8dp"
+                        android:layout_marginStart="3dp"
+
+                        android:textColor="@color/white"
                         android:textSize="14sp"
-                        tools:ignore="Autofill" />
+                        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
 
                     <CheckBox
                         android:id="@+id/compnotes_cb"
@@ -283,7 +339,7 @@
                 <!-- Рядок 6: Вага -->
                 <TextView
                     android:id="@+id/labelWeight"
-                    android:layout_width="90dp"
+                    android:layout_width="60dp"
                     android:layout_height="48dp"
                     android:gravity="center_vertical"
                     android:text="@string/Weight_"
@@ -293,30 +349,30 @@
                 <LinearLayout
                     android:layout_width="200dp"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/compweight"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/tb_start_bott_end_tr25"
                         android:gravity="center"
-                        android:hint="@string/Write_year"
                         android:inputType="textCapSentences"
                         android:maxLength="18"
-                        android:textColor="@color/white"
-                        android:background="@drawable/tb_start_bott_end_tr25"
+                        android:layout_marginStart="3dp"
+
                         android:paddingTop="8dp"
+                        android:textColor="@color/white"
                         android:textSize="16sp"
-                        tools:ignore="Autofill,TextFields" />
+                        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TextFields" />
 
                     <CheckBox
                         android:id="@+id/compweight_cb"
-                        android:layout_width="90dp"
+                        android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/white"
-                        android:text="@string/contain"
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         tools:ignore="SmallSp,TouchTargetSizeCheck" />
@@ -325,21 +381,36 @@
             </androidx.gridlayout.widget.GridLayout>
 
 
+            <!-- Placeholder для фото -->
+            <TextView
+                android:id="@+id/imgLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Added_photo"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/gridLayout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageButton
+                android:id="@+id/photoPlaceholder"
+                android:layout_width="282dp"
+                android:layout_height="198dp"
+                android:layout_gravity="center"
+                android:background="@color/light_white"
+                android:contentDescription="@string/add"
+                android:layout_marginBottom="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/svg_add_photo"
+                tools:ignore="ImageContrastCheck" />
 
-                <!-- Placeholder для фото -->
-                <ImageButton
-                    android:id="@+id/photoPlaceholder"
-                    android:layout_width="282dp"
-                    android:layout_height="198dp"
-                    android:contentDescription="@string/add"
-                    android:layout_gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/img_gee_setups"
-                    tools:ignore="ImageContrastCheck" />
         </LinearLayout>
     </ScrollView>
 
     <!-- Рамочка для фото компонента -->
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

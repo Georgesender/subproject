@@ -57,6 +57,7 @@ data class Component(
     val compBrand: String,
     val compYear: String,
     val compModel: String,
+    val compBrandExtra: String,
     val compAdaptive: String,
     val compSize: String,
     val compWeight: String,

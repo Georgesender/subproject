@@ -25,6 +25,27 @@
         android:layout_height="wrap_content"
         android:max="100"
         android:progress="50" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:textSize="20sp"
+        android:text="Колір для видалення:"
+        android:textColor="@color/white"/>
+
+    <ImageView
+        android:id="@+id/colorPreview"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="end|center_vertical"
+        android:background="@drawable/di_scrollvw_trwhite"
+        android:onClick="pickColor"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

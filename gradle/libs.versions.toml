@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.1"
+ambilwarna = "2.0.1"
 glide = "4.12.0"
 gridlayout = "1.1.0"
 gson = "2.10.1"
@@ -23,6 +24,7 @@ cardview = "1.0.0"
 ucrop = "2.2.8"
 
 [libraries]
+ambilwarna = { module = "com.github.yukuku:ambilwarna", version.ref = "ambilwarna" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }

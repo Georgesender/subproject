@@ -15,7 +15,7 @@ android {
         //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
-        versionName = "0.1"
+        versionName = "0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.ambilwarna)
     implementation (libs.ucrop)
     implementation (libs.glide)
     implementation(libs.kotlinx.coroutines.android)

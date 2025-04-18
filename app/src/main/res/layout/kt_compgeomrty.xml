@@ -140,16 +140,15 @@
 
                 </androidx.gridlayout.widget.GridLayout>
 
-                <androidx.gridlayout.widget.GridLayout
+                <LinearLayout
                     android:id="@+id/components_container_grid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="70dp"
-                    android:padding="10dp"
-                    app:columnCount="2"
-                    app:orientation="vertical" >
-            </androidx.gridlayout.widget.GridLayout>
+                    android:orientation="vertical"
+                    android:padding="10dp" >
+            </LinearLayout>
 
 
             </LinearLayout>
