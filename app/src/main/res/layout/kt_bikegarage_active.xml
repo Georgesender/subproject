@@ -79,38 +79,43 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp">
             <androidx.constraintlayout.widget.ConstraintLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:background="@drawable/bg_grey_square"
                     android:layout_width="match_parent"
                     android:layout_height="360dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <TextView
-                        android:textSize="32sp"
-                        android:textColor="@color/white"
                         android:id="@+id/bike_submodel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="test"
                         android:layout_marginStart="8dp"
+                        android:text="test"
+                        android:textSize="32sp"
+                        android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="HardcodedText" />
+
                     <TextView
-                        android:textSize="34sp"
-                        android:textColor="@color/white"
                         android:id="@+id/bike_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="28dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="6dp"
                         android:text="0000"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textSize="34sp"
+                        android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         tools:ignore="HardcodedText" />
 
                     <ImageView
@@ -119,12 +124,42 @@
                         android:layout_height="250dp"
                         android:layout_marginTop="12dp"
                         android:contentDescription="Bike Image"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bike_submodel"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bike_submodel"
                         tools:ignore="HardcodedText,ImageContrastCheck" />
+
+                    <!-- Додаємо напис знизу зліва -->
+                    <TextView
+                        android:id="@+id/elapsed_hours_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Накатиних годин ->"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="HardcodedText" />
+                    <!-- Значення накатаних годин праворуч від напису -->
+                    <TextView
+                        android:id="@+id/elapsed_hours_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0h"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="4dp"
+                        app:layout_constraintStart_toEndOf="@id/elapsed_hours_label"
+                        app:layout_constraintBaseline_toBaselineOf="@id/elapsed_hours_label"
+                        tools:ignore="HardcodedText" />
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -177,7 +212,17 @@
                         android:layout_width="185dp"
                         android:layout_height="205dp"
                         layout="@layout/inc_setups_button"/>
+
+                    <Button
+                        android:layout_width="185dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/Technical_service"
+                        android:background="@drawable/btn_trwhite_anim_2pxstroke"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

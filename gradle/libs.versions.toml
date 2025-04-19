@@ -22,6 +22,7 @@ constraintlayout = "2.2.1"
 roomRuntime = "2.7.0"
 cardview = "1.0.0"
 ucrop = "2.2.8"
+workRuntimeKtx = "2.10.0"
 
 [libraries]
 ambilwarna = { module = "com.github.yukuku:ambilwarna", version.ref = "ambilwarna" }
@@ -29,6 +30,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

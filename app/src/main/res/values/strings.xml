@@ -128,6 +128,7 @@
     <string name="di_adder_img_textForpng">Це просто додасть обрізане фото</string>
     <string name="Delete_bg">Видалити задній фон</string>
     <string name="Added_photo">Додане фото</string>
+    <string name="Technical_service">Технічне обслуговування</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

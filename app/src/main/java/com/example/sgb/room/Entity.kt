@@ -10,7 +10,9 @@ data class Bike(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val brand: String,
     val modelsJson: Map<String, BikeModel>, // Містить моделі та підмоделі
-    val selectedSize: String? = null // Обраний розмір байка
+    val selectedSize: String? = null,
+    val elapsedHoursValue: Int = 0 // Додаємо поле для годин
+
 )
 
 // BikeModel.kt
@@ -26,7 +28,6 @@ data class BikeSubmodel(
     val imageName: String? = null, // Зображення байка
     val geometry: Map<String, BikeGeometry>? = null // Геометрія для кожного розміру
 )
-
 // BikeGeometryEntity.kt
 @Entity(tableName = "bike_geometry")
 data class BikeGeometry(

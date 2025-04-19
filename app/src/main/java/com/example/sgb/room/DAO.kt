@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BikeDao {
@@ -22,6 +23,13 @@ interface BikeDao {
 
     @Query("DELETE FROM bike_table WHERE id = :bikeId")
     suspend fun deleteBikeById(bikeId: Int)
+
+    @Query("UPDATE bike_table SET elapsedHoursValue = :newValue WHERE id = :bikeId")
+    suspend fun updateElapsedHours(bikeId: Int, newValue: Int) // Робимо параметр не-nullable
+
+        @Query("SELECT * FROM bike_table WHERE id = :id")
+        fun getBikeByIdFlow(id: Int): Flow<Bike?> // Використовуємо Flow
+
 }
 
 @Dao
@@ -55,6 +63,7 @@ interface ComponentsDao {
     // Додайте новий метод в ComponentsDao
     @Query("SELECT photoUri FROM components_table WHERE bikeId = :bikeId")
     fun getPhotoUrisByBikeId(bikeId: Int): List<String?>
+
 }
 
 

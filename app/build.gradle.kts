@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation (libs.androidx.work.runtime.ktx)
+
     implementation (libs.ambilwarna)
     implementation (libs.ucrop)
     implementation (libs.glide)

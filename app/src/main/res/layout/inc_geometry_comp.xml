@@ -15,6 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
     <TextView
+        android:scaleX="2.3"
+        android:scaleY="1.7"
         android:background="@drawable/img_fork_ruler"
         android:layout_width="match_parent"
         android:layout_height="165dp"
