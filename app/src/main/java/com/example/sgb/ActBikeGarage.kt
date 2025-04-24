@@ -112,6 +112,15 @@ class ActBikeGarage : AppCompatActivity() {
 
 
         // Buttons >>>>
+        val service = findViewById<Button>(R.id.service)
+        service.setOnClickListener{
+            val intent = Intent(this , ActService::class.java)
+            intent.putExtra("bike_id" , bikeId)
+            val options = ActivityOptionsCompat.makeCustomAnimation(
+                this , R.anim.fade_in_faster , R.anim.fade_out_faster
+            )
+            startActivity(intent , options.toBundle())
+        }
         val clearButton = findViewById<Button>(R.id.right_button_2)
         clearButton.setOnClickListener {
             val sharedPreferences: SharedPreferences =
@@ -167,6 +176,7 @@ class ActBikeGarage : AppCompatActivity() {
         setupBottomNavigation()
         // Functions initialisation <<<<
     }
+
 
     private fun initViews(){
         bikeNameTextView = findViewById(R.id.bike_name)
@@ -335,11 +345,15 @@ class ActBikeGarage : AppCompatActivity() {
     private fun initNotifications() {
         val prefs = getSharedPreferences("maintenance", MODE_PRIVATE)
         if (!prefs.contains("cycle_step")) {
-            // Вперше — заводимо лічильник і плануємо перший запуск через 61 день
-            prefs.edit { putInt("cycle_step" , 0) }
+            prefs.edit {
+                putInt("cycle_step", -1)               // було 0 → стало -1
+                putLong("last_step_time", System.currentTimeMillis())
+            }
             scheduleNextCycle(61)
         }
     }
+
+
 
     private fun scheduleNextCycle(delayDays: Long) {
         val workRequest = OneTimeWorkRequestBuilder<CycleWorker>()
@@ -378,30 +392,32 @@ class ActBikeGarage : AppCompatActivity() {
     ) : CoroutineWorker(context , params) {
 
         override suspend fun doWork(): Result {
-            val prefs = applicationContext
-                .getSharedPreferences("maintenance" , Context.MODE_PRIVATE)
+            val prefs = applicationContext.getSharedPreferences("maintenance", Context.MODE_PRIVATE)
 
-            // 1) Зчитуємо поточний крок
-            val step = prefs.getInt("cycle_step" , 0)
+            // Ініціалізація тільки при першому запуску
 
-            // 2) Відповідно до кроку надсилаємо сповіщення
-            when (step) {
-                0 , 1 , 3 , 4 -> sendNotification(
-                    "50h" ,
-                    "50-годинне ТО" ,
-                    "Час для обслуговування підвіски!"
-                )
 
-                2 -> sendNotification("100h" , "Піврічне ТО" , "Час для піврічного огляду!")
-                5 -> sendNotification("year" , "Річне ТО" , "Час для повного огляду велосипеда!")
+            // Отримуємо поточний стан
+            var currentStep = prefs.getInt("cycle_step", 0)
+            prefs.getLong("last_step_time", 0L)
+
+            // Відправляємо сповіщення на основі ПОТОЧНОГО кроку
+            when (currentStep) {
+                0, 1, 3, 4 -> sendNotification("50h", "...", "...")
+                2 -> sendNotification("100h", "...", "...")
+                5 -> sendNotification("year", "...", "...")
             }
 
-            // 3) Інкрементуємо крок і зберігаємо (0…5 циклічно)
+            // Інкрементуємо крок (0-5 циклічно)
+            currentStep = (currentStep + 1) % 6
+
+            // Зберігаємо новий стан
             prefs.edit {
-                putInt("cycle_step" , (step + 1) % 6)
+                putInt("cycle_step", currentStep)
+                putLong("last_step_time", System.currentTimeMillis())
             }
 
-            // 4) Запланувати себе ж ще через 61 день
+            // Плануємо наступний запуск через 61 день
             scheduleNextCycle(61)
 
             return Result.success()
@@ -409,14 +425,14 @@ class ActBikeGarage : AppCompatActivity() {
 
         private fun scheduleNextCycle(delayDays: Long) {
             val workRequest = OneTimeWorkRequestBuilder<CycleWorker>()
-                .setInitialDelay(delayDays , TimeUnit.DAYS)
+                .setInitialDelay(delayDays, TimeUnit.DAYS)
                 .build()
-            WorkManager.getInstance(applicationContext)
-                .enqueueUniqueWork(
-                    "maintenance_cycle" ,
-                    ExistingWorkPolicy.REPLACE ,
-                    workRequest
-                )
+
+            WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+                "maintenance_cycle",
+                ExistingWorkPolicy.REPLACE,
+                workRequest
+            )
         }
 
         private fun sendNotification(type: String , title: String , message: String) {
@@ -485,5 +501,6 @@ class ActBikeGarage : AppCompatActivity() {
             }
         }
     }
+
 }
 

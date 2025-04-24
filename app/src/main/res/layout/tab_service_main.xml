@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/Header_for_service"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="8dp"/>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*"
+            android:shrinkColumns="*"
+            android:background="@drawable/tb_border"
+            android:layout_margin="8dp">
+
+            <!-- Заголовки -->
+            <TableRow
+                android:background="@drawable/tb_hd"
+                android:layout_marginBottom="1dp">
+
+                <TextView
+                    style="@style/TableHeader"
+                    android:text="@string/component"/>
+
+                <TextView
+                    style="@style/TableHeader"
+                    android:text="@string/Hours"/>
+            </TableRow>
+
+            <!-- Підзаголовки -->
+            <TableRow
+                android:background="@drawable/tb_subhd"
+                android:layout_marginBottom="1dp">
+
+                <TextView
+                    android:layout_height="28dp"
+                    style="@style/TableSubheader"
+                    android:text=""/>
+
+                <TextView
+                    style="@style/TableSubheader"
+                    android:text="50"
+                    tools:ignore="HardcodedText"/>
+
+                <TextView
+                    style="@style/TableSubheader"
+                    android:text="100"
+                    tools:ignore="HardcodedText"/>
+
+                <TextView
+                    style="@style/TableSubheader"
+                    android:text="@string/twohunder_or_Year"/>
+            </TableRow>
+
+            <!-- Рядок з даними -->
+            <TableRow
+                android:background="@drawable/tb_row">
+
+                <TextView
+                    style="@style/TableDataLabel"
+                    android:layout_height="38dp"
+                    android:text="@string/Suspension"/>
+
+                <!-- Колонка 50 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/tb_cell">
+
+                    <TextView
+                        android:id="@+id/sus_date50"
+                        style="@style/TableData"
+                        android:textColorHint="@color/light_gray"
+                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                </LinearLayout>
+
+                <!-- Колонка 100 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/tb_cell">
+
+                    <TextView
+                        android:id="@+id/sus_date100"
+                        style="@style/TableData"
+                        android:textColorHint="@color/light_gray"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <!-- Колонка 200/Рік -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/tb_cell">
+
+                    <TextView
+                        android:id="@+id/sus_dateyear"
+                        style="@style/TableData"
+                        android:textColorHint="@color/light_gray"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="@color/bike_light_blue">
+
+                <!-- Назва лічильника -->
+                <TextView
+                    android:id="@+id/elapsed_hours_label"
+                    style="@style/TableHeader"
+                    android:layout_width="228dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/Riden_hours"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+
+
+                <!-- Значення -->
+                <EditText
+                    android:id="@+id/elapsed_hours_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textColor="@color/green_strings"
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText,LabelFor,TextContrastCheck,TouchTargetSizeCheck" />
+
+                <!-- Плюс -->
+                <Button
+                    android:id="@+id/btn_increment_hours"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

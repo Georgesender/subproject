@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 ambilwarna = "2.0.1"
 glide = "4.12.0"
 gridlayout = "1.1.0"
@@ -23,6 +23,7 @@ roomRuntime = "2.7.0"
 cardview = "1.0.0"
 ucrop = "2.2.8"
 workRuntimeKtx = "2.10.0"
+material = "1.12.0"
 
 [libraries]
 ambilwarna = { module = "com.github.yukuku:ambilwarna", version.ref = "ambilwarna" }
@@ -54,6 +55,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

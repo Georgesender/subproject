@@ -134,14 +134,13 @@
                         android:id="@+id/elapsed_hours_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Накатиних годин ->"
+                        android:text="@string/Riden_hours"
                         android:textSize="16sp"
                         android:textColor="@color/white"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="8dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        tools:ignore="HardcodedText" />
+                        app:layout_constraintBottom_toBottomOf="parent"/>
                     <!-- Значення накатаних годин праворуч від напису -->
                     <TextView
                         android:id="@+id/elapsed_hours_value"
@@ -214,6 +213,7 @@
                         layout="@layout/inc_setups_button"/>
 
                     <Button
+                        android:id="@+id/service"
                         android:layout_width="185dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"

@@ -51,6 +51,7 @@ dependencies {
     implementation (libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.cardview)
+    implementation(libs.material)
     ksp(libs.androidx.room.compiler)
     implementation (libs.androidx.constraintlayout)
     implementation (libs.androidx.gridlayout)

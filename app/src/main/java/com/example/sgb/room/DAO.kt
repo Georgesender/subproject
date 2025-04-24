@@ -29,7 +29,6 @@ interface BikeDao {
 
         @Query("SELECT * FROM bike_table WHERE id = :id")
         fun getBikeByIdFlow(id: Int): Flow<Bike?> // Використовуємо Flow
-
 }
 
 @Dao
