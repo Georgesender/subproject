@@ -40,7 +40,7 @@
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActSetups" android:exported="true"/>
         <activity
             android:name="com.example.sgb.MaketSetup" android:theme="@style/AppTheme" android:exported="true" android:windowSoftInputMode="adjustPan"/>
-        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActService" android:exported="true"/>
+        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActService" android:exported="true" android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.example.sgb.SplashActivity"
             android:exported="true"

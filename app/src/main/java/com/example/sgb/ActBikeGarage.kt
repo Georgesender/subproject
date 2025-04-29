@@ -4,9 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Typeface
@@ -15,21 +17,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -53,6 +60,8 @@ class ActBikeGarage : AppCompatActivity() {
     private lateinit var bikeYearTextView: TextView
     private lateinit var bikeImageView: ImageView
     private val REQUEST_NOTIFICATION_PERMISSION = 1001
+    private lateinit var receiver: BroadcastReceiver
+
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -121,17 +130,17 @@ class ActBikeGarage : AppCompatActivity() {
             )
             startActivity(intent , options.toBundle())
         }
-        val clearButton = findViewById<Button>(R.id.right_button_2)
+        val clearButton = findViewById<ImageButton>(R.id.right_button_2)
         clearButton.setOnClickListener {
             val sharedPreferences: SharedPreferences =
                 getSharedPreferences("bike_prefs" , MODE_PRIVATE)
             val bikeId = sharedPreferences.getInt("selected_bike_id" , -1)
             if (bikeId != -1) {
-                deleteBikeAndClearPreferences(bikeId)
+                showDeleteConfirmation(bikeId)
             }
         }
 
-        val compGeometry = findViewById<View>(R.id.componentsGeometry)
+        val compGeometry = findViewById<ConstraintLayout>(R.id.componentsGeometry)
         compGeometry.setOnClickListener {
             val intent = Intent(this , ActComponentsGeometry::class.java)
             intent.putExtra("bike_id" , bikeId)
@@ -141,7 +150,7 @@ class ActBikeGarage : AppCompatActivity() {
             startActivity(intent , options.toBundle())
         }
 
-        val frameGeometry = findViewById<View>(R.id.frameGeometry)
+        val frameGeometry = findViewById<ConstraintLayout>(R.id.frameGeometry)
         frameGeometry.setOnClickListener {
             val intent = Intent(this , ActBikeGeometry::class.java)
             intent.putExtra("bike_id" , bikeId) // Передаємо bikeId
@@ -151,7 +160,7 @@ class ActBikeGarage : AppCompatActivity() {
             startActivity(intent , options.toBundle())
         }
 
-        val setupBike = findViewById<View>(R.id.setups)
+        val setupBike = findViewById<ConstraintLayout>(R.id.setups)
         setupBike.setOnClickListener {
             val intent = Intent(this , ActSetups::class.java)
             intent.putExtra("bike_id" , bikeId)
@@ -167,16 +176,26 @@ class ActBikeGarage : AppCompatActivity() {
         }
         // Buttons <<<<
 
+        receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                checkNotificationSettings()
+            }
+        }
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(receiver, IntentFilter("NOTIFICATION_SETTINGS_CHANGED"))
 
         // Functions initialisation >>>>
         checkFirstLaunch()
         checkAndRequestNotificationPermission()
-        initNotifications()
         initViews()
+        checkNotificationSettings()
         setupBottomNavigation()
         // Functions initialisation <<<<
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
+    }
 
     private fun initViews(){
         bikeNameTextView = findViewById(R.id.bike_name)
@@ -240,37 +259,52 @@ class ActBikeGarage : AppCompatActivity() {
         navHome.setTypeface(null , Typeface.BOLD)
         navHome.textSize = navHome.textSize / resources.displayMetrics.density + 10
     }
+    //========== Delete function ==========
+    private fun showDeleteConfirmation(bikeId: Int) {
+        // inflate custom view
+        val dialogView = layoutInflater.inflate(R.layout.di_confirm_delete, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+        val transparentColor = resources.getColor(R.color.transparent, theme)
+        dialog.window?.setBackgroundDrawable(transparentColor.toDrawable())
+        // кнопка "Ні" — просто закрити
+        dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            dialog.dismiss()
+        }
+        // кнопка "Так" — виконати видалення
+        dialogView.findViewById<Button>(R.id.btnConfirm).setOnClickListener {
+            dialog.dismiss()
+            performDeleteBike(bikeId)
+        }
 
-    private fun deleteBikeAndClearPreferences(bikeId: Int) {
+        dialog.show()
+    }
+    // Перейменували: тепер це внутрішня логіка видалення
+    private fun performDeleteBike(bikeId: Int) {
         lifecycleScope.launch {
-            // Ініціалізуємо базу даних
-            val database = BikeDatabase.getDatabase(this@ActBikeGarage)
-            val bikeDao = database.bikeDao()
-            val geometryDao = database.geometryDao()
-            val bpSetupDao = database.bpSetupDao()
+            val db = BikeDatabase.getDatabase(this@ActBikeGarage)
+            with(db) {
+                geometryDao().deleteGeometryByBikeId(bikeId)
+                bikeDao().deleteBikeById(bikeId)
+                bpSetupDao().deleteBikeParkSetupByBikeId(bikeId)
+                serviceRecordDao().deleteRecordsByBikeId(bikeId)
+                setupDao().deleteSetupsByBikeId(bikeId)
+                componentsDao().deleteComponentsByBikeId(bikeId)
+            }
 
-
-            // Видаляємо геометрію байка
-            geometryDao.deleteGeometryByBikeId(bikeId)
-
-            // Видаляємо сам байк
-            bikeDao.deleteBikeById(bikeId)
-
-            bpSetupDao.deleteBikeParkSetupById(bikeId)
-
-            // Очищаємо вибір у SharedPreferences
-            val sharedPreferences: SharedPreferences =
-                getSharedPreferences("bike_prefs" , MODE_PRIVATE)
-            sharedPreferences.edit {
+            // Очищаємо shared prefs
+            getSharedPreferences("bike_prefs", MODE_PRIVATE).edit {
                 remove("selected_bike_id")
             }
 
-            // Переходимо до AddBikeActivity
-            val intent = Intent(this@ActBikeGarage , PreAddBikeActivity::class.java)
-            startActivity(intent)
+            // Переходимо до PreAddBikeActivity
+            startActivity(Intent(this@ActBikeGarage, PreAddBikeActivity::class.java))
             finish()
         }
     }
+    //========== Delete function ==========
+
 // Notifications functions >>>>
     private fun checkFirstLaunch() {
         val prefs = getSharedPreferences("app_prefs" , MODE_PRIVATE)
@@ -318,6 +352,19 @@ class ActBikeGarage : AppCompatActivity() {
         )
 
         prefs.edit { putBoolean("work_scheduled" , true) }
+    }
+    private fun checkNotificationSettings() {
+        val prefs = getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
+        if (prefs.getBoolean("receive_notifications", true)) {
+            initNotifications()
+        } else {
+            cancelScheduledNotifications()
+        }
+    }
+
+    private fun cancelScheduledNotifications() {
+        WorkManager.getInstance(this).cancelUniqueWork("maintenance_cycle")
+        WorkManager.getInstance(this).cancelUniqueWork("hour_increment_work")
     }
 
     private fun checkAndRequestNotificationPermission() {
@@ -391,11 +438,15 @@ class ActBikeGarage : AppCompatActivity() {
         params: WorkerParameters
     ) : CoroutineWorker(context , params) {
 
+
         override suspend fun doWork(): Result {
-            val prefs = applicationContext.getSharedPreferences("maintenance", Context.MODE_PRIVATE)
+            val prefs = applicationContext.getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
 
-            // Ініціалізація тільки при першому запуску
-
+            // Перевірка, чи дозволені сповіщення
+            if (!prefs.getBoolean("receive_notifications", true)) {
+                Log.d(TAG, "Notifications are disabled, skipping work")
+                return Result.success()
+            }
 
             // Отримуємо поточний стан
             var currentStep = prefs.getInt("cycle_step", 0)
@@ -403,9 +454,9 @@ class ActBikeGarage : AppCompatActivity() {
 
             // Відправляємо сповіщення на основі ПОТОЧНОГО кроку
             when (currentStep) {
-                0, 1, 3, 4 -> sendNotification("50h", "...", "...")
-                2 -> sendNotification("100h", "...", "...")
-                5 -> sendNotification("year", "...", "...")
+                0, 1, 3, 4 -> sendNotification("50h", "50", "50")
+                2 -> sendNotification("100h", "100", "100")
+                5 -> sendNotification("year", "100", "100")
             }
 
             // Інкрементуємо крок (0-5 циклічно)

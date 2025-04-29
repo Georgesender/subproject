@@ -1,5 +1,6 @@
 package com.example.sgb.room
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -125,4 +126,15 @@ data class BpMarksSuspenshion(
     var corners: String = "",
     var tiredFeet: String = "",
     var averageMark: Int
+)
+@Entity(tableName = "service_records", indices = [Index(value = ["date", "bikeId"], unique = true),
+Index(value = ["bikeId"])
+]
+)
+data class ServiceRecord(
+    @PrimaryKey val date: Long ,
+    @ColumnInfo(name = "bikeId") val bikeId: Int ,
+    @ColumnInfo(name = "title") var title: String = "" ,
+    @ColumnInfo(name = "notes") var notes: String = "" ,
+    @ColumnInfo(name = "price") var price: String = ""
 )

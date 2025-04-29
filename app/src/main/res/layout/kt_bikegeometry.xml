@@ -72,16 +72,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"/>
+
                 <ImageView
                     android:id="@+id/geometry_image"
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
-                    android:layout_marginTop="22dp"
-                    android:src="@drawable/img_frameset"
-                    android:scaleType="fitCenter"
+                    android:layout_marginTop="16dp"
                     android:contentDescription="@string/_1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/img_frame_size"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/size"
                     tools:ignore="HardcodedText" />

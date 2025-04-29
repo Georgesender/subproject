@@ -2,37 +2,41 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/transparent"
+
     android:focusable="true"
     android:clickable="true"
-    android:layout_width="185dp"
-    android:layout_height="205dp">
+    android:descendantFocusability="blocksDescendants"
+    android:layout_width="176dp"
+    android:layout_height="195dp">
     <TextView
         android:background="@drawable/extra_shapes_setups"
         android:layout_width="match_parent"
-        android:layout_height="165dp"
-        android:layout_marginBottom="40dp"
+        android:layout_height="161dp"
+        android:layout_marginBottom="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-    <TextView
-        android:scaleX="2.3"
-        android:scaleY="1.7"
-        android:background="@drawable/img_fork_ruler"
+    <ImageButton
+        android:contentDescription="@string/test"
+        android:background="@color/transparent"
+        android:src="@drawable/svg_components"
         android:layout_width="match_parent"
-        android:layout_height="165dp"
-        android:layout_marginBottom="40dp"
+        android:scaleType="centerInside"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_height="161dp"
+        android:layout_marginBottom="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:background="@drawable/extra_shapesblk_setup"
-        android:paddingStart="8dp"
-        android:paddingTop="5dp"
         android:text="@string/components_adjust"
         android:textColor="@color/white"
+        android:gravity="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

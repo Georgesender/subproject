@@ -1,17 +1,29 @@
 package com.example.sgb
 
+import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.sgb.room.BikeDatabase
+import com.example.sgb.room.ServiceRecord
+import com.example.sgb.room.ServiceRecordDao
 import com.example.sub.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +32,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -36,6 +50,7 @@ class ActService : AppCompatActivity() {
     private var sus_year: TextView? = null
     private var valueElapsed: EditText? = null
     private var btnIncrement: Button? = null
+    private lateinit var addNewCardButton: Button
 
     // State caches
     private var lastT50: String? = null
@@ -43,12 +58,19 @@ class ActService : AppCompatActivity() {
     private var lastTYear: String? = null
     private var cachedStartTime: Long = 0L
 
+    //ServiceCards
+    private lateinit var serviceCardsContainer: LinearLayout
+    private lateinit var serviceRecordDao: ServiceRecordDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_service)
+
         bikeId = intent.getIntExtra("bike_id" , -1)
+        val database = BikeDatabase.getDatabase(this)
+        serviceRecordDao = database.serviceRecordDao()
+
         val backButton = findViewById<Button>(R.id.back)
 
         backButton.setOnClickListener {
@@ -78,16 +100,14 @@ class ActService : AppCompatActivity() {
 
         // Setup tabs
         tabLayout.addTab(tabLayout.newTab().setText("Сервіс"), true)
-        tabLayout.addTab(tabLayout.newTab().setText("Інше 1"))
-        tabLayout.addTab(tabLayout.newTab().setText("Інше 2"))
+        tabLayout.addTab(tabLayout.newTab().setText("Сповіщення"))
         showServiceContent()
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> showServiceContent()
-                    1 -> showServiceContent1()
-                    2 -> showServiceContent2()
+                    1 -> showNotificationSettings()
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -126,6 +146,26 @@ class ActService : AppCompatActivity() {
             }
         }
     }
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            currentFocus?.let { view ->
+                if (view is EditText) {
+                    val outRect = Rect().apply { view.getGlobalVisibleRect(this) }
+                    // якщо торкнулися поза межами поточного EditText
+                    if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                        view.clearFocus()
+                        hideKeyboard(view)
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
     // Функція для відображення сервісного вмісту
     private fun showServiceContent() {
@@ -139,6 +179,15 @@ class ActService : AppCompatActivity() {
         sus_year = serviceView.findViewById(R.id.sus_dateyear)
         btnIncrement = serviceView.findViewById(R.id.btn_increment_hours)
         valueElapsed = serviceView.findViewById(R.id.elapsed_hours_value)
+
+        // Ініціалізація нових елементів
+        serviceCardsContainer = serviceView.findViewById(R.id.serviceCardContainer)
+        addNewCardButton = serviceView.findViewById(R.id.addNewCard)
+
+        addNewCardButton.setOnClickListener { showDatePicker() }
+
+        // Завантажити існуючі записи
+        loadServiceRecords()
 
         // Додати слухачі подій для НОВИХ елементів
         btnIncrement?.setOnClickListener {
@@ -165,25 +214,71 @@ class ActService : AppCompatActivity() {
             updateRemainingTimes(System.currentTimeMillis())
             // потім оновлюємо щосекунди
             while (isActive) {
-                delay(10)
+                delay(1000)
                 updateRemainingTimes(System.currentTimeMillis())
             }
         }
     }
-    private fun showServiceContent1() {
-        //testing tab
+    private fun showNotificationSettings() {
         contentContainer.removeAllViews()
-        val serviceView = layoutInflater.inflate(R.layout.kt_discover, contentContainer, false)
+        val serviceView = layoutInflater.inflate(R.layout.tab_notifications_setting, contentContainer, false)
         contentContainer.addView(serviceView)
-    }
 
-    private fun showServiceContent2() {
-        // testing tab
-        contentContainer.removeAllViews()
-        val serviceView = layoutInflater.inflate(R.layout.kt_setups, contentContainer, false)
-        contentContainer.addView(serviceView)
-    }
+        // Ініціалізація елементів керування автоінкрементом
+        val switchAutoInc = serviceView.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_autoinc)
+        val editAutoIncValue = serviceView.findViewById<EditText>(R.id.et_autoinc_days)
 
+        // Завантаження збережених налаштувань
+        val prefs = getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
+        switchAutoInc.isChecked = prefs.getBoolean("auto_inc_enabled", false)
+        editAutoIncValue.isEnabled = switchAutoInc.isChecked
+        editAutoIncValue.setText(prefs.getInt("auto_inc_value", 7).toString())
+
+                // Обробник змін стану перемикача
+                switchAutoInc.setOnCheckedChangeListener { _, isChecked ->
+            editAutoIncValue.isEnabled = isChecked
+            prefs.edit { putBoolean("auto_inc_enabled", isChecked) }
+
+            if (isChecked && editAutoIncValue.text.isNullOrEmpty()) {
+                editAutoIncValue.setText("7")
+                prefs.edit { putInt("auto_inc_value", 7) }
+            }
+        }
+
+                // Обробник зміни значення інкременту
+                editAutoIncValue.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                s?.toString()?.toIntOrNull()?.takeIf { it > 0 }?.let {
+                    prefs.edit { putInt("auto_inc_value", it) }
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
+            override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
+        })
+        // Світчер для сповіщень ТО
+        val switchNotifications = serviceView.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_receive_notifications)
+        switchNotifications.isChecked = prefs.getBoolean("receive_notifications", true)
+
+        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit {
+                putBoolean("receive_notifications", isChecked)
+                apply()
+            }
+
+            // Синхронізація з ActBikeGarage через Broadcast
+            sendNotificationSettingsUpdate()
+
+            if (isChecked) {
+                Toast.makeText(this, "Сповіщення увімкнено", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Сповіщення вимкнено", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun sendNotificationSettingsUpdate() {
+        val intent = Intent("NOTIFICATION_SETTINGS_CHANGED")
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+    }
     // Функція збереження в Room
     private fun saveHoursToDb(value: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
@@ -221,5 +316,147 @@ class ActService : AppCompatActivity() {
             (remaining % 3600) / 60,
             remaining % 60
         )
+    }
+
+    //ServiceCard func >>>>>>>>>>
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(this, { _, year, month, day ->
+            val selectedDate = Calendar.getInstance().apply {
+                set(year, month, day)
+            }.timeInMillis
+
+            createNewServiceCard(selectedDate)
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
+    private fun createNewServiceCard(date: Long) {
+        val cardView = layoutInflater.inflate(R.layout.blank_service_card,serviceCardsContainer, false)
+
+        val dateText = cardView.findViewById<TextView>(R.id.dateText)
+        val titleInput = cardView.findViewById<EditText>(R.id.titleInput)
+        val notesInput = cardView.findViewById<EditText>(R.id.notesInput)
+        val priceInput = cardView.findViewById<EditText>(R.id.priceInput)
+
+
+        dateText.text = formatDate(date)
+
+        setupTextWatchers(date, titleInput, notesInput, priceInput)
+
+        serviceCardsContainer.addView(cardView, 0)
+        saveNewRecord(date)
+    }
+
+    private fun setupTextWatchers(date: Long, vararg editTexts: EditText) {
+        editTexts.forEach { editText ->
+
+
+            // Дебаунс-слухач
+            var updateJob: Job? = null
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                override fun afterTextChanged(s: Editable?) {
+                    updateJob?.cancel()
+                    updateJob = lifecycleScope.launch {
+                        delay(300)                         // чекаємо 300 мс після останньої зміни
+                        updateRecordInDatabase(date, editTexts)
+                    }
+                }
+            })
+
+            // Done → ховаємо клавіатуру + знімаємо фокус
+            editText.setOnEditorActionListener { v, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    v.clearFocus()
+                    hideKeyboard(v)
+                    true
+                } else false
+            }
+        }
+    }
+
+
+    private fun updateRecordInDatabase(date: Long, inputs: Array<out EditText>) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val record = serviceRecordDao.getRecordByDate(date, bikeId) ?: let {
+                ServiceRecord(date = date, bikeId = bikeId).also {
+                    serviceRecordDao.insert(it)
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                record.title = inputs[0].text.toString()
+                record.notes = inputs[1].text.toString()
+                record.price = inputs[2].text.toString()
+            }
+
+            serviceRecordDao.update(record)
+        }
+    }
+
+    private fun saveNewRecord(date: Long) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val newRecord = ServiceRecord(
+                date = date,
+                bikeId = bikeId,
+                title = "",
+                notes = "",
+                price = ""
+            )
+            serviceRecordDao.insert(newRecord)
+        }
+    }
+
+    private fun loadServiceRecords() {
+        lifecycleScope.launch {
+            var previousDates = emptyList<Long>()
+            // getRecordsForBike() – дає Flow<List<ServiceRecord>>
+            serviceRecordDao.getRecordsForBike(bikeId)
+                .collect { records ->
+                    // витягуємо тільки ключі (дати)
+                    val dates = records.map { it.date }
+                    if (dates != previousDates) {
+                        previousDates = dates
+                        // ми вже в Main dispatcher (lifecycleScope), тож можна оновлювати UI прямо
+                        serviceCardsContainer.removeAllViews()
+                        records.forEach { record ->
+                            createCardFromRecord(record)
+                        }
+                    }
+                    // якщо dates == previousDates, значить змінилися лише title/notes/price → нічого не перероюємо
+                }
+        }
+    }
+
+
+
+    private fun createCardFromRecord(record: ServiceRecord) {
+        val cardView = layoutInflater.inflate(R.layout.blank_service_card, serviceCardsContainer, false)
+
+
+
+        // Аналогічно до createNewServiceCard, але з заповненням даних з запису
+        val dateText = cardView.findViewById<TextView>(R.id.dateText)
+        val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        dateText.text = formatter.format(record.date)
+
+        cardView.findViewById<EditText>(R.id.titleInput).setText(record.title)
+        cardView.findViewById<EditText>(R.id.notesInput).setText(record.notes)
+        cardView.findViewById<EditText>(R.id.priceInput).setText(record.price)
+
+        setupTextWatchers(record.date,
+            cardView.findViewById(R.id.titleInput),
+            cardView.findViewById(R.id.notesInput),
+            cardView.findViewById(R.id.priceInput)
+        )
+
+        serviceCardsContainer.addView(cardView)
+
+    }
+    private fun formatDate(date: Long): String {
+        return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date)
+        // Або для API 26+:
+        // return LocalDate.ofEpochDay(date).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     }
 }

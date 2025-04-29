@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
     <FrameLayout
         android:id="@+id/bike_name_container"
-        android:background="@drawable/bg_grey_square"
+        android:background="@drawable/vw_transparent_blckline_in_bottom"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,26 +36,17 @@
             android:text="test"
             tools:ignore="HardcodedText" />
 
-        <Button
-            android:id="@+id/right_button_1"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="58dp"
-            android:background="@drawable/btn_trwhite_anim_2pxstroke"
-            android:gravity="center"
-            android:text="@string/add"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            tools:ignore="TouchTargetSizeCheck,TextSizeCheck" />
 
-        <Button
+
+        <ImageButton
             android:id="@+id/right_button_2"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="6dp"
-            android:background="@drawable/btn_trwhite_anim_2pxstroke"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/img_delete"
+            android:background="@color/transparent"
             android:gravity="center"
             android:text="@string/delete"
             android:textColor="@color/white"
@@ -79,13 +70,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp">
             <androidx.constraintlayout.widget.ConstraintLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:background="@drawable/bg_grey_square"
+                    android:background="@drawable/vw_transparent_blckline_in_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="360dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +87,7 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginStart="8dp"
                         android:text="test"
-                        android:textSize="32sp"
+                        android:textSize="30sp"
                         android:textColor="@color/white"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -112,7 +101,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="6dp"
                         android:text="0000"
-                        android:textSize="34sp"
+                        android:textSize="30sp"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -135,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/Riden_hours"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="8dp"
@@ -147,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0h"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:layout_marginStart="4dp"
                         app:layout_constraintStart_toEndOf="@id/elapsed_hours_label"
@@ -178,17 +167,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp">
+
                     <include
                         android:id="@+id/frameGeometry"
-                        android:layout_width="185dp"
-                        android:layout_height="205dp"
-                        android:layout_marginEnd="4dp"
+                        android:layout_width="175dp"
+                        android:layout_height="196dp"
+                        android:layout_marginEnd="6dp"
                         layout="@layout/inc_geometry_frame"/>
                     <include
                         android:id="@+id/componentsGeometry"
-                        android:layout_width="185dp"
-                        android:layout_height="205dp"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="175dp"
+                        android:layout_height="196dp"
+                        android:layout_marginStart="6dp"
                         layout="@layout/inc_geometry_comp"/>
                 </LinearLayout>
                 <TextView

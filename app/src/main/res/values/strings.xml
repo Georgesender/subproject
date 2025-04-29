@@ -134,6 +134,14 @@
     <string name="Hours">Години</string>
     <string name="twohunder_or_Year">200(Рік)</string>
     <string name="Riden_hours"><![CDATA[Накатаних годин ->]]></string>
+    <string name="Notes_about_service">Нотатки про те, що робилось</string>
+    <string name="Cost">Ціна</string>
+    <string name="Component_that_serviced">Компонент що обслуговували</string>
+    <string name="days_short">дн</string>
+    <string name="Reciving_auto_notifi_about_service">Отримувати автоматичні сповіщення про ТО\n</string>
+    <string name="Add_hour_auto">Додавати 1 годину автоматично раз в</string>
+    <string name="Confirm_delete_bike">Ви дійсно бажаєте видалити велосипед з гаражу ?</string>
+    <string name="Cancel">Відхилити</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

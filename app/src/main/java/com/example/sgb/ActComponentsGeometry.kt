@@ -172,8 +172,8 @@ class ActComponentsGeometry : AppCompatActivity() {
             }
             // 3. Отримання посилань на UI-елементи
             val views = mapOf(
-                "adaptive" to dialogView.findViewById<TextView>(R.id.labelAdaptive),
-                "model" to dialogView.findViewById<TextView>(R.id.labelModel),
+                "adaptive" to dialogView.findViewById(R.id.labelAdaptive),
+                "model" to dialogView.findViewById(R.id.labelModel),
                 "adaptiveEditText" to adaptiveEditText,
                 "forkSize" to dialogView.findViewById<TextView>(R.id.labelForkSize)
             )
@@ -648,7 +648,7 @@ class ActComponentsGeometry : AppCompatActivity() {
             SpannableStringBuilder("${component.compBrand} ${component.compModel}")
         }
 
-        if (component.compYear.isNotEmpty() || !component.compBrandExtra.isNotEmpty()) {
+        if (component.compYear.isNotEmpty() || component.compBrandExtra.isEmpty()) {
             leftText.append(" ${component.compYear}")
             val start = leftText.length - component.compYear.length
             leftText.setSpan(SuperscriptSpan(), start, leftText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -712,7 +712,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                     if (shouldExpandSize) 2 else 1
                 )
                 columnSpec =  androidx.gridlayout.widget.GridLayout.spec(0)
-                height = if (shouldExpandSize) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
+                height = if (shouldExpandSize) 192.toPx(this@ActComponentsGeometry) else if (!hasWeight) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
                 width = if (shouldExpandSize) 340.toPx(this@ActComponentsGeometry) else 120.toPx(this@ActComponentsGeometry)
 
             }
@@ -735,7 +735,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                     if (shouldExpandWeight) 2 else 1
                 )
                 columnSpec = androidx.gridlayout.widget.GridLayout.spec(0)
-                height = if (shouldExpandWeight) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
+                height = if (shouldExpandSize) 192.toPx(this@ActComponentsGeometry) else if (!hasSize) 192.toPx(this@ActComponentsGeometry) else 96.toPx(this@ActComponentsGeometry)
                 width = if (shouldExpandWeight) 340.toPx(this@ActComponentsGeometry) else 120.toPx(this@ActComponentsGeometry)
             }
             gridWrapper.addView(tvWeight, tvWeightParams)
@@ -760,21 +760,23 @@ class ActComponentsGeometry : AppCompatActivity() {
             val ivPhotoParams = androidx.gridlayout.widget.GridLayout.LayoutParams().apply {
                 rowSpec = androidx.gridlayout.widget.GridLayout.spec( 2, 2)
                 columnSpec = androidx.gridlayout.widget.GridLayout.spec(1)
-                if (component.compType == "Handlebar" || component.compType == "Cranks") {
-                    width = 220.toPx(this@ActComponentsGeometry)
-                    height = 108.toPx(this@ActComponentsGeometry)
-                }
-                else if (component.compType == "Rim"){
-                    width = 190.toPx(this@ActComponentsGeometry)
-                    height = 192.toPx(this@ActComponentsGeometry)
-                }
-                else if(component.compType == "Tyre") {
-                    width = 220.toPx(this@ActComponentsGeometry)
-                    height = 192.toPx(this@ActComponentsGeometry)
-                }
-                else {
-                    width = 108.toPx(this@ActComponentsGeometry)
-                    height = 192.toPx(this@ActComponentsGeometry)
+                when (component.compType) {
+                    "Handlebar" , "Cranks" -> {
+                        width = 220.toPx(this@ActComponentsGeometry)
+                        height = 108.toPx(this@ActComponentsGeometry)
+                    }
+                    "Rim" -> {
+                        width = 190.toPx(this@ActComponentsGeometry)
+                        height = 192.toPx(this@ActComponentsGeometry)
+                    }
+                    "Tyre" -> {
+                        width = 220.toPx(this@ActComponentsGeometry)
+                        height = 192.toPx(this@ActComponentsGeometry)
+                    }
+                    else -> {
+                        width = 108.toPx(this@ActComponentsGeometry)
+                        height = 192.toPx(this@ActComponentsGeometry)
+                    }
                 }
                 setGravity(Gravity.CENTER)
             }
@@ -921,7 +923,7 @@ class ActComponentsGeometry : AppCompatActivity() {
 // 2. Спрощена ініціалізація спінера з використанням apply
             // Варіант 1: обмежуємо адаптер лише одним елементом
             val spinner = dialogView.findViewById<Spinner>(R.id.compType).apply {
-                val arrayAdapter = ArrayAdapter<String>(
+                val arrayAdapter = ArrayAdapter(
                     this@ActComponentsGeometry,
                     android.R.layout.simple_spinner_item,
                     listOf(currentType) // Використовуємо лише currentType
@@ -934,8 +936,8 @@ class ActComponentsGeometry : AppCompatActivity() {
 
 // 3. Отримання посилань на UI-елементи
             val views = mapOf(
-                "adaptive" to dialogView.findViewById<TextView>(R.id.labelAdaptive),
-                "model" to dialogView.findViewById<TextView>(R.id.labelModel),
+                "adaptive" to dialogView.findViewById(R.id.labelAdaptive),
+                "model" to dialogView.findViewById(R.id.labelModel),
                 "forkSize" to dialogView.findViewById<TextView>(R.id.labelForkSize)
             )
 
@@ -1021,7 +1023,7 @@ class ActComponentsGeometry : AppCompatActivity() {
                     etWeight.text.toString() else ""
                 val updatedCompNotes = if (notesCb.isChecked)
                     etNotes.text.toString() else ""
-                val extraBrand = extraBrand.text.toString()
+                val extraBrand1 = extraBrand.text.toString()
                 // If the photo was not changed, keep the old value
                 val photoUriString = selectedImageUri?.toString() ?: component.photoUri
                 val updatedComponent = component.copy(
@@ -1031,25 +1033,11 @@ class ActComponentsGeometry : AppCompatActivity() {
                     compAdaptive = updatedCompAdaptive,
                     compSize = updatedCompSize,
                     compWeight = updatedCompWeight,
-                    compBrandExtra = extraBrand,
+                    compBrandExtra = extraBrand1,
                     compNotes = updatedCompNotes,
                     photoUri = photoUriString
                 )
                 lifecycleScope.launch(Dispatchers.IO) {
-                    // Перевірка унікальності фото ПЕРЕД вставкою
-                    if (photoUriString != null) {
-                        val isUnique = isPhotoUnique(photoUriString, bikeId)
-                        if (!isUnique) {
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(
-                                    this@ActComponentsGeometry,
-                                    "Таке фото вже є в інших компонентах",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                            return@launch // Виходимо, якщо фото не унікальне
-                        }
-                    }
 
                     BikeDatabase.getDatabase(applicationContext).componentsDao().updateComponent(updatedComponent)
                     withContext(Dispatchers.Main) {
@@ -1078,7 +1066,7 @@ class ActComponentsGeometry : AppCompatActivity() {
         }
     }
     // Extension function to convert dp to px
-    fun Int.toPx(context: Context): Int = (this * context.resources.displayMetrics.density).toInt()
+    private fun Int.toPx(context: Context): Int = (this * context.resources.displayMetrics.density).toInt()
 
     private fun showBackgroundRemovalDialog(originalUri: Uri) {
         // Закриваємо попередній діалог якщо він відкритий

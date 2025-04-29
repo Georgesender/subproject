@@ -25,24 +25,28 @@ class WorkerHourIncrement(
     override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO) {
             try {
-                Log.d("Worker", "Starting work...")
                 val dao = BikeDatabase.getDatabase(applicationContext).bikeDao()
                 val prefs = applicationContext.getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
+
+                // Перевірка активності автоінкременту
+                if (!prefs.getBoolean("auto_inc_enabled", false)) {
+                    return@withContext Result.success()
+                }
+
                 val bikeId = prefs.getInt("selected_bike_id", -1)
-                Log.d("Worker", "Bike ID: $bikeId")
+                val increment = prefs.getInt("auto_inc_value", 7)
 
                 if (bikeId != -1) {
                     val bike = dao.getBikeById(bikeId)
                     bike?.let {
-                        val newHours = it.elapsedHoursValue + 1
-                        Log.d("Worker", "Updating hours to $newHours")
+                        val newHours = it.elapsedHoursValue + increment
                         dao.updateElapsedHours(bikeId, newHours)
                         sendNotification(newHours)
                     }
                 }
                 Result.success()
             } catch (e: Exception) {
-                Log.e("Worker", "Error in worker", e)
+                Log.e("Worker", "Error", e)
                 Result.failure()
             }
         }

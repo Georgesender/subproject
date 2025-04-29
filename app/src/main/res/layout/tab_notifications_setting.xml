@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:padding="16dp">
+
+    <!-- Загальна вертикальна група -->
+    <LinearLayout
+        android:id="@+id/ll_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 1) Отримувати сповіщення -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_receive_notifications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:text="@string/Reciving_auto_notifi_about_service"
+                android:textSize="16sp"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_receive_notifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <!-- 2) Додавати 1 годину автоматично раз в ___ днів -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_autoinc_label"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/Add_hour_auto"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/et_autoinc_days"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textColorHint="@color/tr_white"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:background="@drawable/tb_start_bott_end_withmargin"
+                android:hint="днів"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:textSize="16sp"
+                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_autoinc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:minWidth="48dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
