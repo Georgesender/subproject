@@ -18,14 +18,16 @@
         app:layout_constraintStart_toStartOf="parent"/>
     <ImageButton
         android:contentDescription="@string/test"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
         android:background="@color/transparent"
-        android:src="@drawable/img_components"
+        android:src="@drawable/img_service"
         android:layout_width="match_parent"
         android:scaleType="centerCrop"
         android:clickable="false"
         android:focusable="false"
         android:layout_height="161dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -34,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:background="@drawable/extra_shapesblk_setup"
-        android:text="@string/components_adjust"
+        android:text="@string/Service"
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="20sp"

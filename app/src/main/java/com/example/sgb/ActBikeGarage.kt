@@ -121,7 +121,7 @@ class ActBikeGarage : AppCompatActivity() {
 
 
         // Buttons >>>>
-        val service = findViewById<Button>(R.id.service)
+        val service = findViewById<ConstraintLayout>(R.id.service)
         service.setOnClickListener{
             val intent = Intent(this , ActService::class.java)
             intent.putExtra("bike_id" , bikeId)

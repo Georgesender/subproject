@@ -88,7 +88,7 @@
                     android:layout_marginTop="12dp"
                     android:contentDescription="@string/_1"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/svg_components"
+                    android:src="@drawable/img_components"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"

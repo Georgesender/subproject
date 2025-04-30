@@ -20,7 +20,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="6dp"
             android:layout_marginTop="1dp"
-            android:background="@drawable/btn_trwhite_anim_2pxstroke"
+            android:background="@color/transparent"
             android:text="@string/Menu"
             android:textColor="@color/white"
             android:textSize="14sp"
@@ -181,6 +181,7 @@
                         android:layout_marginStart="6dp"
                         layout="@layout/inc_geometry_comp"/>
                 </LinearLayout>
+
                 <TextView
                     android:textSize="26sp"
                     android:textColor="@color/white"
@@ -191,26 +192,24 @@
                     android:text="@string/custom_settings"
                     android:layout_marginStart="10dp"/>
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="15dp">
                     <include
                         android:id="@+id/setups"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="185dp"
-                        android:layout_height="205dp"
+                        android:layout_width="175dp"
+                        android:layout_height="196dp"
+                        android:layout_marginEnd="6dp"
                         layout="@layout/inc_setups_button"/>
 
-                    <Button
+                    <include
                         android:id="@+id/service"
-                        android:layout_width="185dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/Technical_service"
-                        android:background="@drawable/btn_trwhite_anim_2pxstroke"
-                        android:textColor="@color/white"/>
+                        android:layout_width="175dp"
+                        android:layout_height="196dp"
+                        android:layout_marginStart="6dp"
+                        layout="@layout/inc_service"/>
                 </LinearLayout>
 
             </LinearLayout>

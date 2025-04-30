@@ -142,6 +142,7 @@
     <string name="Add_hour_auto">Додавати 1 годину автоматично раз в</string>
     <string name="Confirm_delete_bike">Ви дійсно бажаєте видалити велосипед з гаражу ?</string>
     <string name="Cancel">Відхилити</string>
+    <string name="Service">Сервіс байку</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>
