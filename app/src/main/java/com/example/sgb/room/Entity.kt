@@ -1,5 +1,6 @@
 package com.example.sgb.room
 
+import androidx.annotation.DrawableRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -12,6 +13,7 @@ data class Bike(
     val brand: String,
     val modelsJson: Map<String, BikeModel>, // Містить моделі та підмоделі
     val selectedSize: String? = null,
+    val addedImgBikeUri: String? = null,
     val elapsedHoursValue: Int = 0 // Додаємо поле для годин
 
 )
@@ -24,26 +26,25 @@ data class BikeModel(
 
 // BikeSubmodel.kt
 data class BikeSubmodel(
-    val name: String,
-    val years: Map<String, List<String>>, // Роки та доступні розміри
-    val imageName: String? = null, // Зображення байка
+    val name: String ,
+    val years: Map<String, List<String>> , // Роки та доступні розміри
+    @DrawableRes val imageRes: Int? = null ,
     val geometry: Map<String, BikeGeometry>? = null // Геометрія для кожного розміру
 )
-// BikeGeometryEntity.kt
 @Entity(tableName = "bike_geometry")
 data class BikeGeometry(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val bikeId: Int, // Ідентифікатор байка
+    var bikeId: Int, // Змінено на var для оновлення після створення байка
     val wheelBase: Int,
     val reach: Int,
     val stack: Int,
     val bottomBracketOffset: Int,
     val standOverHeight: Int,
     val headTubeLength: Int,
+    val seatTubeAngle: Int,
     val seatTubeLength: Int,
     val topTubeLength: Int,
     val seatHeight: Int,
-    val seatTubeAngle: Int,
     val headTubeAngle: Int,
     val chainstayLength: Int,
     val bodyHeight: Int,

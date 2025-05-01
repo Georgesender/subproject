@@ -44,14 +44,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.scale
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.Component
 import com.example.sub.R
@@ -454,24 +452,24 @@ class ActComponentsGeometry : AppCompatActivity() {
             val bike = bikeDao.getBikeById(bikeId)
             bike?.let {
                 bikeAndModelView.text = getString(R.string.two_strings, it.brand, it.modelsJson.keys.first())
-                loadBikeImage(it)
+//                loadBikeImage(it)
 
 
             }
         }
     }
 
-    @SuppressLint("DiscouragedApi")
-    private fun loadBikeImage(bike: Bike) {
-        val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
-        imageName?.let {
-            val resourceId = resources.getIdentifier(it, "drawable", packageName)
-            if (resourceId != 0) {
-                val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
-                bikeImageView.setImageDrawable(drawable)
-            }
-        }
-    }
+//    @SuppressLint("DiscouragedApi")
+//    private fun loadBikeImage(bike: Bike) {
+//        val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
+//        imageName?.let {
+//            val resourceId = resources.getIdentifier(it, "drawable", packageName)
+//            if (resourceId != 0) {
+//                val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
+//                bikeImageView.setImageDrawable(drawable)
+//            }
+//        }
+//    }
 
 
     private fun pickImageForComponent() {

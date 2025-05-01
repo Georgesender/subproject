@@ -12,12 +12,11 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -31,7 +30,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -45,12 +43,15 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDao
 import com.example.sgb.room.BikeDatabase
 import com.example.sub.R
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import androidx.core.net.toUri
 
 class ActBikeGarage : AppCompatActivity() {
     private var bikeId: Int = -1
@@ -102,18 +103,18 @@ class ActBikeGarage : AppCompatActivity() {
                     bikeYearTextView.text = year
 
                     // Завантажуємо зображення байка
-                    val imageName =
-                        bike.modelsJson.values.first().submodels.values.first().imageName
-                    if (imageName != null) {
-                        val resourceId =
-                            resources.getIdentifier(imageName , "drawable" , packageName)
-                        if (resourceId != 0) {
-                            val drawable =
-                                ResourcesCompat.getDrawable(resources , resourceId , null)
-                            bikeImageView.setImageDrawable(drawable)
+                    if(bike.addedImgBikeUri == null) {
+                        val imageRes = bike.modelsJson
+                            .values.first()
+                            .submodels
+                            .values.first()
+                            .imageRes
+                        if (imageRes != null) {
+                            bikeImageView.setImageResource(imageRes)
                         }
+                    } else {
+                        loadPhotoIntoPlaceholder(bike.addedImgBikeUri.toUri())
                     }
-
 
                 }
             }
@@ -171,8 +172,12 @@ class ActBikeGarage : AppCompatActivity() {
         }
 
         val testing = findViewById<Button>(R.id.left_button)
-        testing.setOnClickListener {
-            startActivity(Intent(this , PreAddBikeActivity::class.java))
+        testing.setOnClickListener{
+            val intent = Intent(this , GarageActivity::class.java)
+            val option = ActivityOptionsCompat.makeCustomAnimation(
+                this , R.anim.fade_in_faster , R.anim.fade_out_faster
+            )
+            startActivity(intent , option.toBundle())
         }
         // Buttons <<<<
 
@@ -246,9 +251,9 @@ class ActBikeGarage : AppCompatActivity() {
             startActivity(intent , options.toBundle())
             finish()
         }
-
+// garage test
         navDiscover.setOnClickListener {
-            val intent = Intent(this , Discover::class.java)
+            val intent = Intent(this , GarageActivity::class.java)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
             )
@@ -299,7 +304,7 @@ class ActBikeGarage : AppCompatActivity() {
             }
 
             // Переходимо до PreAddBikeActivity
-            startActivity(Intent(this@ActBikeGarage, PreAddBikeActivity::class.java))
+            startActivity(Intent(this@ActBikeGarage, MainBikeGarage::class.java))
             finish()
         }
     }
@@ -550,6 +555,18 @@ class ActBikeGarage : AppCompatActivity() {
                 val manager = applicationContext.getSystemService(NotificationManager::class.java)
                 manager.createNotificationChannel(channel)
             }
+        }
+    }
+    private fun loadPhotoIntoPlaceholder(uri: Uri) {
+        findViewById<ImageView>(R.id.bike_image).also { btn ->
+            Glide.with(this)
+                .load(uri)
+                .override(500, 500)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .placeholder(R.drawable.img_fork)
+                .error(R.drawable.img_fork)
+                .into(btn)
         }
     }
 

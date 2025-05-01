@@ -80,11 +80,36 @@
         android:background="@drawable/btn_trwhite_anim_2pxstroke"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="20dp"
         android:text="@string/btn_confirm"
         android:layout_marginStart="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/size_spinner"/>
+    <TextView
+        android:id="@+id/label_or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginTop="40dp"
+        android:text="Aбо"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_selection"/>
+    <Button
+        android:textColor="@color/white"
+        android:id="@+id/make_own_bike"
+        android:background="@drawable/btn_trwhite_anim_2pxstroke"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:text="Додати вручну байк"
+        android:layout_marginStart="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_or"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

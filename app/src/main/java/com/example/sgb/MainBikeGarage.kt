@@ -5,7 +5,12 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.sgb.room.BikeDatabase
 import com.example.sub.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainBikeGarage : AppCompatActivity() {
 
@@ -14,8 +19,8 @@ class MainBikeGarage : AppCompatActivity() {
         setContentView(R.layout.kt_bikegarage)
 
         val addBikeButton = findViewById<Button>(R.id.add_bike_button)
+        val bikeDao = BikeDatabase.getDatabase(this).bikeDao()
 
-        // Перевіряємо, чи є вибраний байк у SharedPreferences
         val sharedPreferences: SharedPreferences = getSharedPreferences("bike_prefs", MODE_PRIVATE)
         val selectedBikeId = sharedPreferences.getInt("selected_bike_id", -1)
 
@@ -26,10 +31,22 @@ class MainBikeGarage : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            // Якщо байк не вибрано, показуємо кнопку додавання
-            addBikeButton.setOnClickListener {
-                val intent = Intent(this@MainBikeGarage, PreAddBikeActivity::class.java)
-                startActivity(intent)
+            // Без вибраного байка – перевіряємо, чи є в БД хоч один
+            lifecycleScope.launch {
+                val allBikes = bikeDao.getAllBikes()
+                if (allBikes.isNotEmpty()) {
+                    // Якщо є хоча б один – йдемо в загальний гараж
+                    startActivity(Intent(this@MainBikeGarage, GarageActivity::class.java))
+                    finish()
+                } else {
+                    // Якщо ні – показуємо кнопку "додати" і реагуємо на натискання
+                    withContext(Dispatchers.Main) {
+                        addBikeButton.isEnabled = true
+                        addBikeButton.setOnClickListener {
+                            startActivity(Intent(this@MainBikeGarage, PreAddBikeActivity::class.java))
+                        }
+                    }
+                }
             }
         }
     }

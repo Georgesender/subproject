@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDatabase
@@ -89,17 +88,17 @@ class ActBikeGeometry : AppCompatActivity() {
             val sizeSeleceted = bikeDao.getBikeById(bikeId)
             sizeSeleceted?.let {updateBikeMainInfTextView(it)}
 
-            if (bike != null) {
-                // Завантажуємо зображення байка
-                val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
-                if (imageName != null) {
-                    val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
-                    if (resourceId != 0) {
-                        val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
-                        bikePhoto.setImageDrawable(drawable)
-                    }
-                }
-            }
+//            if (bike != null) {
+//                // Завантажуємо зображення байка
+//                val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
+//                if (imageName != null) {
+//                    val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
+//                    if (resourceId != 0) {
+//                        val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
+//                        bikePhoto.setImageDrawable(drawable)
+//                    }
+//                }
+//            }
 
             // Отримуємо геометрію для конкретного bikeId
             val geometry = geometryDao.getGeometryByBikeId(bikeId)

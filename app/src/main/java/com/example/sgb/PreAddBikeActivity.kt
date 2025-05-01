@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDatabase
@@ -36,7 +38,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                             years = mapOf(
                                 "2019" to listOf("S", "M", "L", "XL")
                             ),
-                            imageName = "img_sendercf9",
+                            imageRes = R.drawable.img_sendercf9,
                             geometry = mapOf(
                                 "L" to BikeGeometry(
                                     bikeId = 0, // Заповниться після збереження в Room
@@ -63,7 +65,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                                 "2024" to listOf("M", "L", "XL"),
                                 "2023" to listOf("S", "M", "L")
                             ),
-                            imageName = "img_canyonsendercfr",
+                            imageRes = R.drawable.img_canyonsendercfr,
                             geometry = mapOf(
                                 "M" to BikeGeometry(
                                     bikeId = 1,
@@ -89,7 +91,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                             years = mapOf(
                                 "2019" to listOf("S", "M", "L", "XL")
                             ),
-                            imageName = "img_sendercf8",
+                            imageRes =  null,
                             geometry = mapOf(
                                 "S" to BikeGeometry(
                                     bikeId = 2,
@@ -125,7 +127,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                             years = mapOf(
                                 "2024" to listOf("S", "M", "L", "XL")
                             ),
-                            imageName = "img_propainrage3cflim",
+                            imageRes = R.drawable.img_propainrage3cflim,
                             geometry = mapOf(
                                 "XL" to BikeGeometry(
                                     bikeId = 3,
@@ -206,6 +208,14 @@ class PreAddBikeActivity : AppCompatActivity() {
                 saveBike()
             }
         }
+        val manualAddingBike = findViewById<Button>(R.id.make_own_bike)
+        manualAddingBike.setOnClickListener{
+            val intent = Intent(this , PreAddOwnBike::class.java)
+        val options = ActivityOptionsCompat.makeCustomAnimation(
+            this , R.anim.fade_in_faster , R.anim.fade_out_faster
+        )
+        startActivity(intent , options.toBundle())
+        }
     }
     private fun updateSpinner(spinner: Spinner, items: List<String>) {
         val adapter = ArrayAdapter(this, R.layout.s_spinner, items)
@@ -233,7 +243,7 @@ class PreAddBikeActivity : AppCompatActivity() {
         if (selectedBrand != null && selectedModel != null && selectedSubmodel != null && selectedYear != null && selectedSize != null) {
             // Отримуємо зображення для вибраної підмоделі
             val imageName = bikeData.firstOrNull { it.brand == selectedBrand }
-                ?.modelsJson?.get(selectedModel)?.submodels?.get(selectedSubmodel)?.imageName
+                ?.modelsJson?.get(selectedModel)?.submodels?.get(selectedSubmodel)?.imageRes
 
             // Створюємо об'єкт Bike з вибраним розміром
             val bike = Bike(
@@ -243,11 +253,11 @@ class PreAddBikeActivity : AppCompatActivity() {
                         name = selectedModel!!,
                         submodels = mapOf(
                             selectedSubmodel!! to BikeSubmodel(
+                                imageRes = imageName,
                                 name = selectedSubmodel!!,
                                 years = mapOf(
                                     selectedYear!! to listOf(selectedSize!!) // Зберігаємо вибраний розмір
-                                ),
-                                imageName = imageName // Додаємо ім'я зображення
+                                )
                             )
                         )
                     )

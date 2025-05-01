@@ -143,6 +143,10 @@
     <string name="Confirm_delete_bike">Ви дійсно бажаєте видалити велосипед з гаражу ?</string>
     <string name="Cancel">Відхилити</string>
     <string name="Service">Сервіс байку</string>
+    <string name="Submodel_"><![CDATA[Підмодель>\n]]></string>
+    <string name="Add_photo_bike">Додайте фото байка\n</string>
+    <string name="Requaired_inputs">Обов\'язкові данні</string>
+    <string name="Unnessesary_info">Не обов\'язкові дані</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

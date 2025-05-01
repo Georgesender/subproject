@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BikeDao {
+    @Query("SELECT * FROM bike_table")
+    suspend fun getAllBikes(): List<Bike>
+
+    @Query("SELECT * FROM bike_table")
+    fun getAllBikesFlow(): Flow<List<Bike>>
     @Insert
     suspend fun insertBike(bike: Bike): Long
 
