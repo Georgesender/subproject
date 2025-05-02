@@ -64,6 +64,7 @@ import java.util.UUID
 import kotlin.math.abs
 import androidx.core.graphics.get
 import androidx.core.graphics.set
+import com.example.sgb.room.Bike
 
 class ActComponentsGeometry : AppCompatActivity() {
 
@@ -452,25 +453,42 @@ class ActComponentsGeometry : AppCompatActivity() {
             val bike = bikeDao.getBikeById(bikeId)
             bike?.let {
                 bikeAndModelView.text = getString(R.string.two_strings, it.brand, it.modelsJson.keys.first())
-//                loadBikeImage(it)
+               loadBikeImage(it)
 
 
             }
         }
     }
 
-//    @SuppressLint("DiscouragedApi")
-//    private fun loadBikeImage(bike: Bike) {
-//        val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
-//        imageName?.let {
-//            val resourceId = resources.getIdentifier(it, "drawable", packageName)
-//            if (resourceId != 0) {
-//                val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
-//                bikeImageView.setImageDrawable(drawable)
-//            }
-//        }
-//    }
 
+    private fun loadBikeImage(bike: Bike) {
+        // 1) Якщо є URI із бази — показуємо його
+        val uriString = bike.addedImgBikeUri
+        if (!uriString.isNullOrEmpty()) {
+            Glide.with(bikeImageView.context)
+                .load(uriString.toUri())
+                .override(200, 200)
+                .centerCrop()
+                .placeholder(R.drawable.img_fork)
+                .error(R.drawable.img_fork)
+                .into(bikeImageView)
+
+            // 2) Інакше, якщо є imageName — шукаємо drawable і встановлюємо
+        } else {
+            if(bike.addedImgBikeUri == null) {
+                val imageRes = bike.modelsJson
+                    .values.first()
+                    .submodels
+                    .values.first()
+                    .imageRes
+                if (imageRes != null) {
+                    bikeImageView.setImageResource(imageRes)
+                }
+            } else {
+                Toast.makeText(this@ActComponentsGeometry, "Troble with bike photo(dev)",  Toast.LENGTH_SHORT).show()
+            }
+    }
+    }
 
     private fun pickImageForComponent() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

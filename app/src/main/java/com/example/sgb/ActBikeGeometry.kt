@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.BikeGeometry
@@ -48,6 +51,7 @@ class ActBikeGeometry : AppCompatActivity() {
         backButton.setOnClickListener {
                 val intent = Intent(this@ActBikeGeometry, ActBikeGarage::class.java)
                 intent.putExtra("bike_id", selectedBikeId)
+                intent.putExtra("Taked focus", "Yes")
                 val options = ActivityOptionsCompat.makeCustomAnimation(
                     this, R.anim.fade_in_faster, R.anim.fade_out_faster
                 )
@@ -88,17 +92,35 @@ class ActBikeGeometry : AppCompatActivity() {
             val sizeSeleceted = bikeDao.getBikeById(bikeId)
             sizeSeleceted?.let {updateBikeMainInfTextView(it)}
 
-//            if (bike != null) {
-//                // Завантажуємо зображення байка
-//                val imageName = bike.modelsJson.values.first().submodels.values.first().imageName
-//                if (imageName != null) {
-//                    val resourceId = resources.getIdentifier(imageName, "drawable", packageName)
-//                    if (resourceId != 0) {
-//                        val drawable = ResourcesCompat.getDrawable(resources, resourceId, null)
-//                        bikePhoto.setImageDrawable(drawable)
-//                    }
-//                }
-//            }
+
+
+
+            // 1) Якщо є URI із бази — показуємо його
+            val uriString = bike?.addedImgBikeUri
+            if (!uriString.isNullOrEmpty()) {
+                Glide.with(bikePhoto.context)
+                    .load(uriString.toUri())
+                    .override(200, 200)
+                    .centerCrop()
+                    .placeholder(R.drawable.img_fork)
+                    .error(R.drawable.img_fork)
+                    .into(bikePhoto)
+
+                // 2) Інакше, якщо є imageName — шукаємо drawable і встановлюємо
+            } else if (bike != null) {
+                if(bike.addedImgBikeUri == null) {
+                    val imageRes = bike.modelsJson
+                        .values.first()
+                        .submodels
+                        .values.first()
+                        .imageRes
+                    if (imageRes != null) {
+                        bikePhoto.setImageResource(imageRes)
+                    }
+                } else {
+                    Toast.makeText(this@ActBikeGeometry, "Troble with bike photo(dev)",  Toast.LENGTH_SHORT).show()
+                }
+            }
 
             // Отримуємо геометрію для конкретного bikeId
             val geometry = geometryDao.getGeometryByBikeId(bikeId)

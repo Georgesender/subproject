@@ -1,6 +1,8 @@
 package com.example.sgb
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -16,6 +18,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -31,6 +36,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toUri
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -49,9 +56,11 @@ import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDao
 import com.example.sgb.room.BikeDatabase
 import com.example.sub.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
-import androidx.core.net.toUri
 
 class ActBikeGarage : AppCompatActivity() {
     private var bikeId: Int = -1
@@ -82,28 +91,29 @@ class ActBikeGarage : AppCompatActivity() {
         setContentView(R.layout.kt_bikegarage_active)
         bikeDao = BikeDatabase.getDatabase(this).bikeDao()
         bikeId = intent.getIntExtra("bike_id" , -1)
+        val session = intent.getStringExtra("Taked focus")
 
 
+        val testing = findViewById<Button>(R.id.left_button)
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
             lifecycleScope.launch {
-                val bikeDao = BikeDatabase.getDatabase(this@ActBikeGarage).bikeDao()
                 val bike = bikeDao.getBikeById(bikeId)
 
                 // Якщо байк знайдений
                 if (bike != null) {
                     saveSelectedBikeId(bikeId)
-                    bikeNameTextView.text =
+                    val getBikeName =
                         getString(R.string.two_strings , bike.brand , bike.modelsJson.keys.first())
-                    bikeSubmodelTextView.text =
-                        bike.modelsJson.values.first().submodels.keys.first()
+
+
                     // Отримуємо рік зі структури BikeSubmodel
                     val years = bike.modelsJson.values.first().submodels.values.first().years
                     val year = years.keys.first() // Отримуємо перший рік з карти
                     bikeYearTextView.text = year
 
                     // Завантажуємо зображення байка
-                    if(bike.addedImgBikeUri == null) {
+                    if (bike.addedImgBikeUri == null) {
                         val imageRes = bike.modelsJson
                             .values.first()
                             .submodels
@@ -116,6 +126,12 @@ class ActBikeGarage : AppCompatActivity() {
                         loadPhotoIntoPlaceholder(bike.addedImgBikeUri.toUri())
                     }
 
+
+                    if (session == "Yes") {
+                        bikeNameTextView.text = getBikeName
+                    } else {
+                        startTypewriterAnimation(bikeNameTextView , getBikeName , 100)
+                    }
                 }
             }
         }
@@ -123,7 +139,8 @@ class ActBikeGarage : AppCompatActivity() {
 
         // Buttons >>>>
         val service = findViewById<ConstraintLayout>(R.id.service)
-        service.setOnClickListener{
+        service.setOnClickListener {
+
             val intent = Intent(this , ActService::class.java)
             intent.putExtra("bike_id" , bikeId)
             val options = ActivityOptionsCompat.makeCustomAnimation(
@@ -143,22 +160,28 @@ class ActBikeGarage : AppCompatActivity() {
 
         val compGeometry = findViewById<ConstraintLayout>(R.id.componentsGeometry)
         compGeometry.setOnClickListener {
+
             val intent = Intent(this , ActComponentsGeometry::class.java)
             intent.putExtra("bike_id" , bikeId)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
             )
+
             startActivity(intent , options.toBundle())
         }
 
         val frameGeometry = findViewById<ConstraintLayout>(R.id.frameGeometry)
         frameGeometry.setOnClickListener {
+            val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_faster)
+            bikeImageView.startAnimation(fadeOut)
+            bikeImageView.visibility = View.GONE
             val intent = Intent(this , ActBikeGeometry::class.java)
             intent.putExtra("bike_id" , bikeId) // Передаємо bikeId
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
             )
             startActivity(intent , options.toBundle())
+
         }
 
         val setupBike = findViewById<ConstraintLayout>(R.id.setups)
@@ -171,8 +194,8 @@ class ActBikeGarage : AppCompatActivity() {
             startActivity(intent , option.toBundle())
         }
 
-        val testing = findViewById<Button>(R.id.left_button)
-        testing.setOnClickListener{
+
+        testing.setOnClickListener {
             val intent = Intent(this , GarageActivity::class.java)
             val option = ActivityOptionsCompat.makeCustomAnimation(
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
@@ -182,12 +205,12 @@ class ActBikeGarage : AppCompatActivity() {
         // Buttons <<<<
 
         receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
+            override fun onReceive(context: Context? , intent: Intent?) {
                 checkNotificationSettings()
             }
         }
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(receiver, IntentFilter("NOTIFICATION_SETTINGS_CHANGED"))
+            .registerReceiver(receiver , IntentFilter("NOTIFICATION_SETTINGS_CHANGED"))
 
         // Functions initialisation >>>>
         checkFirstLaunch()
@@ -196,13 +219,16 @@ class ActBikeGarage : AppCompatActivity() {
         checkNotificationSettings()
         setupBottomNavigation()
         // Functions initialisation <<<<
+
+
     }
+
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
     }
 
-    private fun initViews(){
+    private fun initViews() {
         bikeNameTextView = findViewById(R.id.bike_name)
         bikeSubmodelTextView = findViewById(R.id.bike_submodel)
         bikeYearTextView = findViewById(R.id.bike_year)
@@ -216,6 +242,7 @@ class ActBikeGarage : AppCompatActivity() {
         }
         startObservingBike()
     }
+
     private fun startObservingBike() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -225,9 +252,8 @@ class ActBikeGarage : AppCompatActivity() {
             }
         }
     }
+
     private fun updateUI(bike: Bike) {
-        bikeNameTextView.text =
-            getString(R.string.two_strings , bike.brand , bike.modelsJson.keys.first())
         bikeYearTextView.text =
             bike.modelsJson.values.first().submodels.values.first().years.keys.first()
         bikeSubmodelTextView.text = bike.modelsJson.values.first().submodels.keys.first()
@@ -244,12 +270,7 @@ class ActBikeGarage : AppCompatActivity() {
         val navDiscover = findViewById<TextView>(R.id.nav_etc)
 
         navCompCheck.setOnClickListener {
-            val intent = Intent(this , ComponentsCheker::class.java)
-            val options = ActivityOptionsCompat.makeCustomAnimation(
-                this , R.anim.fade_in_faster , R.anim.fade_out_faster
-            )
-            startActivity(intent , options.toBundle())
-            finish()
+            animateBikeImage()
         }
 // garage test
         navDiscover.setOnClickListener {
@@ -264,14 +285,15 @@ class ActBikeGarage : AppCompatActivity() {
         navHome.setTypeface(null , Typeface.BOLD)
         navHome.textSize = navHome.textSize / resources.displayMetrics.density + 10
     }
+
     //========== Delete function ==========
     private fun showDeleteConfirmation(bikeId: Int) {
         // inflate custom view
-        val dialogView = layoutInflater.inflate(R.layout.di_confirm_delete, null)
+        val dialogView = layoutInflater.inflate(R.layout.di_confirm_delete , null)
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
-        val transparentColor = resources.getColor(R.color.transparent, theme)
+        val transparentColor = resources.getColor(R.color.transparent , theme)
         dialog.window?.setBackgroundDrawable(transparentColor.toDrawable())
         // кнопка "Ні" — просто закрити
         dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
@@ -285,6 +307,7 @@ class ActBikeGarage : AppCompatActivity() {
 
         dialog.show()
     }
+
     // Перейменували: тепер це внутрішня логіка видалення
     private fun performDeleteBike(bikeId: Int) {
         lifecycleScope.launch {
@@ -299,18 +322,18 @@ class ActBikeGarage : AppCompatActivity() {
             }
 
             // Очищаємо shared prefs
-            getSharedPreferences("bike_prefs", MODE_PRIVATE).edit {
+            getSharedPreferences("bike_prefs" , MODE_PRIVATE).edit {
                 remove("selected_bike_id")
             }
 
             // Переходимо до PreAddBikeActivity
-            startActivity(Intent(this@ActBikeGarage, MainBikeGarage::class.java))
+            startActivity(Intent(this@ActBikeGarage , SplashActivity::class.java))
             finish()
         }
     }
     //========== Delete function ==========
 
-// Notifications functions >>>>
+    // Notifications functions >>>>
     private fun checkFirstLaunch() {
         val prefs = getSharedPreferences("app_prefs" , MODE_PRIVATE)
         if (!prefs.getBoolean("has_seen_warning" , false)) {
@@ -358,9 +381,10 @@ class ActBikeGarage : AppCompatActivity() {
 
         prefs.edit { putBoolean("work_scheduled" , true) }
     }
+
     private fun checkNotificationSettings() {
-        val prefs = getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("receive_notifications", true)) {
+        val prefs = getSharedPreferences("bike_prefs" , Context.MODE_PRIVATE)
+        if (prefs.getBoolean("receive_notifications" , true)) {
             initNotifications()
         } else {
             cancelScheduledNotifications()
@@ -395,25 +419,24 @@ class ActBikeGarage : AppCompatActivity() {
 
 
     private fun initNotifications() {
-        val prefs = getSharedPreferences("maintenance", MODE_PRIVATE)
+        val prefs = getSharedPreferences("maintenance" , MODE_PRIVATE)
         if (!prefs.contains("cycle_step")) {
             prefs.edit {
-                putInt("cycle_step", -1)               // було 0 → стало -1
-                putLong("last_step_time", System.currentTimeMillis())
+                putInt("cycle_step" , -1)               // було 0 → стало -1
+                putLong("last_step_time" , System.currentTimeMillis())
             }
             scheduleNextCycle(61)
         }
     }
 
 
-
     private fun scheduleNextCycle(delayDays: Long) {
         val workRequest = OneTimeWorkRequestBuilder<CycleWorker>()
-            .setInitialDelay(delayDays, TimeUnit.DAYS)
+            .setInitialDelay(delayDays , TimeUnit.DAYS)
             .build()
 
         WorkManager.getInstance(this)
-            .enqueueUniqueWork("maintenance_cycle", ExistingWorkPolicy.REPLACE, workRequest)
+            .enqueueUniqueWork("maintenance_cycle" , ExistingWorkPolicy.REPLACE , workRequest)
     }
 
 
@@ -445,23 +468,23 @@ class ActBikeGarage : AppCompatActivity() {
 
 
         override suspend fun doWork(): Result {
-            val prefs = applicationContext.getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
+            val prefs = applicationContext.getSharedPreferences("bike_prefs" , Context.MODE_PRIVATE)
 
             // Перевірка, чи дозволені сповіщення
-            if (!prefs.getBoolean("receive_notifications", true)) {
-                Log.d(TAG, "Notifications are disabled, skipping work")
+            if (!prefs.getBoolean("receive_notifications" , true)) {
+                Log.d(TAG , "Notifications are disabled, skipping work")
                 return Result.success()
             }
 
             // Отримуємо поточний стан
-            var currentStep = prefs.getInt("cycle_step", 0)
-            prefs.getLong("last_step_time", 0L)
+            var currentStep = prefs.getInt("cycle_step" , 0)
+            prefs.getLong("last_step_time" , 0L)
 
             // Відправляємо сповіщення на основі ПОТОЧНОГО кроку
             when (currentStep) {
-                0, 1, 3, 4 -> sendNotification("50h", "50", "50")
-                2 -> sendNotification("100h", "100", "100")
-                5 -> sendNotification("year", "100", "100")
+                0 , 1 , 3 , 4 -> sendNotification("50h" , "50" , "50")
+                2 -> sendNotification("100h" , "100" , "100")
+                5 -> sendNotification("year" , "100" , "100")
             }
 
             // Інкрементуємо крок (0-5 циклічно)
@@ -469,8 +492,8 @@ class ActBikeGarage : AppCompatActivity() {
 
             // Зберігаємо новий стан
             prefs.edit {
-                putInt("cycle_step", currentStep)
-                putLong("last_step_time", System.currentTimeMillis())
+                putInt("cycle_step" , currentStep)
+                putLong("last_step_time" , System.currentTimeMillis())
             }
 
             // Плануємо наступний запуск через 61 день
@@ -481,12 +504,12 @@ class ActBikeGarage : AppCompatActivity() {
 
         private fun scheduleNextCycle(delayDays: Long) {
             val workRequest = OneTimeWorkRequestBuilder<CycleWorker>()
-                .setInitialDelay(delayDays, TimeUnit.DAYS)
+                .setInitialDelay(delayDays , TimeUnit.DAYS)
                 .build()
 
             WorkManager.getInstance(applicationContext).enqueueUniqueWork(
-                "maintenance_cycle",
-                ExistingWorkPolicy.REPLACE,
+                "maintenance_cycle" ,
+                ExistingWorkPolicy.REPLACE ,
                 workRequest
             )
         }
@@ -557,11 +580,12 @@ class ActBikeGarage : AppCompatActivity() {
             }
         }
     }
+
     private fun loadPhotoIntoPlaceholder(uri: Uri) {
         findViewById<ImageView>(R.id.bike_image).also { btn ->
             Glide.with(this)
                 .load(uri)
-                .override(500, 500)
+                .override(500 , 500)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .placeholder(R.drawable.img_fork)
@@ -570,5 +594,60 @@ class ActBikeGarage : AppCompatActivity() {
         }
     }
 
-}
+    private fun startTypewriterAnimation(
+        view: TextView ,
+        text: String ,
+        delay: Long = 100 ,
+        onEnd: (() -> Unit)? = null
+    ) {
+        view.text = "" // Очищаємо TextView перед початком
+        lifecycleScope.launch {
+            text.forEachIndexed { _ , char ->
+                withContext(Dispatchers.Main) {
+                    view.append(char.toString())
+                }
+                delay(delay)
+            }
+            onEnd?.invoke()
+        }
+    }
 
+    private fun animateBikeImage() {
+        val bikeImage = findViewById<ImageView>(R.id.bike_image)
+        val bikePhoto = findViewById<ImageView>(R.id.bike_photo)
+
+        // Чекаємо завершення малювання елементів
+        bikeImage.post {
+            // Отримуємо глобальні координати
+            val startPos = IntArray(2).apply { bikeImage.getLocationOnScreen(this) }
+            val endPos = IntArray(2).apply { bikePhoto.getLocationOnScreen(this) }
+
+            // Враховуємо різницю прокрутки
+            val scrollView = findViewById<NestedScrollView>(R.id.scroll_view)
+            val scrollY = scrollView.scrollY
+
+            // Розрахунок зміщення з урахуванням прокрутки
+            val deltaX = endPos[0] - startPos[0].toFloat()
+            val deltaY = endPos[1] - startPos[1] + scrollY.toFloat()
+
+            // Розрахунок масштабу з урахуванням padding
+            val scaleX = (bikePhoto.width - bikePhoto.paddingLeft - bikePhoto.paddingRight) /
+                    bikeImage.width.toFloat()
+            val scaleY = (bikePhoto.height - bikePhoto.paddingTop - bikePhoto.paddingBottom) /
+                    bikeImage.height.toFloat()
+
+            // Створюємо анімацію
+            AnimatorSet().apply {
+                playTogether(
+                    ObjectAnimator.ofFloat(bikeImage, "translationX", deltaX),
+                    ObjectAnimator.ofFloat(bikeImage, "translationY", deltaY),
+                    ObjectAnimator.ofFloat(bikeImage, "scaleX", scaleX),
+                    ObjectAnimator.ofFloat(bikeImage, "scaleY", scaleY)
+                )
+                duration = 800
+                interpolator = AccelerateDecelerateInterpolator()
+                start()
+            }
+        }
+    }
+}

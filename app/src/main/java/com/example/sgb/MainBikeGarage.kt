@@ -4,9 +4,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.BikeDatabase
+import com.example.sgb.utils.BlurUtils
 import com.example.sub.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,32 +21,57 @@ class MainBikeGarage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_bikegarage)
 
+        // 1) Знаходимо в’юшки
+        val imageView = findViewById<ImageView>(R.id.main_image)
+        val firstText = findViewById<TextView>(R.id.first_text)
         val addBikeButton = findViewById<Button>(R.id.add_bike_button)
-        val bikeDao = BikeDatabase.getDatabase(this).bikeDao()
 
+        // Статичне розмиття з тією ж константою
+        BlurUtils.applyBlur(imageView, BlurUtils.BLUR_RADIUS)
+
+        // Спочатку ховаємо обидва
+        firstText.alpha = 0f
+        addBikeButton.alpha = 0f
+
+        // Плавне показування тексту (fade-in за 600 мс)
+        firstText.animate()
+            .alpha(1f)
+            .setDuration(600)
+            .start()
+
+        // 4) Логіка показу кнопки
+        val bikeDao = BikeDatabase.getDatabase(this).bikeDao()
         val sharedPreferences: SharedPreferences = getSharedPreferences("bike_prefs", MODE_PRIVATE)
         val selectedBikeId = sharedPreferences.getInt("selected_bike_id", -1)
 
         if (selectedBikeId != -1) {
-            // Якщо байк вибрано, відкриваємо BikeGarageAct з ID байка
-            val intent = Intent(this@MainBikeGarage, ActBikeGarage::class.java)
-            intent.putExtra("bike_id", selectedBikeId)
-            startActivity(intent)
+            // якщо байк вже вибрано
+            startActivity(Intent(this, ActBikeGarage::class.java).apply {
+                putExtra("bike_id", selectedBikeId)
+                addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            })
             finish()
         } else {
-            // Без вибраного байка – перевіряємо, чи є в БД хоч один
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val allBikes = bikeDao.getAllBikes()
-                if (allBikes.isNotEmpty()) {
-                    // Якщо є хоча б один – йдемо в загальний гараж
-                    startActivity(Intent(this@MainBikeGarage, GarageActivity::class.java))
-                    finish()
-                } else {
-                    // Якщо ні – показуємо кнопку "додати" і реагуємо на натискання
-                    withContext(Dispatchers.Main) {
-                        addBikeButton.isEnabled = true
-                        addBikeButton.setOnClickListener {
-                            startActivity(Intent(this@MainBikeGarage, PreAddBikeActivity::class.java))
+                withContext(Dispatchers.Main) {
+                    if (allBikes.isNotEmpty()) {
+                        startActivity(Intent(this@MainBikeGarage, GarageActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
+                        finish()
+                    } else {
+                        // показуємо і анімуємо кнопку
+                        addBikeButton.apply {
+                            isEnabled = true
+                            animate()
+                                .alpha(1f)
+                                .setDuration(600)
+                                .start()
+
+                            setOnClickListener {
+                                startActivity(Intent(this@MainBikeGarage, PreAddBikeActivity::class.java))
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                            }
                         }
                     }
                 }

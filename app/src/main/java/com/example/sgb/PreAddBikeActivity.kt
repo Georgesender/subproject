@@ -91,7 +91,7 @@ class PreAddBikeActivity : AppCompatActivity() {
                             years = mapOf(
                                 "2019" to listOf("S", "M", "L", "XL")
                             ),
-                            imageRes =  null,
+                            imageRes =  R.drawable.img_sendercf8,
                             geometry = mapOf(
                                 "S" to BikeGeometry(
                                     bikeId = 2,

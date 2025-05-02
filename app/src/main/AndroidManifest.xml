@@ -46,8 +46,7 @@
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.GarageActivity" android:exported="true" android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.example.sgb.SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme"> <!-- Можна задати окрему тему для splash -->
+            android:exported="true"> <!-- Можна задати окрему тему для splash -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

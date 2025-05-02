@@ -2,21 +2,21 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="@color/transparent" /> <!-- Тло -->
+            <solid android:color="@color/black" /> <!-- Тло -->
         </shape>
     </item>
     <item android:left="5dp" android:right="5dp" android:bottom="4dp">
         <shape>
-            <stroke android:color="@color/transparent_black" android:width="1dp"/>
-            <solid android:color="@color/transparent"/>
+            <stroke android:color="@color/black" android:width="1dp"/>
+            <solid android:color="@color/black"/>
         </shape>
     </item>
 
     <!-- Нижня межа -->
     <item android:left="5dp" android:right="5dp" android:top="0dp">
         <shape>
-            <stroke android:color="@color/black" android:width="2dp"/>
-            <solid android:color="@color/transparent"/>
+            <stroke android:color="@color/tr_white" android:width="2dp"/>
+            <solid android:color="@color/black"/>
         </shape>
     </item>
 </layer-list>

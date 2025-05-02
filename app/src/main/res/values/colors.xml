@@ -28,9 +28,9 @@
     <color name="blue_compression">#1a73e8</color>
     <color name="bg_hint">#6c54aa</color>
     <color name="light_white">#C7C7C7</color>
-    <color name="table_subheader">#34495E</color>    <!-- Сіро-синій -->
-    <color name="row_even">#FFFFFF</color>           <!-- Білий -->
-    <color name="row_odd">#F5F6FA</color>           <!-- Світло-сірий -->
-    <color name="accent_green">#27AE60</color>      <!-- Зелений акцент -->
-    <color name="light_gray">#BDC3C7</color>         <!-- Світло-сірий -->
+    <color name="table_subheader">#34495E</color>
+    <color name="row_even">#FFFFFF</color>
+    <color name="row_odd">#F5F6FA</color>
+    <color name="accent_green">#27AE60</color>
+    <color name="light_gray">#BDC3C7</color>
 </resources>
