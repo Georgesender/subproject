@@ -1,14 +1,21 @@
 package com.example.sgb
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.Bike
@@ -16,6 +23,7 @@ import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.BikeGeometry
 import com.example.sgb.room.BikeModel
 import com.example.sgb.room.BikeSubmodel
+import com.example.sgb.utils.BlurUtils
 import com.example.sub.R
 import kotlinx.coroutines.launch
 
@@ -160,15 +168,19 @@ class PreAddBikeActivity : AppCompatActivity() {
     private var selectedSize: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.setBackgroundDrawableResource(R.drawable.bg_bikegarageact)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_add_bike)
 
+        animationRoot()
         brandSpinner = findViewById(R.id.brand_spinner)
         modelSpinner = findViewById(R.id.model_spinner)
         submodelSpinner = findViewById(R.id.submodel_spinner)
         yearSpinner = findViewById(R.id.year_spinner)
         sizeSpinner = findViewById(R.id.size_spinner)
-
+        val imageView = findViewById<ImageView>(R.id.blur_overlay)
+// Статичне розмиття з тією ж константою
+        BlurUtils.applyBlur(imageView , BlurUtils.BLUR_RADIUS)
         val brands = bikeData.map { it.brand }
 
 // Оновлення спінера
@@ -216,10 +228,13 @@ class PreAddBikeActivity : AppCompatActivity() {
         )
         startActivity(intent , options.toBundle())
         }
+
+
+
     }
     private fun updateSpinner(spinner: Spinner, items: List<String>) {
-        val adapter = ArrayAdapter(this, R.layout.s_spinner, items)
-        adapter.setDropDownViewResource(R.layout.s_dropped_spinner)  // Встановлюємо кастомний лейаут для випадаючого списку
+        val adapter = ArrayAdapter(this, R.layout.s_spinner, R.id.spinner_item_text, items)
+        adapter.setDropDownViewResource(R.layout.s_dropped_spinner)
         spinner.adapter = adapter
     }
 
@@ -240,12 +255,12 @@ class PreAddBikeActivity : AppCompatActivity() {
 
 
     private fun saveBike() {
-        if (selectedBrand != null && selectedModel != null && selectedSubmodel != null && selectedYear != null && selectedSize != null) {
-            // Отримуємо зображення для вибраної підмоделі
+        if (selectedBrand != null && selectedModel != null && selectedSubmodel != null &&
+            selectedYear != null && selectedSize != null
+        ) {
             val imageName = bikeData.firstOrNull { it.brand == selectedBrand }
                 ?.modelsJson?.get(selectedModel)?.submodels?.get(selectedSubmodel)?.imageRes
 
-            // Створюємо об'єкт Bike з вибраним розміром
             val bike = Bike(
                 brand = selectedBrand!!,
                 modelsJson = mapOf(
@@ -256,27 +271,33 @@ class PreAddBikeActivity : AppCompatActivity() {
                                 imageRes = imageName,
                                 name = selectedSubmodel!!,
                                 years = mapOf(
-                                    selectedYear!! to listOf(selectedSize!!) // Зберігаємо вибраний розмір
+                                    selectedYear!! to listOf(selectedSize!!)
                                 )
                             )
                         )
                     )
                 ),
-                selectedSize = selectedSize // Додаємо поле для збереження розміру
+                selectedSize = selectedSize
             )
+
             lifecycleScope.launch {
-                // Збереження байка в базу даних
                 val bikeDao = BikeDatabase.getDatabase(this@PreAddBikeActivity).bikeDao()
                 val bikeId = bikeDao.insertBike(bike).toInt()
-                Log.d("BikeID", "Inserted bike with ID: $bikeId")
                 saveBikeGeometry(bikeId)
 
-                // Передаємо bikeId у BikeGarageAct
-                val intent = Intent(this@PreAddBikeActivity, ActBikeGarage::class.java).apply {
-                    putExtra("bike_id", bikeId)
+                runOnUiThread {
+                    startExitAnimations {
+                        val intent = Intent(this@PreAddBikeActivity, ActBikeGarage::class.java).apply {
+                            putExtra("bike_id", bikeId)
+                        }
+                        startActivity(intent, ActivityOptionsCompat.makeCustomAnimation(
+                            this@PreAddBikeActivity,
+                            0,
+                            1
+                        ).toBundle())
+                        finish()
+                    }
                 }
-                startActivity(intent)
-                finish()
             }
         }
     }
@@ -300,4 +321,89 @@ class PreAddBikeActivity : AppCompatActivity() {
             Log.w("SaveGeometry", "Geometry not found for selected size: $selectedSize")
         }
     }
+    private fun animationRoot() {
+        val root = findViewById<ConstraintLayout>(R.id.root)
+
+        for (i in 0 until root.childCount) {
+            val child = root.getChildAt(i)
+
+            // кожного разу новий екземпляр анімації
+            val fadeOut = AnimationUtils.loadAnimation(this , R.anim.fade_innormal)
+
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    child.visibility = View.VISIBLE
+                }
+            })
+
+            child.startAnimation(fadeOut)
+        }
+    }
+    private fun startExitAnimations(onAnimationsEnd: () -> Unit) {
+        val root = findViewById<ConstraintLayout>(R.id.root)
+        val rootparent = findViewById<ConstraintLayout>(R.id.rootparent)
+        val blurOverlay = findViewById<ImageView>(R.id.blur_overlay)
+        val expandingBlock = findViewById<View>(R.id.block)
+
+        // Перша анімація — fade out кореневого контейнера
+        val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_outnormal).apply {
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    root.visibility = View.GONE
+
+                    // Переключаємо blurOverlay на hardware layer, задаємо pivot
+                    blurOverlay.apply {
+                        visibility = View.VISIBLE
+                        // Pivot у лівому верхньому куті
+                        pivotX = 0f
+                        pivotY = 0f
+                        // hardware layer для гладкого масштабування
+                        setLayerType(View.LAYER_TYPE_HARDWARE, null)
+                    }
+                    // ValueAnimator для scaleX
+                    ValueAnimator.ofFloat(1f, 0f).apply {
+                        duration = 2000
+                        addUpdateListener { animator ->
+                            blurOverlay.scaleX = animator.animatedValue as Float
+                        }
+                        addListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator) {
+                                // повертаємо все назад
+                                blurOverlay.visibility = View.INVISIBLE
+                                blurOverlay.scaleX = 1f
+                                blurOverlay.setLayerType(View.LAYER_TYPE_NONE, null)
+
+                                // прибираємо padding із rootparent
+                                rootparent.setPadding(0, 0, 0, 0)
+
+                                // та стартуємо розширення блоку…
+                                expandingBlock.visibility = View.VISIBLE
+                                val targetHeight = (428 * resources.displayMetrics.density).toInt()
+                                ValueAnimator.ofInt(1, targetHeight).apply {
+                                    duration = 3000
+                                    addUpdateListener { anim ->
+                                        expandingBlock.layoutParams.height = anim.animatedValue as Int
+                                        expandingBlock.requestLayout()
+                                    }
+                                    addListener(object : AnimatorListenerAdapter() {
+                                        override fun onAnimationEnd(animation: Animator) {
+                                            onAnimationsEnd()
+                                        }
+                                    })
+                                    start()
+                                }
+                            }
+                        })
+                        start()
+                    }
+                }
+            })
+        }
+        root.startAnimation(fadeOut)
+    }
+
 }

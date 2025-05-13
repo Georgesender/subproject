@@ -1,492 +1,562 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/black"
+    android:orientation="vertical">
 
-    <LinearLayout
-
+    <Button
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save Bike" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
-            android:textSize="24sp"
-            android:hint="@string/Requaired_inputs"/>
-        <TextView
-            android:id="@+id/bikeIdtest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
-            android:textSize="24sp"/>
-        <!-- Brand -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+        android:layout_height="48dp"
+        android:background="@drawable/btn_gpts"
+        android:text="@string/Save_and_go"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:hint="@string/Brand_"/>
-            <EditText
-                android:id="@+id/etBrand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:textColor="@color/white"
-                android:hint="Canyon, Santa Cruz, Pivot..."
-                android:textColorHint="@color/tr_white"
-                android:inputType="text"
-                tools:ignore="HardcodedText,LabelFor" />
-        </LinearLayout>
-
-        <!-- Model -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:hint="@string/Model_"/>
-            <EditText
-                android:id="@+id/etModel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:textColor="@color/white"
-                android:hint="Sender, V10.8, Phoenix..."
-                android:textColorHint="@color/tr_white"
-                android:inputType="text"
-                tools:ignore="HardcodedText,LabelFor" />
-        </LinearLayout>
-
-        <!-- Sub model -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:hint="@string/Submodel_"/>
-            <EditText
-                android:id="@+id/etSubmodel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:textColor="@color/white"
-                android:hint="CFR, DH/X01, - ... "
-                android:textColorHint="@color/tr_white"
-                android:inputType="text"
-                tools:ignore="HardcodedText,LabelFor" />
-        </LinearLayout>
-
-        <!-- Year -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:hint="@string/Year"/>
-            <EditText
-                android:id="@+id/etYear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:textColor="@color/white"
-                android:hint="2022, 2024, 2025..."
-                android:textColorHint="@color/tr_white"
-                android:inputType="text"
-                tools:ignore="HardcodedText,LabelFor" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textSize="20sp"
-                android:hint="@string/Year"/>
-            <EditText
-                android:id="@+id/etSelectedSize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:textColor="@color/white"
-                android:hint="2022, 2024, 2025..."
-                android:textColorHint="@color/tr_white"
-                android:inputType="text"
-                tools:ignore="HardcodedText,LabelFor" />
-        </LinearLayout>
-
-        <!-- Add image -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
-            android:textSize="20sp"
-            android:hint="@string/Add_photo_bike"/>
-        <ImageButton
-            android:id="@+id/bike_image"
-            android:layout_width="370dp"
-            android:layout_height="250dp"
-            android:src="@drawable/svg_add_photo"
-            android:contentDescription="@string/test" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/white"
-            android:textSize="24sp"
-            android:hint="@string/Unnessesary_info"/>
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="4dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/geometry_table"
-            android:padding="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+
+        android:background="@color/black"
+        android:fillViewport="true"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:columnCount="2"
-            app:rowCount="17">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
             <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="242dp"
-                android:layout_height="wrap_content"
-                android:text="@string/wheel_base"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_end"
-                android:id="@+id/etWheelBase"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/reach"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_end"
-                android:id="@+id/etReach"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/Stack"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etStack"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="23sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:padding="2dp"
-                android:background="@drawable/tb_start"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/bottom_bracket_offset"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etBottomBracketOffset"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:padding="2dp"
-                android:background="@drawable/tb_start"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/stand_over_height"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etStandOverHeight"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:padding="2dp"
-                android:background="@drawable/tb_start"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/head_tube_lenght"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etHeadTubeLength"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/seat_tube_angle"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etSeatTubeAngle"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/seat_tube_lenght"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etSeatTubeLength"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/top_tube_lenght"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etTopTubeLength"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/seat_height"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etSeatHeight"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/head_tube_angle"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etHeadTubeAngle"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-            <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chainstay_lenght"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etChainstayLength"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-        </androidx.gridlayout.widget.GridLayout>
-        <TextView
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_gravity="top|center_horizontal"
-            android:padding="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Розмірність"
-            tools:ignore="HardcodedText" />
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/geometry_basic"
-            android:padding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="70dp"
-            app:columnCount="2"
-            app:rowCount="2">
+                android:layout_marginTop="16dp"
+                android:hint="@string/Requaired_inputs"
+                android:textColorHint="@color/white"
+                android:textSize="24sp" />
+
             <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:hint="@string/cannot_be_adited_in_fututre_hint"
+                android:textColorHint="@color/tr30_white"
+                android:textSize="10sp"
+                tools:ignore="SmallSp,TextContrastCheck" />
+
+            <!-- Brand -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/body_height"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etBodyHeight"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Brand_"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Canyon, Santa Cruz, Pivot..."
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/tr_white"
+                    tools:ignore="HardcodedText,LabelFor" />
+            </LinearLayout>
+
+            <!-- Model -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Model_"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Sender, V10.8, Phoenix..."
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/tr_white"
+                    tools:ignore="HardcodedText,LabelFor" />
+            </LinearLayout>
+
+            <!-- Sub model -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Submodel_"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etSubmodel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="CFR, DH/X01, - ... "
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/tr_white"
+                    tools:ignore="HardcodedText,LabelFor" />
+            </LinearLayout>
+
+            <!-- Year -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Year"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="2022, 2024, 2025..."
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/tr_white"
+                    tools:ignore="HardcodedText,LabelFor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/Frame_size"
+                    android:textColorHint="@color/white"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/etSelectedSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="XL, S1, M..."
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/tr_white"
+                    tools:ignore="HardcodedText,LabelFor,TextFields" />
+            </LinearLayout>
+
+            <!-- Add image -->
             <TextView
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:background="@drawable/tb_start"
-                android:padding="2dp"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="6dp"
+                android:hint="@string/Add_photo_bike"
+                android:textColorHint="@color/white"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/bike_image"
+                android:layout_width="370dp"
+                android:layout_height="250dp"
+                android:contentDescription="@string/test"
+                android:src="@drawable/svg_add_photo" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wheel_size"
-                app:layout_columnWeight="1"/>
-            <EditText
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:id="@+id/etWheelSize"
-                android:background="@drawable/tb_end"
-                android:padding="2dp"
-                android:layout_width="80dp"
+                android:layout_marginTop="24dp"
+                android:hint="@string/Unnessesary_info"
+                android:textColorHint="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_columnWeight="1"/>
-        </androidx.gridlayout.widget.GridLayout>
-    </LinearLayout>
-</LinearLayout>
-</ScrollView>
+                android:hint="@string/can_be_adited_in_fututre_hint"
+                android:textColorHint="@color/tr30_white"
+                android:textSize="10sp"
+                tools:ignore="SmallSp,TextContrastCheck" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:text="@string/frame_geometry"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/geometry_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    app:columnCount="2"
+                    app:rowCount="17">
+
+                    <TextView
+                        android:layout_width="232dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/wheel_base"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etWheelBase"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/reach"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etReach"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/Stack"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etStack"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/bottom_bracket_offset"
+                        android:textColor="@color/white"
+                        android:textSize="19sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etBottomBracketOffset"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/stand_over_height"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etStandOverHeight"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/head_tube_lenght"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etHeadTubeLength"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/seat_tube_angle"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etSeatTubeAngle"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/seat_tube_lenght"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etSeatTubeLength"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/top_tube_lenght"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etTopTubeLength"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/seat_height"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etSeatHeight"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/head_tube_angle"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etHeadTubeAngle"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/chainstay_lenght"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etChainstayLength"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+                </androidx.gridlayout.widget.GridLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:text="@string/etc_sizes"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <androidx.gridlayout.widget.GridLayout
+                    android:id="@+id/geometry_basic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:padding="8dp"
+                    app:columnCount="2"
+                    app:rowCount="2">
+
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/body_height"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etBodyHeight"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:inputType="text"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1"
+                        tools:ignore="TextFields" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="@string/wheel_size"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+
+                    <EditText
+                        android:id="@+id/etWheelSize"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tb_cell"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_columnWeight="1" />
+                </androidx.gridlayout.widget.GridLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

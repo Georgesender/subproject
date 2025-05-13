@@ -9,6 +9,17 @@
         <item name="colorControlActivated">@color/tr75_white</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+    <style name="AppThemeAct" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/ubuntu</item>
+        <item name="android:textSelectHandle">@drawable/select_handle_white</item>
+        <item name="android:textSelectHandleLeft">@drawable/select_handle_white</item>
+        <item name="android:textSelectHandleRight">@drawable/select_handle_white</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_white</item>
+        <item name="colorControlActivated">@color/tr75_white</item>
+        <item name="android:windowBackground">@drawable/bg_bikegarageact</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
 
     <style name="CustomAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/black</item>

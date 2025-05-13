@@ -3,6 +3,8 @@
     android:textSize="24sp"
     android:textColor="@color/white"
     android:gravity="center"
-    android:background="@color/black"
+    android:id="@+id/spinner_item_text"
+
+    android:background="@drawable/tb_row_blackandborder"
     android:layout_width="match_parent"
     android:layout_height="40dp"/>

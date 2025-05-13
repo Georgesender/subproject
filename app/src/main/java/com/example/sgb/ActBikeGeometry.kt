@@ -1,9 +1,15 @@
 package com.example.sgb
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.RectEvaluator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -126,7 +132,79 @@ class ActBikeGeometry : AppCompatActivity() {
             val geometry = geometryDao.getGeometryByBikeId(bikeId)
             geometry?.let { updateGeometryTextViews(it) }
         }
+        findViewById<View>(R.id.back).post {
+            startAnimation()
+        }
     }
+
+    private fun startAnimation() {
+        val left = findViewById<View>(R.id.back)
+        val right = findViewById<View>(R.id.bike_photo)
+        val rootbike = findViewById<View>(R.id.rootbike)
+        val rootmain = findViewById<View>(R.id.rootmain)
+
+        // Початково ховаємо rootbike та rootmain
+        rootbike.alpha = 0f
+        rootmain.alpha = 0f
+        rootbike.visibility = View.INVISIBLE
+        rootmain.visibility = View.INVISIBLE
+
+        left.post {
+            // Встановлюємо початковий clipBounds як "невидимий"
+            left.clipBounds = Rect(left.width, 0, left.width, left.height)
+            right.clipBounds = Rect(0, 0, 0, right.height)
+
+            // Анімація для left
+            val leftStartRect = Rect(left.width, 0, left.width, left.height)
+            val leftEndRect = Rect(0, 0, left.width, left.height)
+            val leftClipAnim = ObjectAnimator.ofObject(
+                left, "clipBounds",
+                RectEvaluator(),
+                leftStartRect,
+                leftEndRect
+            ).apply {
+                duration = 750L
+                interpolator = AccelerateDecelerateInterpolator()
+            }
+
+            // Анімація для right
+            val rightStartRect = Rect(0, 0, 0, right.height)
+            val rightEndRect = Rect(0, 0, right.width, right.height)
+            val rightClipAnim = ObjectAnimator.ofObject(
+                right, "clipBounds",
+                RectEvaluator(),
+                rightStartRect,
+                rightEndRect
+            ).apply {
+                duration = 750L
+                interpolator = AccelerateDecelerateInterpolator()
+            }
+
+            // Коли анімація закінчиться, робимо fade-in для rootbike і rootmain
+            val set = AnimatorSet().apply {
+                playTogether(leftClipAnim, rightClipAnim)
+                addListener(object : android.animation.AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: android.animation.Animator) {
+                        rootbike.visibility = View.VISIBLE
+                        rootmain.visibility = View.VISIBLE
+
+                        // Fade-in анімація
+                        val fadeInRootbike = ObjectAnimator.ofFloat(rootbike, "alpha", 0f, 1f)
+                        val fadeInRootmain = ObjectAnimator.ofFloat(rootmain, "alpha", 0f, 1f)
+                        AnimatorSet().apply {
+                            playTogether(fadeInRootbike, fadeInRootmain)
+                            duration = 400L
+                            interpolator = AccelerateDecelerateInterpolator()
+                            start()
+                        }
+                    }
+                })
+            }
+            set.start()
+        }
+    }
+
+
 
     private fun updateBikeMainInfTextView(bike: Bike){
         selectedSize.text = getString(R.string.selected_size_label, bike.selectedSize)

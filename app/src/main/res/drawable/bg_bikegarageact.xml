@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Нижній шар: весь фон чорний -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/black" />
+        </shape>
+    </item>
+
+    <!-- Верхній шар: прямокутник висотою 460dp зверху -->
+    <item
+        android:height="420dp"
+        android:gravity="top">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bike_grey_blue" />
+        </shape>
+    </item>
+</layer-list>

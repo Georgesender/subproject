@@ -33,8 +33,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ComponentsCheker"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.Discover" android:exported="true"/>
-    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.PreAddBikeActivity" android:exported="true"/>
-    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGarage" android:exported="true"/>
+    <activity android:theme="@style/AppThemeAct" android:name="com.example.sgb.PreAddBikeActivity" android:exported="true"/>
+    <activity android:theme="@style/AppThemeAct" android:name="com.example.sgb.ActBikeGarage" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGeometry" android:exported="true"/>
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActComponentsGeometry" android:exported="true" />
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActSetups" android:exported="true"/>

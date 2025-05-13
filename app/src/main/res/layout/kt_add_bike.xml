@@ -2,114 +2,185 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:id="@+id/rootparent"
     android:background="@color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <ImageView
+        android:id="@+id/blur_overlay"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_main"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <View
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="visible"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:layout_marginStart="-8dp"
+        android:background="@drawable/vw_preaddbike_to_actgaragebike"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="340dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/root"
+        android:padding="8dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@id/blur_overlay"
+        app:layout_constraintTop_toTopOf="parent">
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/kt_textviews_basic1"
+        android:background="@color/transparent"
         android:gravity="center"
         android:text="@string/choosebike"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextSizeCheck" />
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/header">
+        <TextView
+            android:id="@+id/labelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:layout_marginTop="40dp"
+            android:text="@string/From_list"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
     <Spinner
         android:id="@+id/brand_spinner"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="28dp"
+        android:layout_marginStart="50dp"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/labelText"
         tools:ignore="TouchTargetSizeCheck" />
 
     <Spinner
         android:id="@+id/model_spinner"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
+
+        android:layout_marginTop="16dp"
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brand_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brand_spinner"
         tools:ignore="TouchTargetSizeCheck" />
 
     <Spinner
         android:id="@+id/submodel_spinner"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/model_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/model_spinner"
         tools:ignore="TouchTargetSizeCheck" />
 
     <Spinner
         android:id="@+id/year_spinner"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+
         android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submodel_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submodel_spinner"
         tools:ignore="TouchTargetSizeCheck" />
 
     <Spinner
         android:id="@+id/size_spinner"
-        android:layout_width="310dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/year_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/year_spinner"
         tools:ignore="TouchTargetSizeCheck" />
+
+
     <Button
         android:textColor="@color/white"
         android:id="@+id/confirm_selection"
-        android:background="@drawable/btn_trwhite_anim_2pxstroke"
-        android:layout_width="300dp"
+        android:background="@drawable/btn_gpts"
+        android:layout_width="100dp"
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:text="@string/btn_confirm"
-        android:layout_marginStart="44dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
+        android:layout_gravity="end"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/size_spinner"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/size_spinner"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout">
     <TextView
         android:id="@+id/label_or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:layout_marginTop="40dp"
-        android:text="Aбо"
+        android:text="@string/Yourself_add_bike_data"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_selection"/>
+/>
     <Button
         android:textColor="@color/white"
         android:id="@+id/make_own_bike"
-        android:background="@drawable/btn_trwhite_anim_2pxstroke"
-        android:layout_width="300dp"
+        android:background="@drawable/btn_gpts"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Додати вручну байк"
-        android:layout_marginStart="44dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label_or"/>
+        android:text="@string/Add_bike"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

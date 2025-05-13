@@ -15,4 +15,5 @@
             <solid android:color="@color/tr_white" />
         </shape>
     </item>
+
 </layer-list>

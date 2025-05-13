@@ -1,8 +1,12 @@
 package com.example.sgb
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.RectEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,17 +17,24 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,7 +48,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -62,7 +72,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
+
 class ActBikeGarage : AppCompatActivity() {
+    private lateinit var bikeNameContainer: ViewGroup
+    private lateinit var rootBikeInfo: ViewGroup
+    private lateinit var rootScroll: ViewGroup
+    private lateinit var bottomNav: ViewGroup
     private var bikeId: Int = -1
     private lateinit var bikeDao: BikeDao
     private lateinit var bikeNameTextView: TextView
@@ -87,13 +102,23 @@ class ActBikeGarage : AppCompatActivity() {
 
     @SuppressLint("DiscouragedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.setBackgroundDrawableResource(R.drawable.bg_bikegarageact)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_bikegarage_active)
         bikeDao = BikeDatabase.getDatabase(this).bikeDao()
         bikeId = intent.getIntExtra("bike_id" , -1)
         val session = intent.getStringExtra("Taked focus")
-
-
+        // Знайдемо контейнери
+        bikeNameContainer = findViewById(R.id.bike_name_container)
+        rootBikeInfo       = findViewById(R.id.rootBikeinf)
+        rootScroll = findViewById(R.id.rootScroll)
+        bottomNav =findViewById(R.id.bottom_navigation)
+        // ВСІ фони вже є — вони малюються автоматично.
+        // А ВСІ внутрішні вьюшки поки що приховаємо через alpha=0:
+        fadeOutChildren(rootScroll)
+        fadeOutChildren(bikeNameContainer)
+        fadeOutChildren(rootBikeInfo)
+        fadeOutChildren(bottomNav)
         val testing = findViewById<Button>(R.id.left_button)
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
@@ -130,7 +155,7 @@ class ActBikeGarage : AppCompatActivity() {
                     if (session == "Yes") {
                         bikeNameTextView.text = getBikeName
                     } else {
-                        startTypewriterAnimation(bikeNameTextView , getBikeName , 100)
+                        startTypewriterAnimation(bikeNameTextView , getBikeName , 50)
                     }
                 }
             }
@@ -164,7 +189,7 @@ class ActBikeGarage : AppCompatActivity() {
             val intent = Intent(this , ActComponentsGeometry::class.java)
             intent.putExtra("bike_id" , bikeId)
             val options = ActivityOptionsCompat.makeCustomAnimation(
-                this , R.anim.fade_in_faster , R.anim.fade_out_faster
+                this , R.anim.fade_in_faster , R.anim.fade_outnormal
             )
 
             startActivity(intent , options.toBundle())
@@ -172,16 +197,39 @@ class ActBikeGarage : AppCompatActivity() {
 
         val frameGeometry = findViewById<ConstraintLayout>(R.id.frameGeometry)
         frameGeometry.setOnClickListener {
-            val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out_faster)
-            bikeImageView.startAnimation(fadeOut)
-            bikeImageView.visibility = View.GONE
-            val intent = Intent(this , ActBikeGeometry::class.java)
-            intent.putExtra("bike_id" , bikeId) // Передаємо bikeId
-            val options = ActivityOptionsCompat.makeCustomAnimation(
-                this , R.anim.fade_in_faster , R.anim.fade_out_faster
-            )
-            startActivity(intent , options.toBundle())
+            // 1) Перші дві fadeOut-анімації,
+            //    вони мають тривалість ~400ms кожна
+            animationFrameGeometryBike()
+            animationFrameGeometry()
 
+            // 2) Одразу ховаємо bottom_navigation
+            bottomNav.visibility = View.GONE
+
+            // 3) Через delay чекаємо 800ms (кінець двох fadeOut’ів)
+            Handler(Looper.getMainLooper()).postDelayed({
+                // отримаємо аніматор
+                val shrinkAnimator = animateShrinkRoot()
+
+                // 4) Коли shrink-анімація закінчиться — стартуємо новий Activity
+                shrinkAnimator.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        val intent = Intent(this@ActBikeGarage, ActBikeGeometry::class.java)
+
+                        intent.putExtra("bike_id", bikeId)
+
+                        val options = ActivityOptionsCompat.makeCustomAnimation(
+                            this@ActBikeGarage , 0, R.anim.fade_outnormal
+                        )
+
+                        startActivity(intent , options.toBundle())
+                        finish()
+                    }
+                })
+
+                // 5) І запускаємо shrink-анімацію
+                shrinkAnimator.start()
+
+            }, /* delayMillis = */ 800L)
         }
 
         val setupBike = findViewById<ConstraintLayout>(R.id.setups)
@@ -227,7 +275,38 @@ class ActBikeGarage : AppCompatActivity() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
     }
+    // Коли система завершить анімацію самого переходу
+    override fun onEnterAnimationComplete() {
+        super.onEnterAnimationComplete()
+        // Запускаємо свій “fade-in” лише для внутрішнього контенту:
+        fadeInChildren(bikeNameContainer, duration = 400L)
+        fadeInChildren(rootBikeInfo,       duration = 500L, startDelay = 500L)
+        fadeInChildren(rootScroll, duration = 500L, startDelay =500L)
+        fadeInChildren(bottomNav, duration = 400L)
+    }
 
+    // Робимо alpha=0 для всіх прямих дітей (вмісту) контейнера
+    private fun fadeOutChildren(container: ViewGroup) {
+        for (i in 0 until container.childCount) {
+            container.getChildAt(i).alpha = 0f
+        }
+    }
+
+    // Анімація alpha від 0 до 1 для дітей
+    private fun fadeInChildren(
+        container: ViewGroup,
+        duration: Long,
+        startDelay: Long = 0L
+    ) {
+        for (i in 0 until container.childCount) {
+            container.getChildAt(i)
+                .animate()
+                .alpha(1f)
+                .setStartDelay(startDelay)
+                .setDuration(duration)
+                .start()
+        }
+    }
     private fun initViews() {
         bikeNameTextView = findViewById(R.id.bike_name)
         bikeSubmodelTextView = findViewById(R.id.bike_submodel)
@@ -270,7 +349,6 @@ class ActBikeGarage : AppCompatActivity() {
         val navDiscover = findViewById<TextView>(R.id.nav_etc)
 
         navCompCheck.setOnClickListener {
-            animateBikeImage()
         }
 // garage test
         navDiscover.setOnClickListener {
@@ -597,7 +675,7 @@ class ActBikeGarage : AppCompatActivity() {
     private fun startTypewriterAnimation(
         view: TextView ,
         text: String ,
-        delay: Long = 100 ,
+        delay: Long = 50 ,
         onEnd: (() -> Unit)? = null
     ) {
         view.text = "" // Очищаємо TextView перед початком
@@ -612,42 +690,105 @@ class ActBikeGarage : AppCompatActivity() {
         }
     }
 
-    private fun animateBikeImage() {
-        val bikeImage = findViewById<ImageView>(R.id.bike_image)
-        val bikePhoto = findViewById<ImageView>(R.id.bike_photo)
 
-        // Чекаємо завершення малювання елементів
-        bikeImage.post {
-            // Отримуємо глобальні координати
-            val startPos = IntArray(2).apply { bikeImage.getLocationOnScreen(this) }
-            val endPos = IntArray(2).apply { bikePhoto.getLocationOnScreen(this) }
 
-            // Враховуємо різницю прокрутки
-            val scrollView = findViewById<NestedScrollView>(R.id.scroll_view)
-            val scrollY = scrollView.scrollY
+    private fun animationFrameGeometry() {
+        val root = findViewById<ConstraintLayout>(R.id.rootBikeinf)
 
-            // Розрахунок зміщення з урахуванням прокрутки
-            val deltaX = endPos[0] - startPos[0].toFloat()
-            val deltaY = endPos[1] - startPos[1] + scrollY.toFloat()
+        for (i in 0 until root.childCount) {
+            val child = root.getChildAt(i)
+            // кожного разу новий екземпляр анімації
+            val fadeOut = AnimationUtils.loadAnimation(this , R.anim.fade_outnormal)
 
-            // Розрахунок масштабу з урахуванням padding
-            val scaleX = (bikePhoto.width - bikePhoto.paddingLeft - bikePhoto.paddingRight) /
-                    bikeImage.width.toFloat()
-            val scaleY = (bikePhoto.height - bikePhoto.paddingTop - bikePhoto.paddingBottom) /
-                    bikeImage.height.toFloat()
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    child.visibility = View.INVISIBLE
+                }
+            })
 
-            // Створюємо анімацію
-            AnimatorSet().apply {
-                playTogether(
-                    ObjectAnimator.ofFloat(bikeImage, "translationX", deltaX),
-                    ObjectAnimator.ofFloat(bikeImage, "translationY", deltaY),
-                    ObjectAnimator.ofFloat(bikeImage, "scaleX", scaleX),
-                    ObjectAnimator.ofFloat(bikeImage, "scaleY", scaleY)
-                )
-                duration = 800
-                interpolator = AccelerateDecelerateInterpolator()
-                start()
+            child.startAnimation(fadeOut)
+        }
+    }
+
+    private fun animationFrameGeometryBike() {
+        val scrollRoot = findViewById<LinearLayout>(R.id.rootScroll)
+
+        for (i in 0 until scrollRoot.childCount) {
+            val child = scrollRoot.getChildAt(i)
+            // кожного разу новий екземпляр анімації
+            val fadeOut = AnimationUtils.loadAnimation(this , R.anim.fade_outnormal)
+
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {}
+                override fun onAnimationRepeat(animation: Animation) {}
+                override fun onAnimationEnd(animation: Animation) {
+                    child.visibility = View.INVISIBLE
+                }
+            })
+
+            child.startAnimation(fadeOut)
+        }
+    }
+    private fun animateShrinkRoot(): Animator {
+        // 1. Знаходимо в’юшки
+        val root     = findViewById<ConstraintLayout>(R.id.rootBikeinf)
+        val leftBtn  = findViewById<View>(R.id.left_button)
+        val rightBtn = findViewById<View>(R.id.right_button_2)
+
+        // 2. Конвертуємо 300dp → px для контейнера
+        val targetPx   = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, 300f, resources.displayMetrics
+        ).toInt()
+        val startH     = root.height
+
+        // 3. Height-анімація контейнера
+        val heightAnim = ValueAnimator.ofInt(startH, targetPx).apply {
+            duration       = 750L
+            interpolator   = AccelerateDecelerateInterpolator()
+            addUpdateListener { anim ->
+                val newH = anim.animatedValue as Int
+                root.layoutParams = root.layoutParams.apply { height = newH }
+                root.requestLayout()
             }
+        }
+
+        // 4. Підготувати Rect для clipBounds
+        val lw = leftBtn.width
+        val lh = leftBtn.height
+        val rw = rightBtn.width
+        val rh = rightBtn.height
+
+        // Ліва кнопка: clip справа → затираємо з правого краю
+        val leftStartRect = Rect(0, 0, lw, lh)
+        val leftEndRect   =  Rect(0, 0, 0, lh)  // ширина 0, “справа” → “зліва”
+        val leftClipAnim = ObjectAnimator.ofObject(
+            leftBtn, "clipBounds",
+            RectEvaluator() ,
+            leftStartRect,
+            leftEndRect
+        ).apply {
+            duration     = 750L
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        // Права кнопка: clip зліва → затираємо з лівого краю
+        val rightStartRect = Rect(0, 0, rw, rh)
+        val rightEndRect   = Rect(rw, 0, rw, rh)    // ширина 0, “зліва” → “справа”
+        val rightClipAnim = ObjectAnimator.ofObject(
+            rightBtn, "clipBounds",
+            RectEvaluator(),
+            rightStartRect,
+            rightEndRect
+        ).apply {
+            duration     = 750L
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        // 5. Запускаємо всі разом
+        return AnimatorSet().apply {
+            playTogether(heightAnim, leftClipAnim, rightClipAnim)
         }
     }
 }

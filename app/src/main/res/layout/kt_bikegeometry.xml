@@ -8,7 +8,7 @@
         android:id="@+id/frame_top"
         android:background="@color/bike_grey_blue"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         app:layout_constraintTop_toTopOf="parent">
         <TextView
             android:textSize="28sp"
@@ -16,7 +16,6 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:id="@+id/brand_model"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bike Name"
@@ -25,7 +24,7 @@
             android:layout_gravity="end|center_vertical"
             android:id="@+id/bike_photo"
             android:layout_width="98dp"
-            android:layout_height="68dp"
+            android:layout_height="59dp"
             android:contentDescription="@string/_1"/>
         <Button
             android:id="@+id/back"
@@ -54,7 +53,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:background="@drawable/bg_grey_square"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:id="@+id/rootbike"
+                android:layout_height="300dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
                 <TextView
@@ -89,6 +89,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:padding="4dp"
+                android:id="@+id/rootmain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.gridlayout.widget.GridLayout
