@@ -227,6 +227,7 @@ class PreAddBikeActivity : AppCompatActivity() {
             this , R.anim.fade_in_faster , R.anim.fade_out_faster
         )
         startActivity(intent , options.toBundle())
+            finish()
         }
 
 

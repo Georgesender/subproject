@@ -66,6 +66,7 @@ import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDao
 import com.example.sgb.room.BikeDatabase
 import com.example.sub.R
+import games.GamesMenu
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -280,9 +281,9 @@ class ActBikeGarage : AppCompatActivity() {
         super.onEnterAnimationComplete()
         // Запускаємо свій “fade-in” лише для внутрішнього контенту:
         fadeInChildren(bikeNameContainer, duration = 400L)
-        fadeInChildren(rootBikeInfo,       duration = 500L, startDelay = 500L)
-        fadeInChildren(rootScroll, duration = 500L, startDelay =500L)
-        fadeInChildren(bottomNav, duration = 400L)
+        fadeInChildren(rootBikeInfo,       duration = 700L, startDelay = 400L)
+        fadeInChildren(rootScroll, duration = 900L, startDelay =400L)
+        fadeInChildren(bottomNav, duration = 200L)
     }
 
     // Робимо alpha=0 для всіх прямих дітей (вмісту) контейнера
@@ -344,18 +345,16 @@ class ActBikeGarage : AppCompatActivity() {
 
 
     private fun setupBottomNavigation() {
-        val navHome = findViewById<TextView>(R.id.nav_home)
-        val navCompCheck = findViewById<TextView>(R.id.nav_setups)
-        val navDiscover = findViewById<TextView>(R.id.nav_etc)
+        val navHome = findViewById<TextView>(R.id.current_bike)
+        val navGames = findViewById<TextView>(R.id.games)
 
-        navCompCheck.setOnClickListener {
-        }
 // garage test
-        navDiscover.setOnClickListener {
-            val intent = Intent(this , GarageActivity::class.java)
+        navGames.setOnClickListener {
+            val intent = Intent(this , GamesMenu::class.java)
             val options = ActivityOptionsCompat.makeCustomAnimation(
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
             )
+            intent.putExtra("bike_id", bikeId)
             startActivity(intent , options.toBundle())
             finish()
         }

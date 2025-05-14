@@ -5,14 +5,13 @@
     android:orientation="horizontal"
     android:background="@color/transparent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="40dp">
     <TextView
         android:textSize="19sp"
         android:textColor="@color/white"
         android:gravity="center"
-        android:id="@+id/nav_home"
+        android:id="@+id/current_bike"
         android:background="@color/black"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:text="@string/Garage"
@@ -21,22 +20,10 @@
         android:textSize="19sp"
         android:textColor="@color/white"
         android:gravity="center"
-        android:id="@+id/nav_setups"
-        android:background="@drawable/tb_left_right"
-        android:padding="10dp"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:text="@string/Discover"
-        android:layout_weight="1"/>
-    <TextView
-        android:textSize="19sp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:id="@+id/nav_etc"
+        android:id="@+id/games"
         android:background="@color/black"
-        android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:text="@string/CompCheker"
+        android:text="@string/games"
         android:layout_weight="1"/>
 </LinearLayout>

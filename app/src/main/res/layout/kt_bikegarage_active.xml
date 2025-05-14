@@ -65,8 +65,8 @@
 
                     <ImageView
                         android:id="@+id/bike_image"
-                        android:layout_width="370dp"
-                        android:layout_height="250dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="270dp"
                         android:layout_marginTop="12dp"
                         android:contentDescription="Bike Image"
                         app:layout_constraintStart_toStartOf="parent"
@@ -175,7 +175,7 @@
     <include
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -191,13 +191,12 @@
 
         <Button
             android:id="@+id/left_button"
-            android:layout_width="58dp"
-            android:layout_height="46dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="6dp"
             android:layout_marginTop="1dp"
-            android:background="@color/transparent"
-            android:text="@string/Menu"
+            android:background="@drawable/img_garage"
             android:textColor="@color/white"
             android:textSize="14sp"
             tools:ignore="TouchTargetSizeCheck,TextSizeCheck" />
@@ -215,8 +214,8 @@
 
         <ImageButton
             android:id="@+id/right_button_2"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="6dp"
             android:background="@color/transparent"

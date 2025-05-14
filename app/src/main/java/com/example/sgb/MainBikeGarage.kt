@@ -139,6 +139,7 @@ class MainBikeGarage : AppCompatActivity() {
                         0  // Вихідна анімація
                     )
                     startActivity(intent, options.toBundle())
+                    finish()
                 }
             })
             start()

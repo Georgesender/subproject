@@ -154,6 +154,7 @@
     <string name="cannot_be_adited_in_fututre_hint">(не можлво буде додати/змінити)\n</string>
     <string name="Frame_size">Розмір рами</string>
     <string name="etc_sizes">Інші роміри</string>
+    <string name="games">Міні гра</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

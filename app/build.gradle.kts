@@ -43,7 +43,6 @@ android {
 
 dependencies {
     implementation (libs.androidx.work.runtime.ktx)
-
     implementation (libs.ambilwarna)
     implementation (libs.ucrop)
     implementation (libs.glide)
@@ -76,4 +75,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation (libs.androidx.constraintlayout.compose)
 }

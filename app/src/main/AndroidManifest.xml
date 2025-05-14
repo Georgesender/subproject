@@ -31,8 +31,6 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ComponentsCheker"/>
-    <activity android:theme="@style/AppTheme" android:name="com.example.sgb.Discover" android:exported="true"/>
     <activity android:theme="@style/AppThemeAct" android:name="com.example.sgb.PreAddBikeActivity" android:exported="true"/>
     <activity android:theme="@style/AppThemeAct" android:name="com.example.sgb.ActBikeGarage" android:exported="true"/>
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGeometry" android:exported="true"/>
@@ -43,7 +41,7 @@
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActService" android:exported="true" android:windowSoftInputMode="adjustPan"/>
 
         <activity android:theme="@style/AppTheme" android:name="com.example.sgb.PreAddOwnBike" android:exported="true" android:windowSoftInputMode="adjustPan"/>
-        <activity android:theme="@style/AppTheme" android:name="com.example.sgb.GarageActivity" android:exported="true" android:windowSoftInputMode="adjustPan"/>
+        <activity android:theme="@style/AppThemeAnim" android:name="com.example.sgb.GarageActivity" android:exported="true" android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.example.sgb.SplashActivity"
             android:exported="true"> <!-- Можна задати окрему тему для splash -->
@@ -52,6 +50,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:theme="@style/AppTheme" android:name="games.GamesMenu" android:exported="true" android:windowSoftInputMode="adjustPan"/>
 
     </application>
 
