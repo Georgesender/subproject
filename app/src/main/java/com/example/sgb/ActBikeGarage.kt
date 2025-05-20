@@ -338,9 +338,6 @@ class ActBikeGarage : AppCompatActivity() {
             bike.modelsJson.values.first().submodels.values.first().years.keys.first()
         bikeSubmodelTextView.text = bike.modelsJson.values.first().submodels.keys.first()
 
-        // Додаємо оновлення лічильника годин
-        val hoursText = "${bike.elapsedHoursValue} год."
-        findViewById<TextView>(R.id.elapsed_hours_value).text = hoursText
     }
 
 

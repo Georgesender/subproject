@@ -155,6 +155,7 @@
     <string name="Frame_size">Розмір рами</string>
     <string name="etc_sizes">Інші роміри</string>
     <string name="games">Міні гра</string>
+    <string name="bg">background</string>
 
     <string-array name="fork_seg_units_array">
         <item>%</item>

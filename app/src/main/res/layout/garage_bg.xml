@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_linux">
+
+    <!-- Фонова картинка -->
+    <ImageView
+        android:id="@+id/blur_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/img_main"
+        android:contentDescription="@string/bg" />
+
+    <!-- ViewPager2 як базовий шар -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- AppBarLayout поверх ViewPager2 -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:backgroundTint="@color/transparent">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:background="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:layout_height="150dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/miniRecycler"
+                android:background="@color/transparent"
+                android:layout_width="match_parent"
+                android:paddingTop="6dp"
+                android:backgroundTint="@color/transparent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="pin" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Іконка “скролл-даун” -->
+    <ImageView
+        android:id="@+id/scrolldown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/svg_scrolldown"
+        android:contentDescription="@string/test"
+        android:layout_marginEnd="8dp"
+        android:translationY="-40dp"
+        android:elevation="6dp"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|end" />
+
+    <!-- Кнопка FAB -->
+    <ImageButton
+        android:id="@+id/fab_add_bike"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:src="@drawable/img_add_bike"
+        android:layout_margin="24dp"
+        android:scaleType="fitCenter"
+        android:background="@drawable/shape_oval"
+        android:elevation="6dp"
+        app:layout_anchor="@id/viewPager"
+        app:layout_anchorGravity="bottom|end" />
+
+    <!-- Gesture Overlay справа -->
+    <View
+        android:id="@+id/gesture_overlay"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_gravity="end"
+        android:elevation="8dp" />
+
+    <!-- Gesture Overlay зліва -->
+    <View
+        android:id="@+id/gesture_overlay1"
+        android:layout_width="35dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_gravity="start"
+        android:elevation="8dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

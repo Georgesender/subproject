@@ -15,7 +15,7 @@ class GamesMenu : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.kt1_games_menu)
+        setContentView(R.layout.games_menu)
         setupBottomNavigation()
         bikeId = intent.getIntExtra("bike_id", -1)
         if(bikeId == -1) {

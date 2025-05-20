@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/transparent"
+
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+
+
+    android:layout_width="0dp"
+    android:layout_height="140dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginStart="35dp"
+    android:layout_marginEnd="35dp"
+android:background="@color/black"
+    android:elevation="4dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <!-- Фотка байка -->
+
+    <!-- Назва байка -->
+
+    <ImageView
+        android:id="@+id/bike_image"
+        android:layout_width="140dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_fork"
+        android:layout_margin="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/bike_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Назва"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@id/bike_number"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <!-- Модель -->
+    <TextView
+        android:id="@+id/bike_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Модель"
+        android:textSize="12sp"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/bike_name"
+        app:layout_constraintBaseline_toBaselineOf="@id/bike_name"
+        tools:ignore="HardcodedText" />
+
+    <!-- Номер -->
+
+    <!-- Години -->
+
+    <!-- Друга колонка: Рік -->
+
+    <TextView
+        android:id="@+id/bike_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Номер"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/labelHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:text="@string/Riden_hours"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/bike_image" />
+
+    <TextView
+        android:id="@+id/bike_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/labelHours"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Розмір -->
+
+    <!-- Вилка -->
+
+    <!-- Аморт -->
+    <TextView
+        android:id="@+id/bike_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
+        android:text="Рік"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/bike_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bike_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Розмір"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bike_name" />
+
+    <TextView
+        android:id="@+id/bike_fork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вилка"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/bike_image"
+        app:layout_constraintTop_toBottomOf="@id/bike_size" />
+
+    <TextView
+        android:id="@+id/bike_shock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Аморт"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/bike_image"
+        app:layout_constraintTop_toBottomOf="@id/bike_fork" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

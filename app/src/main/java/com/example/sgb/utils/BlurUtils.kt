@@ -7,7 +7,7 @@ import android.widget.ImageView
 
 object BlurUtils {
     const val BLUR_RADIUS = 20f
-
+    const val BLUR_RADIUS50 = 50f
     /** Накладає розмиття на imageView, або прибирає effect, якщо radius == 0 */
     fun applyBlur(imageView: ImageView, radius: Float) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
