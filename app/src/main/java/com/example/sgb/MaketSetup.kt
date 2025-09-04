@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.TransitionDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,6 +26,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -42,12 +44,17 @@ import com.example.sgb.room.BpMarksSuspenshion
 import com.example.sub.R
 import com.example.sub.R.id.average_mark
 import com.example.sub.R.id.shock_seg_units
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.io.IOException
 
 class MaketSetup : AppCompatActivity() {
+
+    // В тілі Activity — оголошення змінних (на рівні класу)
+    private var pendingJsonToSave: String? = null
+    private var pendingSuggestedName: String = "bikepark_export.json"
     private lateinit var fork: TextView
     private lateinit var shock: TextView
     private lateinit var fTyre: TextView
@@ -131,7 +138,51 @@ private val initialValues = mutableMapOf<Int, Int>()
     private lateinit var shockLSRDelta: TextView
     private lateinit var shockHSCDelta: TextView
     private lateinit var shockLSCDelta: TextView
+    // Регістрація лончера — роби це в класі (не в локальному методі), або безпосередньо у onCreate перед використанням
+    private val createFileLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
+            if (uri == null) {
+                Toast.makeText(this, "Збереження скасовано", Toast.LENGTH_SHORT).show()
+                return@registerForActivityResult
+            }
 
+            val json = pendingJsonToSave
+            if (json.isNullOrEmpty()) {
+                Toast.makeText(this, "Немає даних для збереження", Toast.LENGTH_SHORT).show()
+                return@registerForActivityResult
+            }
+
+            // Запис у вибраний Uri в IO-потоці
+            lifecycleScope.launch {
+                val resultMessage = withContext(Dispatchers.IO) {
+                    try {
+                        contentResolver.openOutputStream(uri)?.use { out ->
+                            out.write(json.toByteArray(Charsets.UTF_8))
+                            out.flush()
+                        } ?: throw IOException("Не вдалося відкрити потік для запису")
+                        "Експортовано у $uri"
+                    } catch (e: Exception) {
+                        "Помилка експорту: ${e.message ?: "unknown"}"
+                    }
+                }
+
+                // Показати результат
+                Toast.makeText(this@MaketSetup, resultMessage, Toast.LENGTH_LONG).show()
+
+                // Опціонально: відкрити файл у зовнішньому редакторі одразу після збереження
+                if (!resultMessage.startsWith("Помилка")) {
+                    try {
+                        val openIntent = Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndType(uri, "application/json")
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        startActivity(openIntent)
+                    } catch (_: Exception) {
+                        // Якщо нема програми, яка відкриває JSON — нічого страшного
+                    }
+                }
+            }
+        }
     private val bpMarksSusDao by lazy { BikeDatabase.getDatabase(this).bpMarksSusDao() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,6 +241,52 @@ private val initialValues = mutableMapOf<Int, Int>()
         val setupName = intent.getStringExtra("setup_name")
         val checkedText = intent.getStringExtra("BikePark")
 
+
+        // test section start
+
+        val exportButton = findViewById<Button>(R.id.testexport)
+        exportButton.setOnClickListener {
+            lifecycleScope.launch {
+                // --- Підготувати JSON (в IO) ---
+                val pair = withContext(Dispatchers.IO) {
+                    try {
+                        val db = BikeDatabase.getDatabase(applicationContext)
+                        val dao = db.bpSetupDao()
+                        val gson = GsonBuilder().setPrettyPrinting().create()
+
+                        if (bikeId != -1) {
+                            val setup = dao.getBikeParkSetupById(bikeId)
+                            if (setup == null) {
+                                null to "Немає запису для bikeId=$bikeId"
+                            } else {
+                                val json = gson.toJson(setup)
+                                val filename = "bikepark_$bikeId${System.currentTimeMillis()}.json"
+                                json to filename
+                            }
+                        } else {
+                            val list = dao.getAllBikeParkSetups()
+                            val json = gson.toJson(list)
+                            val filename = "bikepark_all_${System.currentTimeMillis()}.json"
+                            json to filename
+                        }
+                    } catch (e: Exception) {
+                        null to ("Помилка при отриманні даних: ${e.message ?: "unknown"}")
+                    }
+                }
+
+                val (json, maybeFilename) = pair
+                if (json == null) {
+                    Toast.makeText(this@MaketSetup, maybeFilename, Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+
+                // Збережемо тимчасово та запустимо діалог з підказаною назвою
+                pendingJsonToSave = json
+                pendingSuggestedName = maybeFilename
+                createFileLauncher.launch(pendingSuggestedName)
+            }
+        }
+        // test section end
         fun EditText.enableLongPressEdit(context: Context) {
             isFocusable = false
             isClickable = true

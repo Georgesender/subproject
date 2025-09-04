@@ -1,5 +1,6 @@
 package com.example.sgb
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -51,7 +52,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -457,7 +457,7 @@ class ActBikeGarage : AppCompatActivity() {
     }
 
     private fun checkNotificationSettings() {
-        val prefs = getSharedPreferences("bike_prefs" , Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("bike_prefs" , MODE_PRIVATE)
         if (prefs.getBoolean("receive_notifications" , true)) {
             initNotifications()
         } else {

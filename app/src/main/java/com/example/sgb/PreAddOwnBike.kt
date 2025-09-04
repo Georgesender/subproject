@@ -300,7 +300,7 @@ class PreAddOwnBike : AppCompatActivity() {
         val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         try {
             contentResolver.takePersistableUriPermission(uri, takeFlags)
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             Toast.makeText(this, "Не вдалося зберегти дозвіл для доступу до зображення", Toast.LENGTH_SHORT).show()
         }
     }

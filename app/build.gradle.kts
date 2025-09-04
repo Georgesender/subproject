@@ -7,12 +7,11 @@ plugins {
 
 android {
     namespace = "com.example.sub"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.sub"
         minSdk = 24
-        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "0.2"
@@ -42,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.localbroadcastmanager)
     implementation (libs.androidx.work.runtime.ktx)
     implementation (libs.ambilwarna)
     implementation (libs.ucrop)

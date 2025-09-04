@@ -7,7 +7,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -110,99 +109,73 @@ class SplashActivity : AppCompatActivity() {
         logo.visibility = View.VISIBLE
         appName.visibility = View.VISIBLE
 
-        logo.post {
-            // 1) Logo clip-in from top-right
-            val lw = logo.width
-            val lh = logo.height
-            logo.clipBounds = Rect(lw, 0, lw, lh)
-            val logoAnim = ValueAnimator.ofInt(0, lw).apply {
-                duration = 1500L
-                addUpdateListener { anim ->
-                    val p = anim.animatedValue as Int
-                    logo.clipBounds = Rect(lw - p, 0, lw, lh)
-                }
+        // Set initial alpha to 0 for fade-in
+        logo.alpha = 0f
+        appName.alpha = 0f
+
+        // 1) Fade-in animations for logo and appName
+        val logoFadeIn = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000L
+            addUpdateListener { a -> logo.alpha = a.animatedValue as Float }
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        val appNameFadeIn = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000L
+            startDelay = 200L // Slight delay for staggered effect
+            addUpdateListener { a -> appName.alpha = a.animatedValue as Float }
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+
+        // 2) Background padding + blur
+        val density = resources.displayMetrics.density
+        val paddingAnim = ValueAnimator.ofInt(0, (24 * density).toInt()).apply {
+            duration = 2500L
+            addUpdateListener { a -> rootLayout.setPadding(a.animatedValue as Int) }
+        }
+
+        val blurAnim = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ValueAnimator.ofFloat(0f, BlurUtils.BLUR_RADIUS).apply {
+                duration = 2500L
+                addUpdateListener { a -> BlurUtils.applyBlur(blurOverlay, a.animatedValue as Float) }
             }
+        } else null
 
-            appName.post {
-                // 2) AppName clip-in from left
-                val tw = appName.width
-                val th = appName.height
-                appName.clipBounds = Rect(0, 0, 0, th)
-                val textAnim = ValueAnimator.ofInt(0, tw).apply {
-                    duration = 2500L
-                    addUpdateListener { anim ->
-                        val p = anim.animatedValue as Int
-                        appName.clipBounds = Rect(0, 0, p, th)
-                    }
-                }
+        // 3) Fade-out animations for logo and appName
+        val logoFadeOut = ValueAnimator.ofFloat(1f, 0f).apply {
+            duration = 1000L
+            addUpdateListener { a -> logo.alpha = a.animatedValue as Float }
+            interpolator = AccelerateDecelerateInterpolator()
+        }
 
-                // 3) Depth fade-out and background overlay together
-                val density = resources.displayMetrics.density
-                // Logo depth animators
-                val logoDepthScaleX = ValueAnimator.ofFloat(1f, 0.5f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> logo.scaleX = a.animatedValue as Float }
-                }
-                val logoDepthScaleY = ValueAnimator.ofFloat(1f, 0.5f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> logo.scaleY = a.animatedValue as Float }
-                }
-                val logoDepthAlpha = ValueAnimator.ofFloat(1f, 0f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> logo.alpha = a.animatedValue as Float }
-                }
-                // Text depth animators
-                val textDepthScaleX = ValueAnimator.ofFloat(1f, 0.5f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> appName.scaleX = a.animatedValue as Float }
-                }
-                val textDepthScaleY = ValueAnimator.ofFloat(1f, 0.5f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> appName.scaleY = a.animatedValue as Float }
-                }
-                val textDepthAlpha = ValueAnimator.ofFloat(1f, 0f).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> appName.alpha = a.animatedValue as Float }
-                }
-                // Background padding + blur
-                val paddingAnim = ValueAnimator.ofInt(0, (24 * density).toInt()).apply {
-                    duration = 2500L
-                    addUpdateListener { a -> rootLayout.setPadding(a.animatedValue as Int) }
-                }
-                val blurAnim = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    ValueAnimator.ofFloat(0f, BlurUtils.BLUR_RADIUS).apply {
-                        duration = 2500L
-                        addUpdateListener { a -> BlurUtils.applyBlur(blurOverlay, a.animatedValue as Float) }
-                    }
-                } else null
+        val appNameFadeOut = ValueAnimator.ofFloat(1f, 0f).apply {
+            duration = 1000L
+            addUpdateListener { a -> appName.alpha = a.animatedValue as Float }
+            interpolator = AccelerateDecelerateInterpolator()
+        }
 
-                val combinedFadeOutSet = AnimatorSet().apply {
-                    playTogether(listOfNotNull(
-                        logoDepthScaleX, logoDepthScaleY, logoDepthAlpha,
-                        textDepthScaleX, textDepthScaleY, textDepthAlpha,
-                        paddingAnim, blurAnim
-                    ))
-                    interpolator = AccelerateDecelerateInterpolator()
-                }
+        // Combine padding, blur, and fade-out animations
+        val combinedFadeOutSet = AnimatorSet().apply {
+            playTogether(listOfNotNull(paddingAnim, blurAnim, logoFadeOut, appNameFadeOut))
+            interpolator = AccelerateDecelerateInterpolator()
+        }
 
-                // Sequence: logo in, text in, then combined fade-out + overlay
-                AnimatorSet().apply {
-                    playSequentially(logoAnim, textAnim, combinedFadeOutSet)
-                    addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator) {
-                            logo.visibility = View.GONE
-                            appName.visibility = View.GONE
-                            onEnd()
-                        }
-                    })
-                    combinedFadeOutSet.addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationStart(animation: Animator) {
-                            blurOverlay.visibility = View.VISIBLE
-                        }
-                    })
-                    start()
+        // Sequence: logo fade-in, appName fade-in, then combined fade-out + overlay
+        AnimatorSet().apply {
+            playSequentially(logoFadeIn, appNameFadeIn, combinedFadeOutSet)
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    logo.visibility = View.GONE
+                    appName.visibility = View.GONE
+                    onEnd()
                 }
-            }
+            })
+            combinedFadeOutSet.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    blurOverlay.visibility = View.VISIBLE
+                }
+            })
+            start()
         }
     }
 

@@ -124,6 +124,9 @@ interface BPSetupDao {
 
     @Query("DELETE FROM bikepark_table")
     suspend fun deleteAllBikeParkSetups()
+
+    @Query("SELECT * FROM bikepark_table")
+    suspend fun getAllBikeParkSetups(): List<BikeParkSetupData>
 }
 
 // Sus - скорочено від suspension

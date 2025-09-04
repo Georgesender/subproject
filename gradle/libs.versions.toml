@@ -1,36 +1,38 @@
 [versions]
-agp = "8.10.0"
+agp = "8.13.0"
 ambilwarna = "2.0.1"
 constraintlayoutCompose = "1.1.1"
-glide = "4.12.0"
+glide = "5.0.4"
 gridlayout = "1.1.0"
-gson = "2.11.0"
-kotlin = "2.0.0"
-coreKtx = "1.16.0"
+gson = "2.13.1"
+kotlin = "2.2.10"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-kotlinxCoroutinesAndroid = "1.7.3"
-lifecycleRuntimeKtx = "2.9.0"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+kotlinxCoroutinesAndroid = "1.10.2"
+lifecycleRuntimeKtx = "2.9.3"
 activityCompose = "1.10.1"
-composeBom = "2025.05.00"
-roomCommon = "2.7.1"
-firebaseCrashlyticsBuildtools = "3.0.3"
-roomCompiler = "2.7.1"
-roomKtx = "2.7.1"
-appcompat = "1.7.0"
+composeBom = "2025.08.01"
+localbroadcastmanager = "1.1.0"
+roomCommon = "2.7.2"
+firebaseCrashlyticsBuildtools = "3.0.6"
+roomCompiler = "2.7.2"
+roomKtx = "2.7.2"
+appcompat = "1.7.1"
 constraintlayout = "2.2.1"
-roomRuntime = "2.7.1"
+roomRuntime = "2.7.2"
 cardview = "1.0.0"
 ucrop = "2.2.8"
-workRuntimeKtx = "2.10.1"
-material = "1.12.0"
+workRuntimeKtx = "2.10.3"
+material = "1.13.0"
 
 [libraries]
 ambilwarna = { module = "com.github.yukuku:ambilwarna", version.ref = "ambilwarna" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
+androidx-localbroadcastmanager = { module = "androidx.localbroadcastmanager:localbroadcastmanager", version.ref = "localbroadcastmanager" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }

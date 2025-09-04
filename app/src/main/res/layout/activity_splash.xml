@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">  <!-- Вкажіть свій фон -->
+    android:background="@color/dark_black">  <!-- Вкажіть свій фон -->
 
     <!-- Прогрес-бар для індикації завантаження -->
     <ProgressBar
@@ -27,7 +27,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_logo_test"
+        android:src="@drawable/img_logo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:translationY="-76dp"
@@ -36,7 +36,7 @@
         android:id="@+id/name_of_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sub project"
+        android:text="GOSSetup"
         android:textSize="28sp"
         android:textColor="@color/white"
         android:gravity="center"
