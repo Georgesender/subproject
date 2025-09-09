@@ -20,8 +20,8 @@ import com.example.sub.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 import androidx.core.view.isNotEmpty
-import com.example.sgb.room.BPSetupDao
-import com.example.sgb.room.BikeParkSetupData
+import com.example.sgb.room.MaketSetupDao
+import com.example.sgb.room.SetupData
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
@@ -29,7 +29,7 @@ import java.io.PrintWriter
 class ActSetups : AppCompatActivity() {
     private lateinit var bikeNameTextView: TextView
     private var isDeleteMode = false
-    private lateinit var bpSetupDao: BPSetupDao
+    private lateinit var bpSetupDao: MaketSetupDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class ActSetups : AppCompatActivity() {
 
         // Ініціалізація бази даних
         val db = BikeDatabase.getDatabase(this)
-        bpSetupDao = db.bpSetupDao()
+        bpSetupDao = db.maketSetupDao()
 
         findViewById<Button>(R.id.back).setOnClickListener { navigateToBikeGarage(bikeId) }
         setupAlertDialog(findViewById(R.id.burger_menu), bikeId)
@@ -63,13 +63,13 @@ class ActSetups : AppCompatActivity() {
     // Додано функцію для завантаження даних BikePark
     private fun loadBikeParkSetupData(bikeId: Int) {
         lifecycleScope.launch {
-            val setupData = bpSetupDao.getBikeParkSetupById(bikeId)
+            val setupData = bpSetupDao.getSetupById(bikeId)
             setupData?.let { populateBikeParkData(it) }
         }
     }
 
     // Додано функцію для заповнення даних BikePark
-    private fun populateBikeParkData(data: BikeParkSetupData) {
+    private fun populateBikeParkData(data: SetupData) {
         // Заповнення значень шока
         findViewById<TextView>(R.id.shock_hsc_value).text = data.shockHSC.toString().takeIf { it != "0" } ?: "—"
         findViewById<TextView>(R.id.shock_lsc_value).text = data.shockLSC.toString().takeIf { it != "0" } ?: "—"

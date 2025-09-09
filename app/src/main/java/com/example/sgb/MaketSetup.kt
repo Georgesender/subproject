@@ -37,10 +37,10 @@ import androidx.core.net.toUri
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.sgb.room.BPSetupDao
 import com.example.sgb.room.BikeDatabase
-import com.example.sgb.room.BikeParkSetupData
-import com.example.sgb.room.BpMarksSuspenshion
+import com.example.sgb.room.MaketSetupDao
+import com.example.sgb.room.MarksSuspenshion
+import com.example.sgb.room.SetupData
 import com.example.sub.R
 import com.example.sub.R.id.average_mark
 import com.example.sub.R.id.shock_seg_units
@@ -183,7 +183,7 @@ private val initialValues = mutableMapOf<Int, Int>()
                 }
             }
         }
-    private val bpMarksSusDao by lazy { BikeDatabase.getDatabase(this).bpMarksSusDao() }
+    private val marksSusDao by lazy { BikeDatabase.getDatabase(this).marksSusDao() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -251,11 +251,11 @@ private val initialValues = mutableMapOf<Int, Int>()
                 val pair = withContext(Dispatchers.IO) {
                     try {
                         val db = BikeDatabase.getDatabase(applicationContext)
-                        val dao = db.bpSetupDao()
+                        val dao = db.maketSetupDao()
                         val gson = GsonBuilder().setPrettyPrinting().create()
 
                         if (bikeId != -1) {
-                            val setup = dao.getBikeParkSetupById(bikeId)
+                            val setup = dao.getSetupById(bikeId)
                             if (setup == null) {
                                 null to "Немає запису для bikeId=$bikeId"
                             } else {
@@ -264,7 +264,7 @@ private val initialValues = mutableMapOf<Int, Int>()
                                 json to filename
                             }
                         } else {
-                            val list = dao.getAllBikeParkSetups()
+                            val list = dao.getAllSetups()
                             val json = gson.toJson(list)
                             val filename = "bikepark_all_${System.currentTimeMillis()}.json"
                             json to filename
@@ -409,13 +409,13 @@ private val initialValues = mutableMapOf<Int, Int>()
         setHeaderText(setupName, checkedText)
 
         val bikeDatabase = BikeDatabase.getDatabase(this)
-        val bpSetupDao = bikeDatabase.bpSetupDao()
+        val maketSetupDao = bikeDatabase.maketSetupDao()
 
 
-        loadSetupData(bikeId, bpSetupDao)
+        loadSetupData(bikeId, maketSetupDao)
         loadSetupById(bikeId)
         loadMarksData(bikeId)
-        loadDeltaValues(bikeId, bpSetupDao)
+        loadDeltaValues(bikeId, maketSetupDao)
 
 
 
@@ -426,7 +426,7 @@ fun handleIncrement(
     editText: EditText,
     fieldName: String,
     bikeId: Int,
-    bpSetupDao: BPSetupDao,
+    maketSetupDao: MaketSetupDao,
     context: Context
 ) {
     val currentValue = editText.text.toString().toIntOrNull() ?: 0
@@ -438,57 +438,57 @@ fun handleIncrement(
     }
 
     editText.setText(newValue.toString())
-    updateFieldInDb(fieldName, newValue, bikeId, bpSetupDao)
+    updateFieldInDb(fieldName, newValue, bikeId, maketSetupDao)
 }
 
 
         inForkHsr.setOnClickListener {
-            handleIncrement(forkHSR, "forkHSR", bikeId, bpSetupDao, this)
+            handleIncrement(forkHSR, "forkHSR", bikeId, maketSetupDao, this)
 
         }
         deForkHsr.setOnClickListener {
             val currentValue = forkHSR.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             forkHSR.setText(newValue.toString())
-            updateFieldInDb("forkHSR", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("forkHSR", newValue, bikeId, maketSetupDao)
         }
 
         inForkLsr.setOnClickListener {
-            handleIncrement(forkLSR, "forkLSR", bikeId, bpSetupDao, this)
+            handleIncrement(forkLSR, "forkLSR", bikeId, maketSetupDao, this)
         }
 
         deForkLsr.setOnClickListener {
             val currentValue = forkLSR.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             forkLSR.setText(newValue.toString())
-            updateFieldInDb("forkLSR", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("forkLSR", newValue, bikeId, maketSetupDao)
         }
 
         inForkHsc.setOnClickListener {
-            handleIncrement(forkHSC, "forkHSC", bikeId, bpSetupDao, this)
+            handleIncrement(forkHSC, "forkHSC", bikeId, maketSetupDao, this)
         }
 
         deForkHsc.setOnClickListener {
             val currentValue = forkHSC.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             forkHSC.setText(newValue.toString())
-            updateFieldInDb("forkHSC", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("forkHSC", newValue, bikeId, maketSetupDao)
         }
 
         inForkLsc.setOnClickListener {
-            handleIncrement(forkLSC, "forkLSC", bikeId, bpSetupDao, this)
+            handleIncrement(forkLSC, "forkLSC", bikeId, maketSetupDao, this)
         }
 
         deForkLsc.setOnClickListener {
             val currentValue = forkLSC.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             forkLSC.setText(newValue.toString())
-            updateFieldInDb("forkLSC", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("forkLSC", newValue, bikeId, maketSetupDao)
         }
 
 
         inShockHsr.setOnClickListener {
-            handleIncrement(shockHSR, "shockHSR", bikeId, bpSetupDao, this)
+            handleIncrement(shockHSR, "shockHSR", bikeId, maketSetupDao, this)
 
         }
 
@@ -496,40 +496,40 @@ fun handleIncrement(
             val currentValue = shockHSR.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             shockHSR.setText(newValue.toString())
-            updateFieldInDb("shockHSR", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("shockHSR", newValue, bikeId, maketSetupDao)
         }
 
         inShockLsr.setOnClickListener {
-            handleIncrement(shockLSR, "shockLSR", bikeId, bpSetupDao, this)
+            handleIncrement(shockLSR, "shockLSR", bikeId, maketSetupDao, this)
         }
 
         deShockLsr.setOnClickListener {
             val currentValue = shockLSR.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             shockLSR.setText(newValue.toString())
-            updateFieldInDb("shockLSR", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("shockLSR", newValue, bikeId, maketSetupDao)
         }
 
         inShockHsc.setOnClickListener {
-            handleIncrement(shockHSC, "shockHSC", bikeId, bpSetupDao, this)
+            handleIncrement(shockHSC, "shockHSC", bikeId, maketSetupDao, this)
         }
 
         deShockHsc.setOnClickListener {
             val currentValue = shockHSC.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             shockHSC.setText(newValue.toString())
-            updateFieldInDb("shockHSC", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("shockHSC", newValue, bikeId, maketSetupDao)
         }
 
         inShockLsc.setOnClickListener {
-            handleIncrement(shockLSC, "shockLSC", bikeId, bpSetupDao, this)
+            handleIncrement(shockLSC, "shockLSC", bikeId, maketSetupDao, this)
         }
 
         deShockLsc.setOnClickListener {
             val currentValue = shockLSC.text.toString().toIntOrNull() ?: 0
             val newValue = if (currentValue > 0) currentValue - 1 else 0
             shockLSC.setText(newValue.toString())
-            updateFieldInDb("shockLSC", newValue, bikeId, bpSetupDao)
+            updateFieldInDb("shockLSC", newValue, bikeId, maketSetupDao)
         }
 
 
@@ -635,11 +635,11 @@ fun handleIncrement(
         fieldName: String,
         newValue: Int,
         bikeId: Int,
-        bpSetupDao: BPSetupDao
+        maketSetupDao: MaketSetupDao
     ) {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                val setup = bpSetupDao.getBikeParkSetupById(bikeId)
+                val setup = maketSetupDao.getSetupById(bikeId)
                 if (setup != null) {
                     when (fieldName) {
                         "forkHSR" -> setup.forkHSR = newValue
@@ -651,7 +651,7 @@ fun handleIncrement(
                         "shockHSC" -> setup.shockHSC = newValue
                         "shockLSC" -> setup.shockLSC = newValue
                     }
-                    bpSetupDao.updateBikeParkSetup(setup)
+                    maketSetupDao.updateSetup(setup)
                 }
             }
             when (fieldName) {
@@ -660,56 +660,56 @@ fun handleIncrement(
                     forkHSRDelta,
                     "forkHSR",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "forkLSR" -> updateDeltaForField(
                     forkLSR,
                     forkLSRDelta,
                     "forkLSR",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "forkHSC" -> updateDeltaForField(
                     forkHSC,
                     forkHSCDelta,
                     "forkHSC",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "forkLSC" -> updateDeltaForField(
                     forkLSC,
                     forkLSCDelta,
                     "forkLSC",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "shockHSR" -> updateDeltaForField(
                     shockHSR,
                     shockHSRDelta,
                     "shockHSR",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "shockLSR" -> updateDeltaForField(
                     shockLSR,
                     shockLSRDelta,
                     "shockLSR",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "shockHSC" -> updateDeltaForField(
                     shockHSC,
                     shockHSCDelta,
                     "shockHSC",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
                 "shockLSC" -> updateDeltaForField(
                     shockLSC,
                     shockLSCDelta,
                     "shockLSC",
                     bikeId,
-                    bpSetupDao
+                    maketSetupDao
                 )
             }
         }
@@ -739,7 +739,7 @@ fun handleIncrement(
         deltaTextView: TextView,
         field: String,
         bikeId: Int,
-        bpSetupDao: BPSetupDao,
+        maketSetupDao: MaketSetupDao,
         delayMillis: Long = 1000
     ) {
         val baseline = initialValues[editText.id] ?: 0
@@ -762,7 +762,7 @@ fun handleIncrement(
                 deltaTextView.visibility = View.VISIBLE
                 deltaTextView.animate().alpha(1f).setDuration(500).start()
 
-                updateDeltaFieldInDb(bikeId, bpSetupDao, field, deltaStr)
+                updateDeltaFieldInDb(bikeId, maketSetupDao, field, deltaStr)
 
                 scheduleHideDelta(deltaTextView, delayMillis)
             }
@@ -780,12 +780,12 @@ fun handleIncrement(
 
 
     @SuppressLint("SetTextI18n")
-    private fun loadSetupData(bikeId: Int, bpSetupDao: BPSetupDao) {
+    private fun loadSetupData(bikeId: Int, maketSetupDao: MaketSetupDao) {
         lifecycleScope.launch {
-            var bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
-            if (bpSetups == null) {
-                bpSetups = BikeParkSetupData(bikeId = bikeId)
-                bpSetupDao.insertBikeParkSetup(bpSetups)
+            var maketSetups = maketSetupDao.getSetupById(bikeId)
+            if (maketSetups == null) {
+                maketSetups = SetupData(bikeId = bikeId)
+                maketSetupDao.insertSetup(maketSetups)
             }
             val fields = mapOf(
                 forkHSR to "forkHSR",
@@ -807,10 +807,10 @@ fun handleIncrement(
             )
 
             fields.forEach { (editText, fieldName) ->
-                val savedValue = bpSetups.getFieldValue(fieldName)
+                val savedValue = maketSetups.getFieldValue(fieldName)
                 editText.setText(savedValue)
                 initialValues[editText.id] = savedValue.toIntOrNull() ?: 0
-                setupEditTextListener(editText, bikeId, fieldName, bpSetupDao)
+                setupEditTextListener(editText, bikeId, fieldName, maketSetupDao)
             }
 
 
@@ -818,7 +818,7 @@ fun handleIncrement(
     }
 
 
-    private fun BikeParkSetupData.getFieldValue(field: String): String {
+    private fun SetupData.getFieldValue(field: String): String {
         return when (field) {
             "forkHSR" -> forkHSR.toString()
             "forkLSR" -> forkLSR.toString()
@@ -841,7 +841,7 @@ fun handleIncrement(
         }
     }
 
-    private fun BikeParkSetupData.setFieldValue(field: String, value: String) {
+    private fun SetupData.setFieldValue(field: String, value: String) {
         when (field) {
             "forkHSR" -> forkHSR = value.toIntOrNull() ?: 0
             "forkLSR" -> forkLSR = value.toIntOrNull() ?: 0
@@ -862,7 +862,7 @@ fun handleIncrement(
             "shockPressure" -> shockPressure = value
         }
     }
-    private fun BikeParkSetupData.setDeltaFieldValue(field: String, delta: String) {
+    private fun SetupData.setDeltaFieldValue(field: String, delta: String) {
         when (field) {
             "forkHSR" -> this.forkHSRDelta = delta
             "forkLSR" -> this.forkLSRDelta = delta
@@ -876,12 +876,12 @@ fun handleIncrement(
     }
 
 
-    private fun updateDeltaFieldInDb(bikeId: Int, bpSetupDao: BPSetupDao, field: String, delta: String) {
+    private fun updateDeltaFieldInDb(bikeId: Int, maketSetupDao: MaketSetupDao, field: String, delta: String) {
         lifecycleScope.launch {
-            val bpSetup = bpSetupDao.getBikeParkSetupById(bikeId)
-            bpSetup?.let {
+            val maketSetup = maketSetupDao.getSetupById(bikeId)
+            maketSetup?.let {
                 it.setDeltaFieldValue(field, delta)
-                bpSetupDao.updateBikeParkSetup(it)
+                maketSetupDao.updateSetup(it)
             }
         }
     }
@@ -902,7 +902,7 @@ fun handleIncrement(
     @SuppressLint("SetTextI18n")
     private fun loadMarksData(bikeId: Int) {
         lifecycleScope.launch {
-            val existingMarks = bpMarksSusDao.getBpMarksSusByBikeId(bikeId)
+            val existingMarks = marksSusDao.getMarksSusByBikeId(bikeId)
             existingMarks?.let {
                 gOut.setText(it.gOut)
                 numbHands.setText(it.numbHands)
@@ -921,7 +921,7 @@ fun handleIncrement(
         editText: EditText,
         bikeId: Int,
         field: String,
-        bpSetupDao: BPSetupDao
+        maketSetupDao: MaketSetupDao
     ) {
 
 
@@ -954,19 +954,19 @@ fun handleIncrement(
                 isEditing = false
 
                 lifecycleScope.launch {
-                    val bpSetups = bpSetupDao.getBikeParkSetupById(bikeId)
-                    bpSetups?.let {
+                    val maketSetups = maketSetupDao.getSetupById(bikeId)
+                    maketSetups?.let {
                         it.setFieldValue(field, newText)
-                        bpSetupDao.updateBikeParkSetup(it)
+                        maketSetupDao.updateSetup(it)
                     }
                 }
             }
         })
     }
-    private fun loadDeltaValues(bikeId: Int, bpSetupDao: BPSetupDao) {
+    private fun loadDeltaValues(bikeId: Int, maketSetupDao: MaketSetupDao) {
         lifecycleScope.launch {
-            val bpSetup = bpSetupDao.getBikeParkSetupById(bikeId)
-            bpSetup?.let {
+            val maketSetup = maketSetupDao.getSetupById(bikeId)
+            maketSetup?.let {
                 if (it.forkHSRDelta.isNotEmpty()) {
                     forkHSRDelta.text = it.forkHSRDelta
                     val colorRes = when {
@@ -1249,27 +1249,27 @@ fun handleIncrement(
 
                 averageMark.toString().also { findViewById<TextView>(average_mark).text = it }
 
-                val newMarks = BpMarksSuspenshion(
-                    bikeId = bikeId,
-                    gOut = gOut.text.toString(),
-                    numbHands = numbHands.text.toString(),
-                    squareEdgedHits = squareEdgedHits.text.toString(),
-                    riderShifts = riderShifts.text.toString(),
-                    bottomOutSus = bottomOutSus.text.toString(),
-                    susSwinging = susSwinging.text.toString(),
-                    stability = stability.text.toString(),
-                    tyresPlussiness = tyrePlussiness.text.toString(),
-                    pulling = pulling.text.toString(),
-                    corners = cornersEdit.text.toString(),
-                    tiredFeet = feetTired.text.toString(),
+                val newMarks = MarksSuspenshion(
+                    bikeId = bikeId ,
+                    gOut = gOut.text.toString() ,
+                    numbHands = numbHands.text.toString() ,
+                    squareEdgedHits = squareEdgedHits.text.toString() ,
+                    riderShifts = riderShifts.text.toString() ,
+                    bottomOutSus = bottomOutSus.text.toString() ,
+                    susSwinging = susSwinging.text.toString() ,
+                    stability = stability.text.toString() ,
+                    tyresPlussiness = tyrePlussiness.text.toString() ,
+                    pulling = pulling.text.toString() ,
+                    corners = cornersEdit.text.toString() ,
+                    tiredFeet = feetTired.text.toString() ,
                     averageMark = averageMark
                 )
 
-                val existingMarks = bpMarksSusDao.getBpMarksSusByBikeId(bikeId)
+                val existingMarks = marksSusDao.getMarksSusByBikeId(bikeId)
                 if (existingMarks == null) {
-                    bpMarksSusDao.insertBpMarksSus(newMarks)
+                    marksSusDao.insertMarksSus(newMarks)
                 } else {
-                    bpMarksSusDao.updateBpMarksSus(newMarks.copy(id = existingMarks.id))
+                    marksSusDao.updateMarksSus(newMarks.copy(id = existingMarks.id))
                 }
             }
         }

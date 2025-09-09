@@ -834,7 +834,6 @@ class ActComponentsGeometry : AppCompatActivity() {
         }
         gridWrapper.addView(marginView)
         componentViews.add(marginView)
-        nextRowIndex += 1
 
 // Нарешті, додаємо сформований gridWrapper до зовнішнього LinearLayout
         parentContainer.addView(gridWrapper)

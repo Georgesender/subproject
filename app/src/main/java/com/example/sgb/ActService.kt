@@ -1,8 +1,6 @@
 package com.example.sgb
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
@@ -21,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.sgb.room.BikeDatabase
 import com.example.sgb.room.ServiceRecord
 import com.example.sgb.room.ServiceRecordDao
@@ -229,7 +228,7 @@ class ActService : AppCompatActivity() {
         val editAutoIncValue = serviceView.findViewById<EditText>(R.id.et_autoinc_days)
 
         // Завантаження збережених налаштувань
-        val prefs = getSharedPreferences("bike_prefs", Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("bike_prefs", MODE_PRIVATE)
         switchAutoInc.isChecked = prefs.getBoolean("auto_inc_enabled", false)
         editAutoIncValue.isEnabled = switchAutoInc.isChecked
         editAutoIncValue.setText(prefs.getInt("auto_inc_value", 7).toString())

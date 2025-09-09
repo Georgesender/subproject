@@ -1,6 +1,5 @@
 package com.example.sgb
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -52,9 +51,9 @@ import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -68,6 +67,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.sgb.room.Bike
 import com.example.sgb.room.BikeDao
 import com.example.sgb.room.BikeDatabase
+import com.example.sgb.room.MaketSetupDao
 import com.example.sub.R
 import games.GamesMenu
 import kotlinx.coroutines.Dispatchers
@@ -508,7 +508,7 @@ class ActBikeGarage : AppCompatActivity() {
             with(db) {
                 geometryDao().deleteGeometryByBikeId(bikeId)
                 bikeDao().deleteBikeById(bikeId)
-                bpSetupDao().deleteBikeParkSetupByBikeId(bikeId)
+                maketSetupDao().deleteSetupByBikeId(bikeId)
                 serviceRecordDao().deleteRecordsByBikeId(bikeId)
                 setupDao().deleteSetupsByBikeId(bikeId)
                 componentsDao().deleteComponentsByBikeId(bikeId)

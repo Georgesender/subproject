@@ -88,64 +88,64 @@ interface SetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSetup(setup: MarksForSetup)
 
-    @Query("SELECT * FROM setup_table WHERE id = :setupId")
+    @Query("SELECT * FROM setups_table WHERE id = :setupId")
     suspend fun getSetupById(setupId: Int): MarksForSetup?
 
     @Delete
     suspend fun deleteSetup(setup: MarksForSetup)
 
-    @Query("DELETE FROM setup_table WHERE bikeId = :bikeId")
+    @Query("DELETE FROM setups_table WHERE bikeId = :bikeId")
     suspend fun deleteSetupsByBikeId(bikeId: Int)
 
-    @Query("DELETE FROM setup_table")
+    @Query("DELETE FROM setups_table")
     suspend fun deleteAllSetups()
 }
 
-// BP - скорочено від Bike Park
+
 @Dao
-interface BPSetupDao {
+interface MaketSetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBikeParkSetup(setup: BikeParkSetupData): Long
+    suspend fun insertSetup(setup: SetupData): Long
 
-    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
-    suspend fun getBikeParkSetupById(bikeId: Int): BikeParkSetupData?
+    @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId")
+    suspend fun getSetupById(bikeId: Int): SetupData?
 
-    @Query("SELECT * FROM bikepark_table WHERE bikeId = :bikeId")
-    fun getBikeParkSetupLive(bikeId: Int): LiveData<BikeParkSetupData>
+    @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId")
+    fun getSetupLive(bikeId: Int): LiveData<SetupData>
 
     @Update
-    suspend fun updateBikeParkSetup(setup: BikeParkSetupData)
+    suspend fun updateSetup(setup: SetupData)
 
-    @Query("DELETE FROM bikepark_table WHERE id = :id")
-    suspend fun deleteBikeParkSetupById(id: Int)
+    @Query("DELETE FROM maket_setup_table WHERE id = :id")
+    suspend fun deleteSetupById(id: Int)
 
-    @Query("DELETE FROM bikepark_table WHERE bikeId = :bikeId")
-    suspend fun deleteBikeParkSetupByBikeId(bikeId: Int)
+    @Query("DELETE FROM maket_setup_table WHERE bikeId = :bikeId")
+    suspend fun deleteSetupByBikeId(bikeId: Int)
 
-    @Query("DELETE FROM bikepark_table")
-    suspend fun deleteAllBikeParkSetups()
+    @Query("DELETE FROM maket_setup_table")
+    suspend fun deleteAllSetups()
 
-    @Query("SELECT * FROM bikepark_table")
-    suspend fun getAllBikeParkSetups(): List<BikeParkSetupData>
+    @Query("SELECT * FROM maket_setup_table")
+    suspend fun getAllSetups(): List<SetupData>
 }
 
 // Sus - скорочено від suspension
 @Dao
-interface BPMarksSuspensionDao {
+interface MarksSuspensionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBpMarksSus(bpMarksFork: BpMarksSuspenshion): Long
+    suspend fun insertMarksSus(marksSus: MarksSuspenshion): Long
 
-    @Query("SELECT * FROM bp_marks_fork_table WHERE bikeId = :bikeId LIMIT 1")
-    suspend fun getBpMarksSusByBikeId(bikeId: Int): BpMarksSuspenshion?
+    @Query("SELECT * FROM marks_sus_table WHERE bikeId = :bikeId LIMIT 1")
+    suspend fun getMarksSusByBikeId(bikeId: Int): MarksSuspenshion?
 
     @Update
-    suspend fun updateBpMarksSus(bpMarksFork: BpMarksSuspenshion)
+    suspend fun updateMarksSus(marksSus: MarksSuspenshion)
 
-    @Query("DELETE FROM bp_marks_fork_table WHERE bikeId = :bikeId")
-    suspend fun deleteBpMarksSusByBikeId(bikeId: Int)
+    @Query("DELETE FROM marks_sus_table WHERE bikeId = :bikeId")
+    suspend fun deleteMarksSusByBikeId(bikeId: Int)
 
-    @Query("DELETE FROM bp_marks_fork_table")
-    suspend fun deleteAllBpMarksSus()
+    @Query("DELETE FROM marks_sus_table")
+    suspend fun deleteAllMarksSus()
 }
 
 @Dao

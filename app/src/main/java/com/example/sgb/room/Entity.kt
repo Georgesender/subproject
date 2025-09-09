@@ -69,19 +69,19 @@ data class Component(
 )
 
 
-// таблиця для MaketSetup.kt
-@Entity(tableName = "setup_table")
+
+@Entity(tableName = "setups_table")
 data class MarksForSetup(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val bikeId: Int, // ID байка, до якого прив'язаний сетап
     val setupName: String // Назва сетапу
 )
-// cетап для байкпарку
+
 @Entity(
-    tableName = "bikepark_table",
+    tableName = "maket_setup_table",
     indices = [Index(value = ["bikeId"], unique = true)]
 )
-data class BikeParkSetupData(
+data class SetupData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var bikeId: Int,
     var forkHSR: Int = 0,
@@ -111,8 +111,8 @@ data class BikeParkSetupData(
     var shockPressure: String = ""
 )
 
-@Entity(tableName = "bp_marks_fork_table")
-data class BpMarksSuspenshion(
+@Entity(tableName = "marks_sus_table")
+data class MarksSuspenshion(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val bikeId: Int,           // Додано для зв’язку з байком
     var gOut: String = "",

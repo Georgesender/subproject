@@ -81,16 +81,16 @@ class SplashActivity : AppCompatActivity() {
             val bikeDao = database.bikeDao()
             val geometryDao = database.geometryDao()
             val componentsDao = database.componentsDao()
-            val bpSetupDao = database.bpSetupDao()
-            val bpMarksSuspensionDao = database.bpMarksSusDao()
+            val bpSetupDao = database.maketSetupDao()
+            val bpMarksSuspensionDao = database.marksSusDao()
 
             // Завантаження всіх даних
             // Викликаємо методи без збереження в змінні
             bikeDao.getBikeById(1)
             geometryDao.getGeometryByBikeId(1)
             componentsDao.getComponentsByBikeId(1)
-            bpSetupDao.getBikeParkSetupById(1)
-            bpMarksSuspensionDao.getBpMarksSusByBikeId(1)
+            bpSetupDao.getSetupById(1)
+            bpMarksSuspensionDao.getMarksSusByBikeId(1)
             // Симулюємо коротку затримку для реалістичності (наприклад, якщо є API-запити)
             delay(500)
 
