@@ -36,12 +36,14 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -50,6 +52,7 @@ import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.work.Constraints
@@ -76,7 +79,7 @@ import java.util.concurrent.TimeUnit
 
 class ActBikeGarage : AppCompatActivity() {
     private lateinit var bikeNameContainer: ViewGroup
-    private lateinit var rootBikeInfo: ViewGroup
+    private lateinit var rootBikeInfo: ConstraintLayout
     private lateinit var rootScroll: ViewGroup
     private lateinit var bottomNav: ViewGroup
     private var bikeId: Int = -1
@@ -121,10 +124,133 @@ class ActBikeGarage : AppCompatActivity() {
         fadeOutChildren(rootBikeInfo)
         fadeOutChildren(bottomNav)
         val testing = findViewById<Button>(R.id.left_button)
+
+        //test section for setting start
+// Функція для застосування режиму центрованого підмоделю
+        fun applyCenterMode(enabled: Boolean) {
+            val cs = ConstraintSet()
+            cs.clone(rootBikeInfo)
+
+            val sub = bikeSubmodelTextView
+            val topMargin = (6 * resources.displayMetrics.density).toInt()
+            val startMargin = (8 * resources.displayMetrics.density).toInt()
+
+            if (enabled) {
+                // центр по горизонталі — START/END до parent, але TOP залишається зверху з margin
+                cs.clear(sub.id, ConstraintSet.START)
+                cs.clear(sub.id, ConstraintSet.END)
+                cs.connect(sub.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                cs.connect(sub.id, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                cs.connect(sub.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
+
+                cs.setHorizontalBias(sub.id, 0.5f)
+                // залишаємо вертикальний bias зверху (0f) — підмодель не буде зміщуватися по Y
+                cs.setVerticalBias(sub.id, 0f)
+            } else {
+                // відновлюємо початкову позицію (start/top з margin)
+                cs.clear(sub.id, ConstraintSet.START)
+                cs.clear(sub.id, ConstraintSet.END)
+                cs.clear(sub.id, ConstraintSet.TOP)
+                cs.connect(sub.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin)
+                cs.connect(sub.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin)
+                cs.setHorizontalBias(sub.id, 0f)
+                cs.setVerticalBias(sub.id, 0f)
+            }
+
+            cs.applyTo(rootBikeInfo)
+        }
+
+
+        val settingsButton = findViewById<ImageButton>(R.id.settings)
+        settingsButton.setOnClickListener {
+            val prefs = getSharedPreferences("bike_prefs", MODE_PRIVATE)
+            val hiddenKey = "bike_${bikeId}_image_hidden"
+            val centerKey = "bike_${bikeId}_center_submodel"
+            val hideAllKey = "bike_${bikeId}_hide_bikeinf"
+            val popup = PopupMenu(this, settingsButton)
+            popup.menuInflater.inflate(R.menu.bike_settings_menu, popup.menu)
+
+            // ініціалізація станів пунктів меню
+            val isHidden = prefs.getBoolean(hiddenKey, false)
+            val hideItem = popup.menu.findItem(R.id.menu_hide_image)
+            hideItem.isChecked = isHidden
+            hideItem.title = if (isHidden) "Show bike image" else "Hide bike image"
+
+            val isCenter = prefs.getBoolean(centerKey, false)
+            val centerItem = popup.menu.findItem(R.id.menu_centerize_no_size)
+            centerItem.isChecked = isCenter
+            centerItem.title = if (isCenter) "Show year" else "Hide year"
+
+            val isHiddenBikeinf = prefs.getBoolean(hideAllKey, false)
+            val hideAllItem = popup.menu.findItem(R.id.menu_hide_bikeinfo)
+            hideAllItem.isChecked = isHiddenBikeinf
+            hideAllItem.title = if (isHiddenBikeinf) "Show all bike sub info" else "Hide all bike sub info"
+
+
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_delete_bike -> {
+                        val sharedPreferences: SharedPreferences =
+                            getSharedPreferences("bike_prefs", MODE_PRIVATE)
+                        val bikeIdLocal = sharedPreferences.getInt("selected_bike_id", -1)
+                        if (bikeIdLocal != -1) {
+                            showDeleteConfirmation(bikeIdLocal)
+                        }
+                        true
+                    }
+                    R.id.menu_hide_image -> {
+                        val newValue = !item.isChecked
+                        item.isChecked = newValue
+                        item.title = if (newValue) "Hide bike image ✓" else "Hide bike image"
+                        prefs.edit { putBoolean(hiddenKey, newValue) }
+                        bikeImageView.visibility = if (newValue) View.GONE else View.VISIBLE
+                        true
+                    }
+                    R.id.menu_centerize_no_size -> {
+                        val newValue = !item.isChecked
+                        item.isChecked = newValue
+                        item.title = if (newValue) "View only Submodel(series) ✓" else "View only Submodel(series)"
+                        prefs.edit { putBoolean(centerKey, newValue) }
+
+                        // застосовуємо зміни UI
+                        applyCenterMode(newValue)
+
+                        bikeYearTextView.visibility = if (newValue) View.GONE else View.VISIBLE
+                        true
+                    }
+                    R.id.menu_hide_bikeinfo -> {
+                        val newValue = !item.isChecked
+                        item.isChecked = newValue
+                        item.title = if (newValue) "Show all bike sub info" else "Hide all bike sub info"
+                        prefs.edit { putBoolean(hideAllKey, newValue) }
+                        rootBikeInfo.visibility = if (newValue) View.GONE else View.VISIBLE
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popup.show()
+        }
+
+
+        //test section end
         // Перевіряємо, чи bikeId дійсне
         if (bikeId != -1) {
             lifecycleScope.launch {
                 val bike = bikeDao.getBikeById(bikeId)
+// після того, як встановили картинку (або завантажили)
+                val prefs = getSharedPreferences("bike_prefs", MODE_PRIVATE)
+                val hiddenKey = "bike_${bikeId}_image_hidden"
+                val isHidden = prefs.getBoolean(hiddenKey, false)
+// ДОБАВТЕ ОЦЕ: (для center-mode)
+                val centerKey = "bike_${bikeId}_center_submodel"
+                val isCenter = prefs.getBoolean(centerKey, false)
+                applyCenterMode(isCenter)
+                // NEXT
+                val hideAllKey = "bike_${bikeId}_hide_bikeinf"
+                val isHiddenBikeinf = prefs.getBoolean(hideAllKey, false)
+                rootBikeInfo.visibility = if (isHiddenBikeinf) View.GONE else View.VISIBLE
 
                 // Якщо байк знайдений
                 if (bike != null) {
@@ -136,7 +262,10 @@ class ActBikeGarage : AppCompatActivity() {
                     // Отримуємо рік зі структури BikeSubmodel
                     val years = bike.modelsJson.values.first().submodels.values.first().years
                     val year = years.keys.first() // Отримуємо перший рік з карти
-                    bikeYearTextView.text = year
+                        bikeYearTextView.text = year
+                    bikeYearTextView.visibility = if (isCenter) View.GONE else View.VISIBLE
+
+
 
                     // Завантажуємо зображення байка
                     if (bike.addedImgBikeUri == null) {
@@ -152,7 +281,7 @@ class ActBikeGarage : AppCompatActivity() {
                         loadPhotoIntoPlaceholder(bike.addedImgBikeUri.toUri())
                     }
 
-
+                    bikeImageView.visibility = if (isHidden) View.GONE else View.VISIBLE
                     if (session == "Yes") {
                         bikeNameTextView.text = getBikeName
                     } else {
@@ -173,15 +302,6 @@ class ActBikeGarage : AppCompatActivity() {
                 this , R.anim.fade_in_faster , R.anim.fade_out_faster
             )
             startActivity(intent , options.toBundle())
-        }
-        val clearButton = findViewById<ImageButton>(R.id.right_button_2)
-        clearButton.setOnClickListener {
-            val sharedPreferences: SharedPreferences =
-                getSharedPreferences("bike_prefs" , MODE_PRIVATE)
-            val bikeId = sharedPreferences.getInt("selected_bike_id" , -1)
-            if (bikeId != -1) {
-                showDeleteConfirmation(bikeId)
-            }
         }
 
         val compGeometry = findViewById<ConstraintLayout>(R.id.componentsGeometry)
@@ -334,8 +454,7 @@ class ActBikeGarage : AppCompatActivity() {
     }
 
     private fun updateUI(bike: Bike) {
-        bikeYearTextView.text =
-            bike.modelsJson.values.first().submodels.values.first().years.keys.first()
+
         bikeSubmodelTextView.text = bike.modelsJson.values.first().submodels.keys.first()
 
     }
@@ -542,7 +661,7 @@ class ActBikeGarage : AppCompatActivity() {
 
 
         override suspend fun doWork(): Result {
-            val prefs = applicationContext.getSharedPreferences("bike_prefs" , Context.MODE_PRIVATE)
+            val prefs = applicationContext.getSharedPreferences("bike_prefs" , MODE_PRIVATE)
 
             // Перевірка, чи дозволені сповіщення
             if (!prefs.getBoolean("receive_notifications" , true)) {
@@ -662,8 +781,8 @@ class ActBikeGarage : AppCompatActivity() {
                 .override(500 , 500)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .placeholder(R.drawable.img_fork)
-                .error(R.drawable.img_fork)
+                .placeholder(R.drawable.img_bike_placeholder)
+                .error(R.drawable.img_bike_placeholder)
                 .into(btn)
         }
     }
@@ -731,7 +850,7 @@ class ActBikeGarage : AppCompatActivity() {
         // 1. Знаходимо в’юшки
         val root     = findViewById<ConstraintLayout>(R.id.rootBikeinf)
         val leftBtn  = findViewById<View>(R.id.left_button)
-        val rightBtn = findViewById<View>(R.id.right_button_2)
+        val rightBtn = findViewById<View>(R.id.settings)
 
         // 2. Конвертуємо 300dp → px для контейнера
         val targetPx   = TypedValue.applyDimension(

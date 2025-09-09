@@ -31,7 +31,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:background="@drawable/vw_transparent_blckline_in_bottom"
                     android:layout_width="match_parent"
-                    android:layout_height="360dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/rootBikeinf"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -39,8 +39,8 @@
                     <TextView
                         android:id="@+id/bike_submodel"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
                         android:layout_marginStart="8dp"
                         android:text="test"
                         android:textSize="30sp"
@@ -53,7 +53,6 @@
                         android:id="@+id/bike_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="28dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="6dp"
                         android:text="0000"
@@ -61,6 +60,7 @@
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bike_image"
                         tools:ignore="HardcodedText" />
 
                     <ImageView
@@ -189,9 +189,8 @@
             android:textSize="28sp"
             tools:ignore="HardcodedText" />
 
-
         <ImageButton
-            android:id="@+id/right_button_2"
+            android:id="@+id/settings"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_gravity="end|center_vertical"
@@ -199,7 +198,7 @@
             android:background="@color/transparent"
             android:contentDescription="@string/delete"
             android:gravity="center"
-            android:src="@drawable/img_delete"
+            android:src="@drawable/img_settings"
             android:text="@string/delete"
             android:textColor="@color/white"
             android:textSize="30sp"

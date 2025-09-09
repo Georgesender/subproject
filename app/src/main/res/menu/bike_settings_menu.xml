@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_delete_bike"
+            android:title="Delete bike" />
+        <item
+            android:id="@+id/menu_hide_image"
+            android:title="Hide bike image"
+            android:checkable="true" />
+        <item
+            android:id="@+id/menu_centerize_no_size"
+            android:title="View only Submodel(series)"
+            android:checkable="true" />
+        <item
+            android:id="@+id/menu_hide_bikeinfo"
+            android:title="Hide all info"
+            android:checkable="true"
+            />
+    </group>
+</menu>
