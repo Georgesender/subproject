@@ -20,6 +20,8 @@ import com.example.sub.R
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.launch
 import androidx.core.view.isNotEmpty
+import com.example.sgb.room.BPSetupDao
+import com.example.sgb.room.BikeParkSetupData
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
@@ -27,6 +29,7 @@ import java.io.PrintWriter
 class ActSetups : AppCompatActivity() {
     private lateinit var bikeNameTextView: TextView
     private var isDeleteMode = false
+    private lateinit var bpSetupDao: BPSetupDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +44,52 @@ class ActSetups : AppCompatActivity() {
         bikeNameTextView = findViewById(R.id.bike_name)
         val bikeId = intent.getIntExtra("bike_id", -1)
 
+        // Ініціалізація бази даних
+        val db = BikeDatabase.getDatabase(this)
+        bpSetupDao = db.bpSetupDao()
+
         findViewById<Button>(R.id.back).setOnClickListener { navigateToBikeGarage(bikeId) }
         setupAlertDialog(findViewById(R.id.burger_menu), bikeId)
         findViewById<MaterialCardView>(R.id.bikepark_card).setOnClickListener {
             navigateToMaketSetup(bikeId, "BikePark")
         }
 
-        if (bikeId != -1) loadBikeData(bikeId)
+        if (bikeId != -1) {
+            loadBikeData(bikeId)
+            loadBikeParkSetupData(bikeId) // Додано завантаження даних BikePark
+        }
     }
 
+    // Додано функцію для завантаження даних BikePark
+    private fun loadBikeParkSetupData(bikeId: Int) {
+        lifecycleScope.launch {
+            val setupData = bpSetupDao.getBikeParkSetupById(bikeId)
+            setupData?.let { populateBikeParkData(it) }
+        }
+    }
+
+    // Додано функцію для заповнення даних BikePark
+    private fun populateBikeParkData(data: BikeParkSetupData) {
+        // Заповнення значень шока
+        findViewById<TextView>(R.id.shock_hsc_value).text = data.shockHSC.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.shock_lsc_value).text = data.shockLSC.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.shock_hsr_value).text = data.shockHSR.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.shock_lsr_value).text = data.shockLSR.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.shock_pressure_value).text = data.shockPressure.takeIf { it.isNotEmpty() } ?: "—"
+
+        // Заповнення значень вилки
+        findViewById<TextView>(R.id.fork_hsc_value).text = data.forkHSC.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.fork_lsc_value).text = data.forkLSC.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.fork_hsr_value).text = data.forkHSR.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.fork_lsr_value).text = data.forkLSR.toString().takeIf { it != "0" } ?: "—"
+        findViewById<TextView>(R.id.fork_pressure_value).text = data.forkPressure.takeIf { it.isNotEmpty() } ?: "—"
+
+        // Заповнення тиску у шинах
+        findViewById<TextView>(R.id.front_tyre_pressure_value).text = data.frontTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
+        findViewById<TextView>(R.id.rear_tyre_pressure_value).text = data.rearTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
+    }
+
+    // Решта коду залишається без змін...
     private fun saveErrorToFile(context: String, e: Exception): String {
         val timestamp = System.currentTimeMillis()
         val fileName = "error_log_$timestamp.txt"
