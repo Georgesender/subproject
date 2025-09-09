@@ -86,7 +86,8 @@ interface ComponentsDao {
 @Dao
 interface SetupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSetup(setup: MarksForSetup)
+    suspend fun insertSetup(setup: MarksForSetup): Long  // Додаємо повернення Long
+
 
     @Query("SELECT * FROM setups_table WHERE id = :setupId")
     suspend fun getSetupById(setupId: Int): MarksForSetup?
@@ -99,6 +100,8 @@ interface SetupDao {
 
     @Query("DELETE FROM setups_table")
     suspend fun deleteAllSetups()
+    @Query("SELECT * FROM setups_table WHERE bikeId = :bikeId")
+    suspend fun getSetupsByBikeId(bikeId: Int): List<MarksForSetup>
 }
 
 
@@ -109,6 +112,12 @@ interface MaketSetupDao {
 
     @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId")
     suspend fun getSetupById(bikeId: Int): SetupData?
+
+    @Query("SELECT * FROM maket_setup_table WHERE setupId = :setupId")
+    suspend fun getSetupBySetupId(setupId: Int): SetupData?
+
+    @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId AND setupId = :setupId")
+    suspend fun getSetup(bikeId: Int, setupId: Int): SetupData?
 
     @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId")
     fun getSetupLive(bikeId: Int): LiveData<SetupData>

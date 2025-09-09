@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.sgb.room.BikeDatabase
@@ -22,6 +23,8 @@ import kotlinx.coroutines.launch
 import androidx.core.view.isNotEmpty
 import com.example.sgb.room.MaketSetupDao
 import com.example.sgb.room.SetupData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 
@@ -50,44 +53,79 @@ class ActSetups : AppCompatActivity() {
 
         findViewById<Button>(R.id.back).setOnClickListener { navigateToBikeGarage(bikeId) }
         setupAlertDialog(findViewById(R.id.burger_menu), bikeId)
-        findViewById<MaterialCardView>(R.id.bikepark_card).setOnClickListener {
-            navigateToMaketSetup(bikeId, "BikePark")
-        }
+
 
         if (bikeId != -1) {
             loadBikeData(bikeId)
-            loadBikeParkSetupData(bikeId) // Додано завантаження даних BikePark
+//            loadBikeParkSetupData(bikeId)
+            loadExistingSetups(bikeId)  // Додайте цей виклик
         }
     }
 
     // Додано функцію для завантаження даних BikePark
-    private fun loadBikeParkSetupData(bikeId: Int) {
+//    private fun loadBikeParkSetupData(bikeId: Int) {
+//        lifecycleScope.launch {
+//            val setupData = bpSetupDao.getSetupById(bikeId)
+//            setupData?.let { populateBikeParkData(it) }
+//        }
+//    }
+
+    private fun loadExistingSetups(bikeId: Int) {
         lifecycleScope.launch {
-            val setupData = bpSetupDao.getSetupById(bikeId)
-            setupData?.let { populateBikeParkData(it) }
+            val setups = withContext(Dispatchers.IO) {
+                BikeDatabase.getDatabase(this@ActSetups)
+                    .setupDao()
+                    .getSetupsByBikeId(bikeId)
+            }
+            runOnUiThread {
+                setups.forEach { setup ->
+                    // Використовуємо новий метод для існуючих сетапів
+                    addExistingSetupButton(setup.setupName, bikeId, setup.id)
+                }
+            }
         }
+    }
+    // Новий метод для додавання кнопки існуючого сетапу
+    private fun addExistingSetupButton(name: String, bikeId: Int, setupId: Int) {
+        val parent = findViewById<ConstraintLayout>(R.id.setups)
+        val newButton = createSetupButton(name, bikeId, setupId)
+
+        val params = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        val lastChild = parent.getChildAt(parent.childCount - 1)
+        if (lastChild != null) {
+            params.topToBottom = lastChild.id
+        } else {
+            params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+        }
+
+        newButton.layoutParams = params
+        parent.addView(newButton)
     }
 
     // Додано функцію для заповнення даних BikePark
-    private fun populateBikeParkData(data: SetupData) {
-        // Заповнення значень шока
-        findViewById<TextView>(R.id.shock_hsc_value).text = data.shockHSC.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.shock_lsc_value).text = data.shockLSC.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.shock_hsr_value).text = data.shockHSR.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.shock_lsr_value).text = data.shockLSR.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.shock_pressure_value).text = data.shockPressure.takeIf { it.isNotEmpty() } ?: "—"
-
-        // Заповнення значень вилки
-        findViewById<TextView>(R.id.fork_hsc_value).text = data.forkHSC.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.fork_lsc_value).text = data.forkLSC.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.fork_hsr_value).text = data.forkHSR.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.fork_lsr_value).text = data.forkLSR.toString().takeIf { it != "0" } ?: "—"
-        findViewById<TextView>(R.id.fork_pressure_value).text = data.forkPressure.takeIf { it.isNotEmpty() } ?: "—"
-
-        // Заповнення тиску у шинах
-        findViewById<TextView>(R.id.front_tyre_pressure_value).text = data.frontTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
-        findViewById<TextView>(R.id.rear_tyre_pressure_value).text = data.rearTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
-    }
+//    private fun populateBikeParkData(data: SetupData) {
+//        // Заповнення значень шока
+//        findViewById<TextView>(R.id.shock_hsc_value).text = data.shockHSC.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.shock_lsc_value).text = data.shockLSC.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.shock_hsr_value).text = data.shockHSR.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.shock_lsr_value).text = data.shockLSR.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.shock_pressure_value).text = data.shockPressure.takeIf { it.isNotEmpty() } ?: "—"
+//
+//        // Заповнення значень вилки
+//        findViewById<TextView>(R.id.fork_hsc_value).text = data.forkHSC.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.fork_lsc_value).text = data.forkLSC.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.fork_hsr_value).text = data.forkHSR.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.fork_lsr_value).text = data.forkLSR.toString().takeIf { it != "0" } ?: "—"
+//        findViewById<TextView>(R.id.fork_pressure_value).text = data.forkPressure.takeIf { it.isNotEmpty() } ?: "—"
+//
+//        // Заповнення тиску у шинах
+//        findViewById<TextView>(R.id.front_tyre_pressure_value).text = data.frontTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
+//        findViewById<TextView>(R.id.rear_tyre_pressure_value).text = data.rearTyrePressure.takeIf { it.isNotEmpty() } ?: "—"
+//    }
 
     // Решта коду залишається без змін...
     private fun saveErrorToFile(context: String, e: Exception): String {
@@ -206,70 +244,53 @@ class ActSetups : AppCompatActivity() {
             }
     }
 
-    private fun addSetupButton(name: String, bikeId: Int, setupId: Int? = null) {
-        val parent = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.setups)
+    // Змініть метод addSetupButton
+    private fun addSetupButton(name: String, bikeId: Int) {
+        lifecycleScope.launch {
+            val setupDao = BikeDatabase.getDatabase(this@ActSetups).setupDao()
+            val maketSetupDao = BikeDatabase.getDatabase(this@ActSetups).maketSetupDao()
 
-        try {
-            val newButton = Button(this@ActSetups).apply {
-                text = name
-                textSize = 16f
-                setTextColor(resources.getColor(android.R.color.white, theme))
-                setBackgroundResource(R.drawable.kt_textviews_basic)
-                // безпечний унікальний id
-                id = View.generateViewId()
+            // Створюємо новий запис у setups_table
+            val newSetup = MarksForSetup(bikeId = bikeId, setupName = name)
+            val setupId = setupDao.insertSetup(newSetup).toInt()  // Тепер працює
 
-                // подія кліку
-                setOnClickListener {
-                    if (isDeleteMode) deleteSetup(this, bikeId, name, setupId) else openSetup(name, bikeId, setupId)
-                }
+            // Створюємо відповідний запис у maket_setup_table
+            val newSetupData = SetupData(bikeId = bikeId, setupId = setupId)
+            maketSetupDao.insertSetup(newSetupData)
+
+            // Додаємо кнопку на UI
+            runOnUiThread {
+                val parent = findViewById<ConstraintLayout>(R.id.setups)
+                val newButton = createSetupButton(name, bikeId, setupId)
+                parent.addView(newButton)
             }
-
-            // правильно формуємо LayoutParams для ConstraintLayout
-            val lp = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
-                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                // відступи в dp -> px
-                val margin16 = (16 * resources.displayMetrics.density).toInt()
-
-                /* якщо в parent вже є діти — прив'язуємо topToBottom до останнього діда */
-                if (parent.isNotEmpty()) {
-                    val lastChild = parent.getChildAt(parent.childCount - 1)
-                    // переконаємося, що у останнього є id
-                    val anchorId = if (lastChild.id != View.NO_ID) lastChild.id else androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-                    topToBottom = anchorId
-                    topMargin = margin16
-                } else {
-                    // перший елемент — прив'язуємо до top of parent
-                    topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-                    topMargin = margin16
-                }
-
-                // горизонтальна прив'язка до початку parent
-                startToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-                marginStart = margin16
-            }
-
-            newButton.layoutParams = lp
-
-            // додаємо в parent
-            parent.addView(newButton)
-
-            // зберегти в БД, якщо треба
-            if (setupId == null) saveSetupToDatabase(name, bikeId)
-        } catch (e: Exception) {
-            // логнемо і показуємо, щоб мати інформацію про помилку
-            android.util.Log.e("ActSetups", "addSetupButton failed", e)
-            val fileName = saveErrorToFile("addSetupButton", e)
-            Toast.makeText(this@ActSetups, "Помилка при додаванні кнопки. Деталі збережено у файл: $fileName в папці Downloads.", Toast.LENGTH_LONG).show()
         }
     }
 
+    // Оновіть метод createSetupButton
+    private fun createSetupButton(name: String, bikeId: Int, setupId: Int): Button {
+        return Button(this).apply {
+            text = name
+            textSize = 16f
+            setTextColor(resources.getColor(android.R.color.white, theme))
+            setBackgroundResource(R.drawable.kt_textviews_basic)
+            id = View.generateViewId()
 
-    private fun deleteSetup(button: Button, bikeId: Int, name: String, setupId: Int?) {
+            setOnClickListener {
+                if (isDeleteMode) {
+                    deleteSetup(this, bikeId, name, setupId)
+                } else {
+                    openSetup(name, bikeId, setupId)
+                }
+            }
+        }
+    }
+
+    // Оновіть метод deleteSetup
+    private fun deleteSetup(button: Button, bikeId: Int, name: String, setupId: Int) {
         lifecycleScope.launch {
-            BikeDatabase.getDatabase(this@ActSetups).setupDao().deleteSetup(MarksForSetup(setupId ?: 0, bikeId, name))
-            findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.setups).removeView(button)
+            BikeDatabase.getDatabase(this@ActSetups).setupDao().deleteSetup(MarksForSetup(setupId, bikeId, name))
+            findViewById<ConstraintLayout>(R.id.setups).removeView(button)
         }
     }
 

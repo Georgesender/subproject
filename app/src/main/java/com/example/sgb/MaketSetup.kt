@@ -184,10 +184,24 @@ private val initialValues = mutableMapOf<Int, Int>()
             }
         }
     private val marksSusDao by lazy { BikeDatabase.getDatabase(this).marksSusDao() }
+    private var currentSetupId: Int = -1
+    private suspend fun fetchRelevantSetup(maketSetupDao: MaketSetupDao, bikeId: Int): SetupData? {
+        return withContext(Dispatchers.IO) {
+            if (currentSetupId != -1) {
+                // шукаємо конкретно по setupId (унікальний ідентифікатор сетапу)
+                maketSetupDao.getSetupBySetupId(currentSetupId)
+            } else {
+                // fallback: якщо відкрито не конкретний setup, беремо "за замовчуванням" по bikeId
+                maketSetupDao.getSetupById(bikeId)
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.kt_maket_setup)
+        currentSetupId = intent.getIntExtra("setup_id", -1)
         fun closeKeyboard() {
             val inputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -255,7 +269,7 @@ private val initialValues = mutableMapOf<Int, Int>()
                         val gson = GsonBuilder().setPrettyPrinting().create()
 
                         if (bikeId != -1) {
-                            val setup = dao.getSetupById(bikeId)
+                            val setup = fetchRelevantSetup(dao, bikeId)
                             if (setup == null) {
                                 null to "Немає запису для bikeId=$bikeId"
                             } else {
@@ -638,82 +652,34 @@ fun handleIncrement(
         maketSetupDao: MaketSetupDao
     ) {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val setup = maketSetupDao.getSetupById(bikeId)
-                if (setup != null) {
-                    when (fieldName) {
-                        "forkHSR" -> setup.forkHSR = newValue
-                        "forkLSR" -> setup.forkLSR = newValue
-                        "forkHSC" -> setup.forkHSC = newValue
-                        "forkLSC" -> setup.forkLSC = newValue
-                        "shockHSR" -> setup.shockHSR = newValue
-                        "shockLSR" -> setup.shockLSR = newValue
-                        "shockHSC" -> setup.shockHSC = newValue
-                        "shockLSC" -> setup.shockLSC = newValue
-                    }
-                    maketSetupDao.updateSetup(setup)
+            val maketSetups = fetchRelevantSetup(maketSetupDao, bikeId)
+            if (maketSetups != null) {
+                when (fieldName) {
+                    "forkHSR" -> maketSetups.forkHSR = newValue
+                    "forkLSR" -> maketSetups.forkLSR = newValue
+                    "forkHSC" -> maketSetups.forkHSC = newValue
+                    "forkLSC" -> maketSetups.forkLSC = newValue
+                    "shockHSR" -> maketSetups.shockHSR = newValue
+                    "shockLSR" -> maketSetups.shockLSR = newValue
+                    "shockHSC" -> maketSetups.shockHSC = newValue
+                    "shockLSC" -> maketSetups.shockLSC = newValue
                 }
+                withContext(Dispatchers.IO) { maketSetupDao.updateSetup(maketSetups) }
             }
+            // оновлюємо delta в UI як і раніше
             when (fieldName) {
-                "forkHSR" -> updateDeltaForField(
-                    forkHSR,
-                    forkHSRDelta,
-                    "forkHSR",
-                    bikeId,
-                    maketSetupDao
-                )
-                "forkLSR" -> updateDeltaForField(
-                    forkLSR,
-                    forkLSRDelta,
-                    "forkLSR",
-                    bikeId,
-                    maketSetupDao
-                )
-                "forkHSC" -> updateDeltaForField(
-                    forkHSC,
-                    forkHSCDelta,
-                    "forkHSC",
-                    bikeId,
-                    maketSetupDao
-                )
-                "forkLSC" -> updateDeltaForField(
-                    forkLSC,
-                    forkLSCDelta,
-                    "forkLSC",
-                    bikeId,
-                    maketSetupDao
-                )
-                "shockHSR" -> updateDeltaForField(
-                    shockHSR,
-                    shockHSRDelta,
-                    "shockHSR",
-                    bikeId,
-                    maketSetupDao
-                )
-                "shockLSR" -> updateDeltaForField(
-                    shockLSR,
-                    shockLSRDelta,
-                    "shockLSR",
-                    bikeId,
-                    maketSetupDao
-                )
-                "shockHSC" -> updateDeltaForField(
-                    shockHSC,
-                    shockHSCDelta,
-                    "shockHSC",
-                    bikeId,
-                    maketSetupDao
-                )
-                "shockLSC" -> updateDeltaForField(
-                    shockLSC,
-                    shockLSCDelta,
-                    "shockLSC",
-                    bikeId,
-                    maketSetupDao
-                )
+                "forkHSR" -> updateDeltaForField(forkHSR, forkHSRDelta, "forkHSR", bikeId, maketSetupDao)
+                "forkLSR" -> updateDeltaForField(forkLSR, forkLSRDelta, "forkLSR", bikeId, maketSetupDao)
+                "forkHSC" -> updateDeltaForField(forkHSC, forkHSCDelta, "forkHSC", bikeId, maketSetupDao)
+                "forkLSC" -> updateDeltaForField(forkLSC, forkLSCDelta, "forkLSC", bikeId, maketSetupDao)
+                "shockHSR" -> updateDeltaForField(shockHSR, shockHSRDelta, "shockHSR", bikeId, maketSetupDao)
+                "shockLSR" -> updateDeltaForField(shockLSR, shockLSRDelta, "shockLSR", bikeId, maketSetupDao)
+                "shockHSC" -> updateDeltaForField(shockHSC, shockHSCDelta, "shockHSC", bikeId, maketSetupDao)
+                "shockLSC" -> updateDeltaForField(shockLSC, shockLSCDelta, "shockLSC", bikeId, maketSetupDao)
             }
         }
     }
+
 
     private fun navigateBackToActSetups(bikeId: Int) {
         val intent = Intent(this, ActSetups::class.java).apply {
@@ -782,9 +748,14 @@ fun handleIncrement(
     @SuppressLint("SetTextI18n")
     private fun loadSetupData(bikeId: Int, maketSetupDao: MaketSetupDao) {
         lifecycleScope.launch {
-            var maketSetups = maketSetupDao.getSetupById(bikeId)
+            var maketSetups = if (currentSetupId != -1) {
+                fetchRelevantSetup(maketSetupDao, bikeId)
+            } else {
+                maketSetupDao.getSetupById(bikeId)
+            }
+
             if (maketSetups == null) {
-                maketSetups = SetupData(bikeId = bikeId)
+                maketSetups = SetupData(bikeId = bikeId, setupId = currentSetupId)
                 maketSetupDao.insertSetup(maketSetups)
             }
             val fields = mapOf(
@@ -878,26 +849,31 @@ fun handleIncrement(
 
     private fun updateDeltaFieldInDb(bikeId: Int, maketSetupDao: MaketSetupDao, field: String, delta: String) {
         lifecycleScope.launch {
-            val maketSetup = maketSetupDao.getSetupById(bikeId)
+            val maketSetup = fetchRelevantSetup(maketSetupDao, bikeId)
             maketSetup?.let {
                 it.setDeltaFieldValue(field, delta)
-                maketSetupDao.updateSetup(it)
+                withContext(Dispatchers.IO) { maketSetupDao.updateSetup(it) }
             }
         }
     }
+
 
 
 
     private fun loadSetupById(bikeId: Int) {
         lifecycleScope.launch {
             val setupDao = BikeDatabase.getDatabase(this@MaketSetup).setupDao()
-            val setup = setupDao.getSetupById(bikeId)
+            val setup = if (currentSetupId != -1) {
+                setupDao.getSetupById(currentSetupId)
+            } else {
+                setupDao.getSetupsByBikeId(bikeId).firstOrNull()
+            }
             setup?.let {
                 findViewById<TextView>(R.id.setup_name).append("\nДані: ${it.setupName}")
             }
         }
-
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun loadMarksData(bikeId: Int) {
@@ -954,18 +930,19 @@ fun handleIncrement(
                 isEditing = false
 
                 lifecycleScope.launch {
-                    val maketSetups = maketSetupDao.getSetupById(bikeId)
+                    val maketSetups = fetchRelevantSetup(maketSetupDao, bikeId)
                     maketSetups?.let {
                         it.setFieldValue(field, newText)
-                        maketSetupDao.updateSetup(it)
+                        withContext(Dispatchers.IO) { maketSetupDao.updateSetup(it) }
                     }
                 }
+
             }
         })
     }
     private fun loadDeltaValues(bikeId: Int, maketSetupDao: MaketSetupDao) {
         lifecycleScope.launch {
-            val maketSetup = maketSetupDao.getSetupById(bikeId)
+            val maketSetup =     fetchRelevantSetup(maketSetupDao, bikeId)
             maketSetup?.let {
                 if (it.forkHSRDelta.isNotEmpty()) {
                     forkHSRDelta.text = it.forkHSRDelta

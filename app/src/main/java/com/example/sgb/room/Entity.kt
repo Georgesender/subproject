@@ -78,12 +78,11 @@ data class MarksForSetup(
 )
 
 @Entity(
-    tableName = "maket_setup_table",
-    indices = [Index(value = ["bikeId"], unique = true)]
-)
+    tableName = "maket_setup_table")
 data class SetupData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var bikeId: Int,
+    var setupId: Int = 0,  // Додаємо посилання на MarksForSetup
     var forkHSR: Int = 0,
     var forkHSRDelta: String = "",
     var forkLSR: Int = 0,
