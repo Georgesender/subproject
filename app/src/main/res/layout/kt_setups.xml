@@ -46,15 +46,17 @@
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
 
+        <!-- кнопка скасування змін, по дефолту GONE -->
         <Button
-            android:id="@+id/test_add"
-            android:layout_width="36dp"
-            android:layout_height="46dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="60dp"
-            android:background="@drawable/btn_burger"
-            android:contentDescription="@string/_1"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:id="@+id/cancel_changes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Cancel"
+            android:layout_marginEnd="50dp"
+            android:visibility="gone"
+            android:layout_gravity="end|center_vertical"/>
+
+
         <Button
             android:id="@+id/burger_menu"
             android:layout_width="36dp"
@@ -67,15 +69,12 @@
 
     </FrameLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setups"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/setups_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/bike_name_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

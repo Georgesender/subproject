@@ -42,7 +42,7 @@
     <activity android:theme="@style/AppTheme" android:name="com.example.sgb.ActBikeGeometry" android:exported="true"/>
         <activity android:screenOrientation="portrait" android:theme="@style/AppTheme" android:name="com.example.sgb.ActComponentsGeometry" android:exported="true"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:screenOrientation="portrait" android:theme="@style/AppThemeAnim" android:name="com.example.sgb.ActSetups" android:exported="true"
+        <activity android:screenOrientation="portrait" android:theme="@style/AppTheme" android:name="com.example.sgb.ActSetups" android:exported="true"
             tools:ignore="LockedOrientationActivity" />
         <activity android:screenOrientation="portrait"
             android:name="com.example.sgb.MaketSetup" android:theme="@style/AppTheme" android:exported="true" android:windowSoftInputMode="adjustPan"

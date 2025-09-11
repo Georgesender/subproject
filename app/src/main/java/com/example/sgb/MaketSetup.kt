@@ -192,7 +192,7 @@ private val initialValues = mutableMapOf<Int, Int>()
                 maketSetupDao.getSetupBySetupId(currentSetupId)
             } else {
                 // fallback: якщо відкрито не конкретний setup, беремо "за замовчуванням" по bikeId
-                maketSetupDao.getSetupById(bikeId)
+                maketSetupDao.getSetupByBikeId(bikeId)
             }
         }
     }
@@ -751,7 +751,7 @@ fun handleIncrement(
             var maketSetups = if (currentSetupId != -1) {
                 fetchRelevantSetup(maketSetupDao, bikeId)
             } else {
-                maketSetupDao.getSetupById(bikeId)
+                maketSetupDao.getSetupByBikeId(bikeId)
             }
 
             if (maketSetups == null) {

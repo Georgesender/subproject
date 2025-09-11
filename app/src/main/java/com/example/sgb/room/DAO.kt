@@ -92,6 +92,8 @@ interface SetupDao {
     @Query("SELECT * FROM setups_table WHERE id = :setupId")
     suspend fun getSetupById(setupId: Int): MarksForSetup?
 
+    @Query("SELECT * FROM setups_table WHERE bikeId = :bikeId ORDER BY id ASC")
+    suspend fun getSetupsByBikeIdOrdered(bikeId: Int): List<MarksForSetup>
     @Delete
     suspend fun deleteSetup(setup: MarksForSetup)
 
@@ -102,6 +104,8 @@ interface SetupDao {
     suspend fun deleteAllSetups()
     @Query("SELECT * FROM setups_table WHERE bikeId = :bikeId")
     suspend fun getSetupsByBikeId(bikeId: Int): List<MarksForSetup>
+
+
 }
 
 
@@ -111,7 +115,7 @@ interface MaketSetupDao {
     suspend fun insertSetup(setup: SetupData): Long
 
     @Query("SELECT * FROM maket_setup_table WHERE bikeId = :bikeId")
-    suspend fun getSetupById(bikeId: Int): SetupData?
+    suspend fun getSetupByBikeId(bikeId: Int): SetupData?
 
     @Query("SELECT * FROM maket_setup_table WHERE setupId = :setupId")
     suspend fun getSetupBySetupId(setupId: Int): SetupData?
@@ -136,6 +140,12 @@ interface MaketSetupDao {
 
     @Query("SELECT * FROM maket_setup_table")
     suspend fun getAllSetups(): List<SetupData>
+
+    @Query("DELETE FROM maket_setup_table WHERE setupId = :setupId")
+    suspend fun deleteBySetupId(setupId: Int)
+
+
+
 }
 
 // Sus - скорочено від suspension

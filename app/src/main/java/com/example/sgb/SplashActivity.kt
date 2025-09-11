@@ -89,7 +89,7 @@ class SplashActivity : AppCompatActivity() {
             bikeDao.getBikeById(1)
             geometryDao.getGeometryByBikeId(1)
             componentsDao.getComponentsByBikeId(1)
-            bpSetupDao.getSetupById(1)
+            bpSetupDao.getSetupByBikeId(1)
             bpMarksSuspensionDao.getMarksSusByBikeId(1)
             // Симулюємо коротку затримку для реалістичності (наприклад, якщо є API-запити)
             delay(500)
